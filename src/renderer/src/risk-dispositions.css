@@ -1,0 +1,41 @@
+.risk-disposition-panel { margin-top: 14px; min-width: 0; overflow: hidden; scroll-margin-top: 12px; }
+.risk-disposition-panel > summary { cursor: pointer; list-style: none; }
+.risk-disposition-panel > summary > svg:last-child { margin-left: auto; color: #a1b391; }
+.disposition-body { padding: 18px 20px; min-width: 0; }
+.disposition-intro, .disposition-note { font-size: 10px; line-height: 1.9; color: #8b9e78; margin-bottom: 13px; overflow-wrap: anywhere; }
+.disposition-note { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border: 1px solid #e4e9da; border-radius: 5px; background: #f8faf3; }
+.disposition-statistics { display: flex; flex-wrap: wrap; gap: 8px 17px; padding-bottom: 13px; margin-bottom: 14px; border-bottom: 1px solid #e7ecdf; }
+.disposition-statistics > span { display: flex; align-items: center; gap: 7px; color: #94a783; font-size: 10px; line-height: 1.8; }
+.disposition-statistics strong { color: #6f8c58; font-size: 13px; font-weight: 550; }
+.disposition-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.disposition-toolbar > .field { flex: 1 1 230px; max-width: 400px; margin: 0; }
+.disposition-toolbar .text-button { font-size: 10px; }
+.disposition-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.3fr); gap: 18px; align-items: start; min-width: 0; }
+.disposition-layout > * { min-width: 0; }
+.disposition-findings { display: flex; flex-direction: column; gap: 7px; max-height: 480px; overflow: auto; scrollbar-width: thin; }
+.disposition-finding { display: flex; flex-direction: column; gap: 6px; padding: 11px 12px; border: 1px solid #e4eadb; border-radius: 5px; background: #fff; text-align: left; }
+.disposition-finding.active { border-color: #d4e3c5; background: #f1f7eb; }
+.disposition-finding strong { font-size: 11px; font-weight: 500; line-height: 1.8; color: #6e8858; overflow-wrap: anywhere; }
+.disposition-finding span { font-size: 9px; color: #9bad88; line-height: 1.8; }
+.disposition-editor { padding: 15px; border: 1px solid #e0e8d6; background: #fdfefa; border-radius: 5px; min-width: 0; }
+.disposition-selected-heading { margin-bottom: 15px; }
+.disposition-selected-heading h3 { font-size: 12px; font-weight: 550; line-height: 1.9; color: #62824e; overflow-wrap: anywhere; }
+.disposition-selected-heading > span { font-size: 10px; color: #99aa86; margin-right: 12px; line-height: 1.9; }
+.disposition-selected-heading .text-button { font-size: 10px; }
+.disposition-body .field { min-width: 0; margin-bottom: 12px; }
+.disposition-body .field > span { font-size: 10px; color: #8b9f76; }
+.disposition-body select, .disposition-body input, .disposition-body textarea { min-width: 0; width: 100%; max-width: 100%; border: 1px solid #dbe5d1; border-radius: 4px; padding: 8px 10px; font-size: 11px; color: #658451; background: #fff; line-height: 1.9; }
+.disposition-body textarea { resize: vertical; max-height: 300px; }
+.disposition-body small { font-size: 9px; line-height: 1.8; color: #a4b294; margin-top: 5px; }
+.disposition-body .notice { font-size: 11px; margin-bottom: 14px; }
+.disposition-body .notice > span { overflow-wrap: anywhere; min-width: 0; }
+.disposition-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.disposition-actions .text-button { font-size: 10px; }
+.disposition-history { border-top: 1px solid #e5ecdd; margin-top: 17px; padding-top: 12px; font-size: 10px; color: #8da375; }
+.disposition-history summary { cursor: pointer; display: flex; justify-content: space-between; gap: 10px; line-height: 1.9; }
+.disposition-history article { padding: 10px 0; border-bottom: 1px solid #e9eedf; }
+.disposition-history article > strong { display: block; font-size: 11px; color: #6b8953; font-weight: 500; }
+.disposition-history article > span { font-size: 9px; color: #a0b08c; line-height: 1.9; }
+.disposition-history article p { font-size: 10px; color: #8fa47a; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 900px) { .disposition-layout { grid-template-columns: minmax(0, 1fr); } .disposition-findings { max-height: 220px; } }
+@media (max-width: 480px) { .disposition-body { padding: 14px 13px; } .disposition-editor { padding: 12px; } }

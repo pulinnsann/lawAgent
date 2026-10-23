@@ -1,0 +1,74 @@
+name: Manual Windows x64 build
+
+# Intentionally manual: no push/PR trigger and no automatic release/upload to
+# a public distribution service. GitHub Actions artifacts stay with this run.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-windows-x64-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows-x64:
+    runs-on: windows-2025
+    timeout-minutes: 60
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out selected revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js 24 x64
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          architecture: x64
+          cache: npm
+      - name: Install locked dependencies including optional native packages
+        run: npm ci --include=optional
+      - name: Type check
+        run: npm run typecheck
+      - name: Engineering regression tests
+        run: npm test
+      - name: Verify native Canvas, SQLite, OCR worker and resource inventory
+        run: node scripts/verify-release-resources.mjs --platform win32 --arch x64 --runtime --report release/resource-inventory-preflight.json
+      - name: Build application
+        run: npm run build
+      - name: Package unsigned NSIS installer and portable ZIP
+        run: npx --no-install electron-builder --win nsis zip --x64 --publish never
+      - name: Verify packaged resource layout
+        run: node scripts/verify-release-resources.mjs --platform win32 --arch x64 --resources release/win-unpacked/resources --report release/resource-inventory-packaged.json
+      - name: Verify engines with the packaged Electron runtime
+        run: |
+          $env:ELECTRON_RUN_AS_NODE = "1"
+          try {
+            & "release/win-unpacked/合同工作台.exe" "scripts/verify-release-resources.mjs" --platform win32 --arch x64 --resources release/win-unpacked/resources --runtime --report release/resource-inventory-runtime.json
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          } finally {
+            Remove-Item Env:ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue
+          }
+      - name: Hash deliverables
+        run: |
+          $files = Get-ChildItem release -File | Where-Object { $_.Extension -in '.exe', '.zip' }
+          if ($files.Count -lt 2) { throw "Expected both NSIS installer and ZIP" }
+          $files | ForEach-Object { "$(($_ | Get-FileHash -Algorithm SHA256).Hash.ToLower())  $($_.Name)" } | Set-Content -Encoding utf8 release/SHA256SUMS.txt
+      - name: Upload verified artifacts for manual review
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: law-agent-windows-x64-${{ github.run_number }}
+          path: |
+            release/*.exe
+            release/*.zip
+            release/*.blockmap
+            release/SHA256SUMS.txt
+            release/resource-inventory-*.json
+          if-no-files-found: error
+          retention-days: 14

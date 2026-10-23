@@ -1,0 +1,5670 @@
+{
+  "提示词包版本已保存；只有当前内容回归通过并经人工评审和批准的包参与新审核。": {
+    "en": "Prompt package saved. Only the current package with passed regression and human approval is used in new reviews.",
+    "th": "บันทึกชุดคำสั่งแล้ว ใช้ในการตรวจใหม่เฉพาะรุ่นปัจจุบันที่ผ่านการทดสอบและอนุมัติโดยผู้ตรวจ"
+  },
+  "版本化顾问提示词包": {
+    "en": "Versioned adviser prompt packages",
+    "th": "ชุดคำสั่งที่ปรึกษาแบบมีรุ่น"
+  },
+  "新建提示词包": {
+    "en": "New prompt package",
+    "th": "สร้างชุดคำสั่ง"
+  },
+  "顾问提供的内容作为带来源的审核参考资料，不能覆盖软件安全边界、法律规定或本次明确要求。记录人及顾问标签不是身份认证。": {
+    "en": "Adviser materials are attributed review references. They cannot override safety boundaries, law or explicit task requirements. Labels do not authenticate identity.",
+    "th": "เนื้อหาที่ปรึกษาเป็นข้อมูลอ้างอิงพร้อมที่มา ไม่อาจลบล้างขอบเขตความปลอดภัย กฎหมาย หรือข้อกำหนดงาน ป้ายชื่อไม่ใช่การยืนยันตัวตน"
+  },
+  "提示词包名称": {
+    "en": "Prompt package name",
+    "th": "ชื่อชุดคำสั่ง"
+  },
+  "顾问提示词包名称": {
+    "en": "Adviser prompt package name",
+    "th": "ชื่อชุดคำสั่งที่ปรึกษา"
+  },
+  "顾问与资料来源标签": {
+    "en": "Adviser and source label",
+    "th": "ป้ายชื่อที่ปรึกษาและแหล่งข้อมูล"
+  },
+  "顾问来源标签": {
+    "en": "Adviser source label",
+    "th": "ป้ายแหล่งข้อมูลที่ปรึกษา"
+  },
+  "实务方法与审核关注资料": {
+    "en": "Practice methods and review focus",
+    "th": "แนวปฏิบัติและประเด็นตรวจ"
+  },
+  "顾问提示词内容": {
+    "en": "Adviser prompt content",
+    "th": "เนื้อหาคำสั่งที่ปรึกษา"
+  },
+  "状态": {
+    "en": "Status",
+    "th": "สถานะ"
+  },
+  "顾问包状态": {
+    "en": "Adviser package status",
+    "th": "สถานะชุดที่ปรึกษา"
+  },
+  "候选，先运行样本检查": {
+    "en": "Candidate: check samples first",
+    "th": "ฉบับรอพิจารณา: ตรวจตัวอย่างก่อน"
+  },
+  "批准供新审核参考": {
+    "en": "Approve for new reviews",
+    "th": "อนุมัติใช้ในการตรวจใหม่"
+  },
+  "停用": {
+    "en": "Disable",
+    "th": "ปิดใช้งาน"
+  },
+  "本次保存原因": {
+    "en": "Reason for this save",
+    "th": "เหตุผลในการบันทึกครั้งนี้"
+  },
+  "对应的人工接受回归": {
+    "en": "Accepted human-reviewed regression",
+    "th": "ผลทดสอบที่ผู้ตรวจยอมรับ"
+  },
+  "采用最新通过且人工接受的记录": {
+    "en": "Use latest passed and accepted result",
+    "th": "ใช้ผลล่าสุดที่ผ่านและผู้ตรวจยอมรับ"
+  },
+  "程序匹配通过": {
+    "en": "Program matching passed",
+    "th": "ผ่านการจับคู่โดยโปรแกรม"
+  },
+  "未通过": {
+    "en": "Not passed",
+    "th": "ไม่ผ่าน"
+  },
+  "· 包r": {
+    "en": "· package r",
+    "th": "· ชุด r"
+  },
+  "我已核对内容、适用范围、样本及人工评审，批准本版本": {
+    "en": "I have checked content, scope, samples and review, and approve this version",
+    "th": "ข้าพเจ้าตรวจเนื้อหา ขอบเขต ตัวอย่าง และผลตรวจแล้ว และอนุมัติรุ่นนี้"
+  },
+  "保存顾问包版本": {
+    "en": "Save adviser package version",
+    "th": "บันทึกรุ่นชุดที่ปรึกษา"
+  },
+  "查看顾问包历史": {
+    "en": "View adviser package history",
+    "th": "ดูประวัติชุดที่ปรึกษา"
+  },
+  "绑定当前包版本的测试样本": {
+    "en": "Test samples bound to this package version",
+    "th": "ตัวอย่างทดสอบที่ผูกกับชุดรุ่นปัจจุบัน"
+  },
+  "登记期望风险和人工观察结果；本地运行金额、日期等程序检查及结果匹配，不调用模型，不认证法律正确性。": {
+    "en": "Record expected risks and human observations. Local amount/date checks and matching do not call a model or certify legal accuracy.",
+    "th": "บันทึกความเสี่ยงที่คาดและผลสังเกตของผู้ตรวจ ตรวจจำนวนเงิน วันที่ และการจับคู่ในเครื่อง ไม่เรียกโมเดลหรือรับรองความถูกต้องทางกฎหมาย"
+  },
+  "新增样本": {
+    "en": "Add sample",
+    "th": "เพิ่มตัวอย่าง"
+  },
+  "样本名称": {
+    "en": "Sample name",
+    "th": "ชื่อตัวอย่าง"
+  },
+  "顾问样本名称": {
+    "en": "Adviser sample name",
+    "th": "ชื่อตัวอย่างที่ปรึกษา"
+  },
+  "样本文字": {
+    "en": "Sample text",
+    "th": "ข้อความตัวอย่าง"
+  },
+  "顾问样本文字": {
+    "en": "Adviser sample text",
+    "th": "ข้อความตัวอย่างที่ปรึกษา"
+  },
+  "样本来源": {
+    "en": "Sample source",
+    "th": "แหล่งตัวอย่าง"
+  },
+  "期望风险": {
+    "en": "Expected risks",
+    "th": "ความเสี่ยงที่คาด"
+  },
+  "期望标识": {
+    "en": "Expected identifier",
+    "th": "รหัสผลที่คาด"
+  },
+  "应出现文字（用分号分隔）": {
+    "en": "Expected text (separate with semicolons)",
+    "th": "ข้อความที่ควรพบ (คั่นด้วยอัฒภาค)"
+  },
+  "类别": {
+    "en": "Category",
+    "th": "ประเภท"
+  },
+  "法律": {
+    "en": "Legal",
+    "th": "กฎหมาย"
+  },
+  "商业": {
+    "en": "Commercial",
+    "th": "ธุรกิจ"
+  },
+  "履约 / 程序": {
+    "en": "Performance / program checks",
+    "th": "การปฏิบัติตามสัญญา / การตรวจโดยโปรแกรม"
+  },
+  "关注等级": {
+    "en": "Attention level",
+    "th": "ระดับความสำคัญ"
+  },
+  "移除此期望": {
+    "en": "Remove expectation",
+    "th": "ลบผลที่คาด"
+  },
+  "增加期望风险": {
+    "en": "Add expected risk",
+    "th": "เพิ่มความเสี่ยงที่คาด"
+  },
+  "人工登记观察结果": {
+    "en": "Human-recorded observations",
+    "th": "ผลสังเกตที่ผู้ตรวจบันทึก"
+  },
+  "观察标题": {
+    "en": "Observation title",
+    "th": "หัวข้อผลสังเกต"
+  },
+  "观察分析": {
+    "en": "Observation analysis",
+    "th": "การวิเคราะห์ผลสังเกต"
+  },
+  "观察类别": {
+    "en": "Observation category",
+    "th": "ประเภทผลสังเกต"
+  },
+  "观察等级": {
+    "en": "Observation level",
+    "th": "ระดับผลสังเกต"
+  },
+  "移除观察": {
+    "en": "Remove observation",
+    "th": "ลบผลสังเกต"
+  },
+  "增加人工观察": {
+    "en": "Add human observation",
+    "th": "เพิ่มผลสังเกตของผู้ตรวจ"
+  },
+  "样本修改原因": {
+    "en": "Reason for sample changes",
+    "th": "เหตุผลที่แก้ตัวอย่าง"
+  },
+  "样本已绑定当前提示词包版本；旧回归不再自动沿用更新后的样本。": {
+    "en": "Sample bound to the current prompt version. Earlier regression does not carry over to changed samples.",
+    "th": "ผูกตัวอย่างกับชุดคำสั่งรุ่นปัจจุบันแล้ว ผลทดสอบเดิมไม่ใช้ต่อเมื่อแก้ตัวอย่าง"
+  },
+  "保存样本版本": {
+    "en": "Save sample version",
+    "th": "บันทึกรุ่นตัวอย่าง"
+  },
+  "查看样本历史": {
+    "en": "View sample history",
+    "th": "ดูประวัติตัวอย่าง"
+  },
+  "样本已停用，历史保留；绑定该样本的启用依据失效，须重新回归评审。": {
+    "en": "Sample disabled; history retained. Approval based on this sample is invalid and needs new regression and review.",
+    "th": "ปิดตัวอย่างและเก็บประวัติแล้ว การอนุมัติที่อิงตัวอย่างนี้ใช้ไม่ได้ ต้องทดสอบและตรวจใหม่"
+  },
+  "停用样本并保留历史": {
+    "en": "Disable sample and retain history",
+    "th": "ปิดตัวอย่างและเก็บประวัติ"
+  },
+  "程序回归已记录，仍须人工评审后才可批准顾问包。": {
+    "en": "Regression recorded. Human review is still required before approving the adviser package.",
+    "th": "บันทึกผลทดสอบแล้ว ต้องให้ผู้ตรวจพิจารณาก่อนอนุมัติชุดที่ปรึกษา"
+  },
+  "运行全部样本程序回归": {
+    "en": "Run program regression on all samples",
+    "th": "ทดสอบโปรแกรมกับทุกตัวอย่าง"
+  },
+  "回归记录与人工评审": {
+    "en": "Regression records and human review",
+    "th": "บันทึกการทดสอบและผลตรวจของผู้ตรวจ"
+  },
+  "人工评审原因": {
+    "en": "Human review reason",
+    "th": "เหตุผลการพิจารณาของผู้ตรวจ"
+  },
+  "顾问回归评审原因": {
+    "en": "Adviser regression review reason",
+    "th": "เหตุผลการพิจารณาผลทดสอบที่ปรึกษา"
+  },
+  "我已人工审阅本次样本及匹配结果；程序检查不代表法律正确性": {
+    "en": "I reviewed samples and matching results. Program checks do not establish legal accuracy.",
+    "th": "ข้าพเจ้าตรวจตัวอย่างและผลจับคู่แล้ว การตรวจโดยโปรแกรมไม่ยืนยันความถูกต้องทางกฎหมาย"
+  },
+  "包 r": {
+    "en": "Package r",
+    "th": "ชุด r"
+  },
+  "匹配检查通过": {
+    "en": "Matching checks passed",
+    "th": "ผ่านการตรวจจับคู่"
+  },
+  "存在未匹配期望": {
+    "en": "Unmatched expectations remain",
+    "th": "ยังมีผลที่คาดซึ่งจับคู่ไม่ได้"
+  },
+  "样本": {
+    "en": "Samples",
+    "th": "ตัวอย่าง"
+  },
+  "人工评审记录已保存，保留历史版本。": {
+    "en": "Human review saved with history retained.",
+    "th": "บันทึกผลพิจารณาของผู้ตรวจและเก็บประวัติแล้ว"
+  },
+  "人工接受本次评审": {
+    "en": "Accept this review",
+    "th": "ยอมรับผลพิจารณานี้"
+  },
+  "人工拒绝": {
+    "en": "Reject manually",
+    "th": "ปฏิเสธโดยผู้ตรวจ"
+  },
+  "不可覆盖的历史版本": {
+    "en": "Immutable version history",
+    "th": "ประวัติรุ่นที่เขียนทับไม่ได้"
+  },
+  "已从历史恢复为候选；必须重新检查样本、评审并人工批准。": {
+    "en": "Restored as candidate. Recheck samples, review and approve before use.",
+    "th": "คืนค่าเป็นฉบับรอพิจารณาแล้ว ต้องตรวจตัวอย่าง พิจารณา และอนุมัติใหม่"
+  },
+  "以此版本建立待确认顾问包": {
+    "en": "Create candidate package from this version",
+    "th": "สร้างชุดรอพิจารณาจากรุ่นนี้"
+  },
+  "已通过现有审核管线开始审核本份原稿。": {
+    "en": "Review of this original started through the existing pipeline.",
+    "th": "เริ่มตรวจต้นฉบับนี้ผ่านกระบวนการตรวจเดิมแล้ว"
+  },
+  "已保存新审核原稿；此前审核与确认已失效，请重新审核。": {
+    "en": "New review original saved. Previous review and confirmation are invalid; review again.",
+    "th": "บันทึกต้นฉบับตรวจใหม่แล้ว ผลตรวจและการยืนยันเดิมใช้ไม่ได้ โปรดตรวจใหม่"
+  },
+  "已导出已确认原稿：{v0}": {
+    "en": "Confirmed original exported: {v0}",
+    "th": "ส่งออกต้นฉบับที่ยืนยันแล้ว: {v0}"
+  },
+  "起草后核验与确认": {
+    "en": "Post-draft checks and confirmation",
+    "th": "การตรวจและยืนยันหลังร่าง"
+  },
+  "起草后核验、审核与确认": {
+    "en": "Post-draft checks, review and confirmation",
+    "th": "การตรวจข้อมูล ตรวจสัญญา และยืนยันหลังร่าง"
+  },
+  "修改正文会生成新的审核原稿；导出绑定当前内容与审核版本。": {
+    "en": "Editing text creates a new review original. Export is bound to current content and review version.",
+    "th": "การแก้ข้อความจะสร้างต้นฉบับตรวจใหม่ การส่งออกผูกกับเนื้อหาและรุ่นตรวจปัจจุบัน"
+  },
+  "返回": {
+    "en": "Back",
+    "th": "กลับ"
+  },
+  "正文 SHA-256：": {
+    "en": "Body SHA-256: ",
+    "th": "SHA-256 ของเนื้อหา: "
+  },
+  "审核原稿：": {
+    "en": "Review original: ",
+    "th": "ต้นฉบับตรวจ: "
+  },
+  " · 项目 {v0}": {
+    "en": " · Project {v0}",
+    "th": " · โครงการ {v0}"
+  },
+  "记录人标签": {
+    "en": "Recorder label",
+    "th": "ป้ายชื่อผู้บันทึก"
+  },
+  "起草确认记录人": {
+    "en": "Draft confirmation recorder",
+    "th": "ผู้บันทึกการยืนยันร่าง"
+  },
+  "修改或确认原因": {
+    "en": "Reason for edit or confirmation",
+    "th": "เหตุผลในการแก้หรือยืนยัน"
+  },
+  "起草确认原因": {
+    "en": "Draft confirmation reason",
+    "th": "เหตุผลยืนยันร่าง"
+  },
+  "编辑正文与待补信息": {
+    "en": "Edit body and missing information",
+    "th": "แก้เนื้อหาและข้อมูลที่ต้องเพิ่มเติม"
+  },
+  "刷新核验状态": {
+    "en": "Refresh check status",
+    "th": "อัปเดตสถานะการตรวจ"
+  },
+  "合同标题": {
+    "en": "Contract title",
+    "th": "ชื่อสัญญา"
+  },
+  "条款标题": {
+    "en": "Clause heading",
+    "th": "หัวข้อข้อสัญญา"
+  },
+  "正文（每行一段）": {
+    "en": "Body (one paragraph per line)",
+    "th": "เนื้อหา (หนึ่งย่อหน้าต่อบรรทัด)"
+  },
+  "待补信息（补齐正文后移除相应条目，每行一项）": {
+    "en": "Missing information (remove resolved items; one per line)",
+    "th": "ข้อมูลที่ขาด (ลบรายการที่เติมแล้ว หนึ่งรายการต่อบรรทัด)"
+  },
+  "保存新原稿并重新核验": {
+    "en": "Save new original and check again",
+    "th": "บันทึกต้นฉบับใหม่และตรวจซ้ำ"
+  },
+  "程序核验与需处理事项": {
+    "en": "Program checks and action items",
+    "th": "การตรวจโดยโปรแกรมและรายการที่ต้องจัดการ"
+  },
+  "金额、主体、日期、引用和占位符检查只覆盖可可靠识别的文字；其余内容需人工确认。": {
+    "en": "Checks cover reliably identifiable amounts, parties, dates, references and placeholders. Other content needs human confirmation.",
+    "th": "ตรวจเฉพาะจำนวนเงิน คู่สัญญา วันที่ อ้างอิง และช่องว่างที่ระบุได้อย่างน่าเชื่อถือ เนื้อหาอื่นต้องให้ผู้ตรวจยืนยัน"
+  },
+  "须先补齐 · ": {
+    "en": "Complete first · ",
+    "th": "เติมให้ครบก่อน · "
+  },
+  "请补齐正文与待补信息，或按本草稿的类型、立场和项目重新审核。": {
+    "en": "Complete the body and missing information, or review again with this draft’s type, role and project.",
+    "th": "เติมเนื้อหาและข้อมูลที่ขาด หรือตรวจใหม่โดยใช้ประเภท จุดยืน และโครงการของร่างนี้"
+  },
+  "处置": {
+    "en": "Disposition",
+    "th": "การจัดการ"
+  },
+  "处置{v0}": {
+    "en": "Disposition {v0}",
+    "th": "การจัดการ {v0}"
+  },
+  "请选择": {
+    "en": "Select",
+    "th": "โปรดเลือก"
+  },
+  "已人工核实或解决": {
+    "en": "Verified or resolved by a person",
+    "th": "ผู้ตรวจยืนยันหรือแก้แล้ว"
+  },
+  "了解事项并接受本次剩余风险": {
+    "en": "Understand and accept the remaining risk",
+    "th": "รับทราบและยอมรับความเสี่ยงที่เหลือครั้งนี้"
+  },
+  "处置原因": {
+    "en": "Disposition reason",
+    "th": "เหตุผลการจัดการ"
+  },
+  "原因{v0}": {
+    "en": "Reason {v0}",
+    "th": "เหตุผล {v0}"
+  },
+  "当前未发现程序性问题；仍须完成审核与人工确认。": {
+    "en": "No program issues currently found. Review and human confirmation are still required.",
+    "th": "ยังไม่พบปัญหาจากโปรแกรม ต้องตรวจสัญญาและให้ผู้ตรวจยืนยันต่อ"
+  },
+  "使用现有审核管线": {
+    "en": "Use the existing review pipeline",
+    "th": "ใช้กระบวนการตรวจเดิม"
+  },
+  "状态：": {
+    "en": "Status: ",
+    "th": "สถานะ: "
+  },
+  "起草后审核模式": {
+    "en": "Post-draft review mode",
+    "th": "โหมดตรวจหลังร่าง"
+  },
+  "本地规则（需人工补充法律分析）": {
+    "en": "Local rules (human legal analysis required)",
+    "th": "กฎในเครื่อง (ต้องให้ผู้ตรวจวิเคราะห์กฎหมายเพิ่มเติม)"
+  },
+  "已配置模型 + 当前检索设置": {
+    "en": "Configured model + current retrieval settings",
+    "th": "โมเดลที่ตั้งค่า + การตั้งค่าค้นหาปัจจุบัน"
+  },
+  "审核当前原稿": {
+    "en": "Review current original",
+    "th": "ตรวจต้นฉบับปัจจุบัน"
+  },
+  "我已核对本版本交易信息、审核意见、程序检查及适用局限，确认本次导出": {
+    "en": "I checked this version’s transaction details, review, checks and limitations, and confirm this export",
+    "th": "ข้าพเจ้าตรวจข้อมูลธุรกรรม ผลตรวจ การตรวจโปรแกรม และข้อจำกัดของรุ่นนี้แล้ว และยืนยันส่งออกครั้งนี้"
+  },
+  "确认会记录内容摘要、原稿摘要、审核版本和逐项处置；不改变原风险或自动作出法律正确性结论。": {
+    "en": "Confirmation records content hashes, original, review version and item dispositions. It does not change original risks or certify legal accuracy.",
+    "th": "การยืนยันบันทึกแฮชเนื้อหา ต้นฉบับ รุ่นตรวจ และการจัดการแต่ละรายการ ไม่เปลี่ยนความเสี่ยงเดิมหรือรับรองความถูกต้องทางกฎหมาย"
+  },
+  "本版本已人工确认，可以导出。": {
+    "en": "This version is human-confirmed and ready to export.",
+    "th": "ผู้ตรวจยืนยันรุ่นนี้แล้ว พร้อมส่งออก"
+  },
+  "保存本版本人工确认": {
+    "en": "Save human confirmation for this version",
+    "th": "บันทึกการยืนยันของผู้ตรวจสำหรับรุ่นนี้"
+  },
+  "导出已确认 DOCX": {
+    "en": "Export confirmed DOCX",
+    "th": "ส่งออก DOCX ที่ยืนยันแล้ว"
+  },
+  "待确认": {
+    "en": "Pending confirmation",
+    "th": "รอยืนยัน"
+  },
+  "已采纳": {
+    "en": "Accepted",
+    "th": "ยอมรับแล้ว"
+  },
+  "已拒绝": {
+    "en": "Rejected",
+    "th": "ปฏิเสธแล้ว"
+  },
+  "已启用可编辑副本。请核对修改前后文字再逐项采纳；导出时会记录副本模式，原件和历史审核保留。": {
+    "en": "Editable copy enabled. Check changes before accepting each item. Export records copy mode and keeps originals and reviews.",
+    "th": "เปิดสำเนาแก้ไขแล้ว ตรวจข้อความก่อนยอมรับแต่ละรายการ การส่งออกบันทึกโหมดสำเนาและเก็บต้นฉบับกับผลตรวจ"
+  },
+  "这项草稿的原文范围当前不可编辑，请核对修改记录和原文定位。": {
+    "en": "This draft’s original range is not editable. Check its record and source location.",
+    "th": "ช่วงต้นฉบับของร่างนี้แก้ไม่ได้ โปรดตรวจบันทึกและตำแหน่งต้นฉบับ"
+  },
+  "本轮只修改单段纯文字，请移除新换行、制表符或控制字符。": {
+    "en": "Only one plain-text paragraph can change. Remove newlines, tabs and control characters.",
+    "th": "แก้ได้เฉพาะข้อความย่อหน้าเดียว โปรดลบบรรทัดใหม่ แท็บ และอักขระควบคุม"
+  },
+  "修改草稿已保存，当前为待确认。请核对修改前后文字，再逐项采纳。": {
+    "en": "Change draft saved as pending. Compare text, then accept each item.",
+    "th": "บันทึกร่างแก้ไขเป็นรอยืนยันแล้ว เปรียบเทียบข้อความและยอมรับทีละรายการ"
+  },
+  "合同修改": {
+    "en": "Contract changes",
+    "th": "การแก้สัญญา"
+  },
+  "项已采纳": {
+    "en": " accepted",
+    "th": " รายการที่ยอมรับ"
+  },
+  "预览后逐项确认": {
+    "en": "Preview, then confirm each item",
+    "th": "ดูตัวอย่างแล้วตรวจยืนยันทีละรายการ"
+  },
+  "修改基于本次审核的原文版本。先核对修改前后文字，再采纳需要的条款；修改稿单独保存，原件和原审核记录保留。": {
+    "en": "Changes use this review’s original version. Compare and accept needed edits. Revised files are separate; originals and reviews remain.",
+    "th": "แก้จากต้นฉบับรุ่นของผลตรวจนี้ เปรียบเทียบและยอมรับรายการที่ต้องการ ไฟล์แก้เก็บแยก ต้นฉบับและผลตรวจยังอยู่"
+  },
+  "当前为界面预览：只能体验内存中的手动草稿与采纳，不调用模型，也不导出真实修改稿。": {
+    "en": "Preview only: manual drafts and acceptance stay in memory. No model calls or real export.",
+    "th": "โหมดตัวอย่าง: ร่างเองและยอมรับในหน่วยความจำ ไม่เรียกโมเดลหรือส่งออกจริง"
+  },
+  "正在读取修改范围与记录…": {
+    "en": "Loading change ranges and records…",
+    "th": "กำลังอ่านช่วงแก้ไขและบันทึก…"
+  },
+  "重新读取修改记录": {
+    "en": "Reload change records",
+    "th": "อ่านบันทึกแก้ไขใหม่"
+  },
+  "本文件暂不支持定点修改。": {
+    "en": "Targeted edits are not yet supported for this file.",
+    "th": "ไฟล์นี้ยังไม่รองรับการแก้ตำแหน่งเฉพาะ"
+  },
+  "可编辑副本模式": {
+    "en": "Editable copy mode",
+    "th": "โหมดสำเนาแก้ไข"
+  },
+  "已启用可编辑副本": {
+    "en": "Editable copy enabled",
+    "th": "เปิดสำเนาแก้ไขแล้ว"
+  },
+  "原件包含编辑限制": {
+    "en": "Original has editing restrictions",
+    "th": "ต้นฉบับจำกัดการแก้ไข"
+  },
+  "当前使用可编辑工作副本拟定修改。仅导出的新副本会移除 Word 的只读限制，并在修改清单中记录；原件与历史审核保留，复杂段落仍按安全范围处理。": {
+    "en": "Edits use a working copy. Only the new exported copy removes Word read-only restrictions and records this in the change list. Originals, reviews and complex-structure safeguards remain.",
+    "th": "แก้ในสำเนาทำงาน เฉพาะสำเนาส่งออกใหม่จะลบข้อจำกัดอ่านอย่างเดียวของ Word และบันทึกในรายการแก้ ต้นฉบับ ผลตรวจ และการป้องกันโครงสร้างซับซ้อนยังคงอยู่"
+  },
+  "启用于": {
+    "en": "Enabled at ",
+    "th": "เปิดเมื่อ "
+  },
+  "启用后可基于工作副本拟定修改；带密码校验的 Word 只读限制仅在导出的新副本中移除，不破解或恢复密码。原件与历史审核保留。": {
+    "en": "Use a working copy to draft edits. Word read-only restrictions are removed only in the new export, without cracking or recovering passwords. Originals and reviews remain.",
+    "th": "ใช้สำเนาทำงานร่างแก้ไข ลบข้อจำกัดอ่านอย่างเดียวของ Word เฉพาะไฟล์ส่งออกใหม่ ไม่ถอดหรือกู้รหัสผ่าน เก็บต้นฉบับและผลตรวจ"
+  },
+  "正在启用副本…": {
+    "en": "Enabling copy…",
+    "th": "กำลังเปิดสำเนา…"
+  },
+  "启用可编辑副本": {
+    "en": "Enable editable copy",
+    "th": "เปิดสำเนาแก้ไข"
+  },
+  "界面预览不执行真实副本操作。": {
+    "en": "Preview does not create real copies.",
+    "th": "โหมดตัวอย่างไม่สร้างสำเนาจริง"
+  },
+  "编辑修改草稿": {
+    "en": "Edit change draft",
+    "th": "แก้ร่างการเปลี่ยนแปลง"
+  },
+  "拟定一项修改": {
+    "en": "Draft an edit",
+    "th": "ร่างการแก้ไข"
+  },
+  "新建修改": {
+    "en": "New edit",
+    "th": "เพิ่มการแก้ไข"
+  },
+  "关联审核意见": {
+    "en": "Related review finding",
+    "th": "ข้อสังเกตที่เกี่ยวข้อง"
+  },
+  "手动拟定修改（不关联意见）": {
+    "en": "Manual edit (no finding link)",
+    "th": "แก้เอง (ไม่ผูกข้อสังเกต)"
+  },
+  "修改原文段落": {
+    "en": "Original paragraph to edit",
+    "th": "ย่อหน้าต้นฉบับที่จะแก้"
+  },
+  "请选择要修改的段落": {
+    "en": "Select a paragraph to edit",
+    "th": "เลือกย่อหน้าที่จะแก้"
+  },
+  "（暂不支持修改）": {
+    "en": " (editing not yet supported)",
+    "th": " (ยังแก้ไม่ได้)"
+  },
+  "此意见没有唯一段落定位，请自行选择对应原文。缺失条款需人工确定放置位置，本轮不自动新增段落。": {
+    "en": "This finding has no unique paragraph location. Select the source manually. Missing clauses need a human-chosen position; no paragraph is inserted automatically.",
+    "th": "ข้อสังเกตนี้ไม่มีตำแหน่งย่อหน้าที่แน่นอน โปรดเลือกเอง ข้อสัญญาที่ขาดต้องให้ผู้ตรวจเลือกตำแหน่ง ไม่เพิ่มย่อหน้าอัตโนมัติ"
+  },
+  "此段包含暂不支持的复杂结构，请在 Word 中人工处理。": {
+    "en": "This paragraph has unsupported complex structures. Handle it in Word.",
+    "th": "ย่อหน้านี้มีโครงสร้างซับซ้อนที่ไม่รองรับ โปรดแก้ใน Word"
+  },
+  "完整段落上下文 · 只读": {
+    "en": "Full paragraph context · read only",
+    "th": "บริบทย่อหน้าเต็ม · อ่านอย่างเดียว"
+  },
+  "此段按文字片段修改。书签、权限边界、原有修订和换行分页等结构保留；只能改写所选的可编辑文字片段。": {
+    "en": "Edit text segments only. Bookmarks, permission boundaries, existing revisions and page/line breaks are preserved.",
+    "th": "แก้ได้เฉพาะส่วนข้อความ เก็บที่คั่น ขอบเขตสิทธิ์ รอยแก้เดิม และการขึ้นบรรทัดหรือหน้า"
+  },
+  "修改文字片段": {
+    "en": "Text segment to edit",
+    "th": "ส่วนข้อความที่จะแก้"
+  },
+  "请选择可编辑文字片段": {
+    "en": "Select an editable segment",
+    "th": "เลือกส่วนข้อความที่แก้ได้"
+  },
+  "文字片段 {v0} · 第 {v1}–{v2} 位 · {v3}": {
+    "en": "Segment {v0} · positions {v1}–{v2} · {v3}",
+    "th": "ส่วนข้อความ {v0} · ตำแหน่ง {v1}–{v2} · {v3}"
+  },
+  "保留结构 {v0} · {v1}": {
+    "en": "Preserved structure {v0} · {v1}",
+    "th": "โครงสร้างที่เก็บไว้ {v0} · {v1}"
+  },
+  "修改前 ·": {
+    "en": "Before · ",
+    "th": "ก่อนแก้ · "
+  },
+  "所选片段只读": {
+    "en": "Selected segment is read only",
+    "th": "ส่วนที่เลือกอ่านอย่างเดียว"
+  },
+  "原文只读": {
+    "en": "Original is read only",
+    "th": "ต้นฉบับอ่านอย่างเดียว"
+  },
+  "修改后 ·": {
+    "en": "After · ",
+    "th": "หลังแก้ · "
+  },
+  "片段草稿": {
+    "en": "Segment draft",
+    "th": "ร่างส่วนข้อความ"
+  },
+  "可编辑草稿": {
+    "en": "Editable draft",
+    "th": "ร่างที่แก้ได้"
+  },
+  "修改后文字": {
+    "en": "Replacement text",
+    "th": "ข้อความหลังแก้"
+  },
+  "仅修改所选片段的文字，其余文字和结构保留。": {
+    "en": "Only the selected text changes; other text and structures remain.",
+    "th": "แก้เฉพาะข้อความที่เลือก เก็บข้อความและโครงสร้างอื่นไว้"
+  },
+  "单段纯文字，段落结构保留。": {
+    "en": "One plain-text paragraph; paragraph structure remains.",
+    "th": "ข้อความย่อหน้าเดียว เก็บโครงสร้างย่อหน้า"
+  },
+  "不新增段落、换行或制表符，最多 30,000 字。清空可删除": {
+    "en": "No new paragraphs, newlines or tabs; maximum 30,000 characters. Clearing deletes ",
+    "th": "ห้ามเพิ่มย่อหน้า บรรทัดใหม่ หรือแท็บ สูงสุด 30,000 อักขระ ล้างเพื่อลบข้อความของ"
+  },
+  "该片段": {
+    "en": "this segment",
+    "th": "ส่วนนี้"
+  },
+  "该段": {
+    "en": "this paragraph",
+    "th": "ย่อหน้านี้"
+  },
+  "文字。": {
+    "en": " text.",
+    "th": "ข้อความ"
+  },
+  "草稿含换行、制表符或控制字符，请移除后保存。": {
+    "en": "Remove newlines, tabs or control characters before saving.",
+    "th": "ลบบรรทัดใหม่ แท็บ หรืออักขระควบคุมก่อนบันทึก"
+  },
+  "保存编辑后，这项修改会恢复为待确认，需要重新采纳。": {
+    "en": "Saving resets this edit to pending; accept it again after checking.",
+    "th": "การบันทึกทำให้รายการกลับเป็นรอยืนยัน ต้องตรวจแล้วยอมรับใหม่"
+  },
+  "有未保存编辑，请先保存或撤销编辑，再切换段落或生成新的改写。": {
+    "en": "Unsaved edits remain. Save or undo before switching paragraphs or generating new text.",
+    "th": "มีการแก้ที่ยังไม่บันทึก บันทึกหรือเลิกทำก่อนเปลี่ยนย่อหน้าหรือสร้างข้อความใหม่"
+  },
+  "正在生成改写…": {
+    "en": "Generating replacement…",
+    "th": "กำลังสร้างข้อความแก้ไข…"
+  },
+  "生成具体改写": {
+    "en": "Generate replacement",
+    "th": "สร้างข้อความแก้ไข"
+  },
+  "正在取消…": {
+    "en": "Cancelling…",
+    "th": "กำลังยกเลิก…"
+  },
+  "取消本次改写": {
+    "en": "Cancel this rewrite",
+    "th": "ยกเลิกการเขียนใหม่ครั้งนี้"
+  },
+  "保存修改草稿": {
+    "en": "Save change draft",
+    "th": "บันทึกร่างแก้ไข"
+  },
+  "撤销未保存编辑": {
+    "en": "Undo unsaved edits",
+    "th": "เลิกทำการแก้ที่ยังไม่บันทึก"
+  },
+  "可直接手动修改；选择审核意见后，可调用已配置模型生成具体改写。": {
+    "en": "Edit manually, or select a finding and use your configured model to generate replacement text.",
+    "th": "แก้เอง หรือเลือกข้อสังเกตเพื่อให้โมเดลที่ตั้งค่าสร้างข้อความแทน"
+  },
+  "修改前后预览": {
+    "en": "Before / after preview",
+    "th": "ตัวอย่างก่อนและหลังแก้"
+  },
+  "项草稿": {
+    "en": " drafts",
+    "th": " ร่าง"
+  },
+  "刷新修改记录": {
+    "en": "Refresh change records",
+    "th": "อัปเดตบันทึกแก้ไข"
+  },
+  "还没有修改草稿": {
+    "en": "No change drafts yet",
+    "th": "ยังไม่มีร่างแก้ไข"
+  },
+  "选择原文段落，手动编辑或生成改写后，修改前后内容会出现在这里。": {
+    "en": "Choose a paragraph and edit or generate replacement text to see the comparison here.",
+    "th": "เลือกย่อหน้าแล้วแก้เองหรือสร้างข้อความแทนเพื่อดูการเปรียบเทียบที่นี่"
+  },
+  "修改稿格式": {
+    "en": "Revised file format",
+    "th": "รูปแบบไฟล์แก้ไข"
+  },
+  "带修订痕迹（可在 Word 接受或拒绝）": {
+    "en": "Tracked changes (accept or reject in Word)",
+    "th": "ติดตามการเปลี่ยนแปลง (ยอมรับหรือปฏิเสธใน Word)"
+  },
+  "普通修改稿（无新增痕迹）": {
+    "en": "Clean revision (no new change marks)",
+    "th": "ฉบับแก้สะอาด (ไม่มีรอยแก้ใหม่)"
+  },
+  "修订作者": {
+    "en": "Revision author",
+    "th": "ผู้แก้ไข"
+  },
+  "1–80 字，不含换行或控制字符。": {
+    "en": "1–80 characters, without newlines or control characters.",
+    "th": "1–80 อักขระ ไม่มีบรรทัดใหม่หรืออักขระควบคุม"
+  },
+  "仅将已采纳项作为新增插入/删除修订写入新 DOCX，可在 Word 中逐项接受或拒绝。原有修订继续保留。": {
+    "en": "Accepted items become new insert/delete revisions in a new DOCX, individually reviewable in Word. Existing revisions remain.",
+    "th": "บันทึกรายการที่ยอมรับเป็นรอยเพิ่มหรือลบใหม่ใน DOCX ใหม่ ตรวจยอมรับหรือปฏิเสธใน Word ได้ เก็บรอยแก้เดิม"
+  },
+  "仅将已采纳项写入普通修改稿，不新增修订痕迹；原有修订仍保留。": {
+    "en": "Only accepted items enter the clean revision. No new change marks; existing revisions remain.",
+    "th": "ฉบับสะอาดรวมเฉพาะรายการที่ยอมรับ ไม่เพิ่มรอยใหม่และเก็บรอยแก้เดิม"
+  },
+  "请填写有效的修订作者。": {
+    "en": "Enter a valid revision author.",
+    "th": "โปรดกรอกชื่อผู้แก้ไขที่ถูกต้อง"
+  },
+  "项修改": {
+    "en": " edits",
+    "th": " รายการแก้ไข"
+  },
+  "当前有未保存编辑，请先保存并确认，或撤销编辑。": {
+    "en": "Unsaved edits remain. Save and confirm, or undo them first.",
+    "th": "มีการแก้ที่ยังไม่บันทึก โปรดบันทึกและยืนยัน หรือเลิกทำก่อน"
+  },
+  "仅将已采纳的修改写入新 DOCX，同时导出变更清单。原件不覆盖。": {
+    "en": "Export accepted edits to a new DOCX with a change list. The original is not overwritten.",
+    "th": "ส่งออกรายการที่ยอมรับไป DOCX ใหม่พร้อมรายการเปลี่ยนแปลง ไม่เขียนทับต้นฉบับ"
+  },
+  "正在导出…": {
+    "en": "Exporting…",
+    "th": "กำลังส่งออก…"
+  },
+  "导出修改稿与清单": {
+    "en": "Export revision and change list",
+    "th": "ส่งออกฉบับแก้และรายการเปลี่ยนแปลง"
+  },
+  "修改稿": {
+    "en": "Revised file",
+    "th": "ฉบับแก้ไข"
+  },
+  "变更清单": {
+    "en": "Change list",
+    "th": "รายการเปลี่ยนแปลง"
+  },
+  "已生成的修改版本": {
+    "en": "Generated revised versions",
+    "th": "รุ่นแก้ไขที่สร้างแล้ว"
+  },
+  "份": {
+    "en": " files",
+    "th": " ไฟล์"
+  },
+  "修改稿 v": {
+    "en": "Revision v",
+    "th": "ฉบับแก้ v"
+  },
+  "项修改 ·": {
+    "en": " edits · ",
+    "th": " รายการแก้ไข · "
+  },
+  "带修订痕迹{v0}": {
+    "en": "Tracked changes {v0}",
+    "th": "ติดตามการเปลี่ยนแปลง {v0}"
+  },
+  "原文段落": {
+    "en": "Original paragraph",
+    "th": "ย่อหน้าต้นฉบับ"
+  },
+  "仅修改文字片段 · 原文第": {
+    "en": "Text segment only · original positions ",
+    "th": "แก้เฉพาะส่วนข้อความ · ตำแหน่งต้นฉบับ "
+  },
+  "位，其余文字与结构保留": {
+    "en": "; other text and structures remain",
+    "th": "; เก็บข้อความและโครงสร้างอื่นไว้"
+  },
+  "修改前": {
+    "en": "Before",
+    "th": "ก่อนแก้"
+  },
+  " · 片段": {
+    "en": " · Segment",
+    "th": " · ส่วนข้อความ"
+  },
+  "修改后": {
+    "en": "After",
+    "th": "หลังแก้"
+  },
+  "删除该{v0}文字，保留段落结构": {
+    "en": "Delete this {v0} text and preserve the paragraph structure",
+    "th": "ลบข้อความ{v0} และเก็บโครงสร้างย่อหน้า"
+  },
+  "模型生成 · 请核对业务事实与法律含义": {
+    "en": "Model generated · check business facts and legal meaning",
+    "th": "โมเดลสร้าง · ตรวจข้อเท็จจริงธุรกิจและความหมายทางกฎหมาย"
+  },
+  "手动编辑": {
+    "en": "Manually edited",
+    "th": "แก้โดยผู้ใช้"
+  },
+  "· 基于本次审核原文版本": {
+    "en": "· Based on this review’s original version",
+    "th": "· อิงต้นฉบับรุ่นของผลตรวจนี้"
+  },
+  "正在编辑这项修改，请先保存或撤销编辑。": {
+    "en": "This item is being edited. Save or undo first.",
+    "th": "กำลังแก้รายการนี้ โปรดบันทึกหรือเลิกทำก่อน"
+  },
+  "编辑草稿": {
+    "en": "Edit draft",
+    "th": "แก้ร่าง"
+  },
+  "采纳这项修改": {
+    "en": "Accept this edit",
+    "th": "ยอมรับการแก้นี้"
+  },
+  "拒绝": {
+    "en": "Reject",
+    "th": "ปฏิเสธ"
+  },
+  "撤销采纳": {
+    "en": "Undo acceptance",
+    "th": "เลิกยอมรับ"
+  },
+  "恢复待确认": {
+    "en": "Reset to pending",
+    "th": "คืนเป็นรอยืนยัน"
+  },
+  "专业法律 MCP": {
+    "en": "Professional legal MCP",
+    "th": "MCP กฎหมายเฉพาะทาง"
+  },
+  "SSH / SFTP 文件目录": {
+    "en": "SSH / SFTP directory",
+    "th": "โฟลเดอร์ SSH / SFTP"
+  },
+  "共享盘或挂载目录": {
+    "en": "Shared or mounted directory",
+    "th": "โฟลเดอร์แชร์หรือที่เมานต์"
+  },
+  "远端知识索引 API": {
+    "en": "Remote knowledge index API",
+    "th": "API ดัชนีความรู้ระยะไกล"
+  },
+  "只读工具名称": {
+    "en": "Read-only tool name",
+    "th": "ชื่อเครื่องมืออ่านอย่างเดียว"
+  },
+  "搜索词参数名": {
+    "en": "Search query parameter name",
+    "th": "ชื่อพารามิเตอร์คำค้น"
+  },
+  "结果数组路径（可留空）": {
+    "en": "Result array path (optional)",
+    "th": "พาธอาร์เรย์ผลลัพธ์ (ไม่บังคับ)"
+  },
+  "例如 data.results": {
+    "en": "For example, data.results",
+    "th": "เช่น data.results"
+  },
+  "固定参数（JSON 对象，仅作为资料）": {
+    "en": "Fixed parameters (JSON object; reference data only)",
+    "th": "พารามิเตอร์คงที่ (ออบเจ็กต์ JSON เป็นข้อมูลอ้างอิงเท่านั้น)"
+  },
+  "{v0}固定参数": {
+    "en": "{v0} fixed parameters",
+    "th": "พารามิเตอร์คงที่ของ {v0}"
+  },
+  "固定参数应为有效 JSON 对象，保存前请修正。": {
+    "en": "Fixed parameters must be a valid JSON object. Correct before saving.",
+    "th": "พารามิเตอร์คงที่ต้องเป็นออบเจ็กต์ JSON ที่ถูกต้อง โปรดแก้ก่อนบันทึก"
+  },
+  "请人工确认此工具只用于检索资料。软件拒绝明确声明会写入数据的工具；不执行代码或脚本。": {
+    "en": "Confirm that the tool only retrieves information. Explicit write tools are rejected; code and scripts are not executed.",
+    "th": "โปรดยืนยันว่าเครื่องมือใช้ค้นข้อมูลเท่านั้น ปฏิเสธเครื่องมือที่ระบุว่าเขียนข้อมูล ไม่รันโค้ดหรือสคริปต์"
+  },
+  "连接版本已保存；凭据输入已清空，凭据不写入版本记录。": {
+    "en": "Connection version saved; credential input cleared. Credentials are excluded from version history.",
+    "th": "บันทึกรุ่นการเชื่อมต่อและล้างช่องข้อมูลรับรองแล้ว ไม่เก็บข้อมูลรับรองในประวัติรุ่น"
+  },
+  "已读取{v0}个工具；请配置法规或案例的只读映射并保存。": {
+    "en": "Read {v0} tools. Configure and save read-only statute or case mappings.",
+    "th": "อ่านเครื่องมือ {v0} รายการแล้ว โปรดตั้งค่าและบันทึกการจับคู่ค้นกฎหมายหรือคดีแบบอ่านอย่างเดียว"
+  },
+  "取得{v0}段可引用资料，请核对来源和适用版本。": {
+    "en": "Retrieved {v0} citable excerpts. Check sources and applicable versions.",
+    "th": "ได้ข้อความอ้างอิง {v0} ส่วน โปรดตรวจที่มาและรุ่นที่ใช้บังคับ"
+  },
+  "已请求取消，等待当前连接释放资源。": {
+    "en": "Cancellation requested; waiting for connection resources to close.",
+    "th": "ขอยกเลิกแล้ว กำลังรอปิดทรัพยากรการเชื่อมต่อ"
+  },
+  "远端知识与专业法律连接": {
+    "en": "Remote knowledge and legal connections",
+    "th": "การเชื่อมต่อความรู้ระยะไกลและกฎหมาย"
+  },
+  "配置企业授权的资料来源；按需同步文件或在审核时并行检索。": {
+    "en": "Configure enterprise-authorized sources; sync files or retrieve in parallel during review.",
+    "th": "ตั้งค่าแหล่งข้อมูลที่องค์กรอนุญาต ซิงก์ไฟล์หรือค้นขนานระหว่างตรวจ"
+  },
+  "关闭远端连接": {
+    "en": "Close remote connections",
+    "th": "ปิดการเชื่อมต่อระยะไกล"
+  },
+  "新建连接": {
+    "en": "New connection",
+    "th": "สร้างการเชื่อมต่อ"
+  },
+  "刷新连接列表": {
+    "en": "Refresh connections",
+    "th": "อัปเดตการเชื่อมต่อ"
+  },
+  "审核时启用": {
+    "en": "Enabled during review",
+    "th": "เปิดใช้ระหว่างตรวจ"
+  },
+  "未启用": {
+    "en": "Disabled",
+    "th": "ยังไม่เปิดใช้"
+  },
+  "尚无连接配置。": {
+    "en": "No connections configured.",
+    "th": "ยังไม่มีการตั้งค่าการเชื่อมต่อ"
+  },
+  "网络连接由用户配置并授权。本机索引、模型服务和联网检索分别配置。": {
+    "en": "Users configure and authorize network connections. Local index, model and web retrieval are configured separately.",
+    "th": "ผู้ใช้ตั้งค่าและอนุญาตการเชื่อมต่อเครือข่าย ดัชนีในเครื่อง โมเดล และค้นเว็บตั้งค่าแยกกัน"
+  },
+  "连接名称": {
+    "en": "Connection name",
+    "th": "ชื่อการเชื่อมต่อ"
+  },
+  "连接类型": {
+    "en": "Connection type",
+    "th": "ประเภทการเชื่อมต่อ"
+  },
+  "启用此连接（MCP / 索引 API 在审核时检索；文件目录需先同步并选为知识库）": {
+    "en": "Enable connection (MCP/index API searches during review; directories must be synced and selected as knowledge sources first)",
+    "th": "เปิดการเชื่อมต่อ (MCP/API ดัชนีค้นระหว่างตรวจ ต้องซิงก์โฟลเดอร์และเลือกเป็นคลังความรู้ก่อน)"
+  },
+  "MCP Streamable HTTP 端点": {
+    "en": "MCP Streamable HTTP endpoint",
+    "th": "ปลายทาง MCP Streamable HTTP"
+  },
+  "知识索引 API 根地址（包含版本路径）": {
+    "en": "Knowledge index API base URL (include version path)",
+    "th": "URL หลัก API ดัชนีความรู้ (รวมพาธรุ่น)"
+  },
+  "连接端点": {
+    "en": "Connection endpoint",
+    "th": "ปลายทางการเชื่อมต่อ"
+  },
+  "公网使用 HTTPS；本机服务可使用 HTTP。地址不携带令牌，令牌填写到下方凭据输入框。索引 API 使用相对 search 路径与 JSON": {
+    "en": "Use HTTPS for public services; local services may use HTTP. Put tokens below, not in URLs. The index API uses relative search and JSON",
+    "th": "ใช้ HTTPS สำหรับบริการสาธารณะ บริการในเครื่องใช้ HTTP ได้ ใส่โทเคนด้านล่าง ไม่ใส่ใน URL API ดัชนีใช้พาธ search แบบสัมพัทธ์และ JSON"
+  },
+  "SSH 主机": {
+    "en": "SSH host",
+    "th": "โฮสต์ SSH"
+  },
+  "SSH主机": {
+    "en": "SSH host",
+    "th": "โฮสต์ SSH"
+  },
+  "端口": {
+    "en": "Port",
+    "th": "พอร์ต"
+  },
+  "用户名": {
+    "en": "Username",
+    "th": "ชื่อผู้ใช้"
+  },
+  "SSH用户名": {
+    "en": "SSH username",
+    "th": "ชื่อผู้ใช้ SSH"
+  },
+  "远端绝对目录": {
+    "en": "Absolute remote directory",
+    "th": "โฟลเดอร์ระยะไกลแบบสัมบูรณ์"
+  },
+  "远端目录": {
+    "en": "Remote directory",
+    "th": "โฟลเดอร์ระยะไกล"
+  },
+  "服务端主机密钥指纹（SHA256:…，由管理员提供）": {
+    "en": "Server host key fingerprint (SHA256:…; supplied by administrator)",
+    "th": "ลายนิ้วมือกุญแจโฮสต์เซิร์ฟเวอร์ (SHA256:… ผู้ดูแลเป็นผู้ให้)"
+  },
+  "SSH主机指纹": {
+    "en": "SSH host fingerprint",
+    "th": "ลายนิ้วมือโฮสต์ SSH"
+  },
+  "仅下载所选目录的 TXT、Markdown、DOCX 和 PDF 文件，不在远端执行命令。默认镜像上限20 GB，可根据硬盘空间调整；1 TB规模仍须实测，不会自动完整下载全部存储。": {
+    "en": "Downloads only TXT, Markdown, DOCX and PDF from the selected directory; no remote commands. Default mirror limit is 20 GB. Adjust to disk capacity. 1 TB still needs real testing; full storage is not automatically downloaded.",
+    "th": "ดาวน์โหลดเฉพาะ TXT, Markdown, DOCX และ PDF จากโฟลเดอร์ที่เลือก ไม่รันคำสั่งระยะไกล สำเนาเริ่มต้นจำกัด 20 GB ปรับตามดิสก์ได้ ขนาด 1 TB ยังต้องทดสอบจริง ไม่ดาวน์โหลดทั้งหมดอัตโนมัติ"
+  },
+  "共享盘或本机挂载目录": {
+    "en": "Shared or locally mounted directory",
+    "th": "โฟลเดอร์แชร์หรือเมานต์ในเครื่อง"
+  },
+  "共享盘目录": {
+    "en": "Shared directory",
+    "th": "โฟลเดอร์แชร์"
+  },
+  "选择已挂载共享目录": {
+    "en": "Choose mounted shared directory",
+    "th": "เลือกโฟลเดอร์แชร์ที่เมานต์"
+  },
+  "先在 Windows 中连接企业共享盘，或在系统中挂载目录，再通过选择器授权读取。软件使用当前系统账户的文件权限。": {
+    "en": "Connect the enterprise share in Windows or mount the directory first, then authorize it in the picker. Current system account permissions apply.",
+    "th": "เชื่อมโฟลเดอร์องค์กรใน Windows หรือเมานต์ก่อน แล้วอนุญาตผ่านตัวเลือก ใช้สิทธิ์บัญชีระบบปัจจุบัน"
+  },
+  "认证凭据（密码，或仅含 privateKey / password / passphrase 的 JSON）": {
+    "en": "Credentials (password, or JSON with only privateKey / password / passphrase)",
+    "th": "ข้อมูลรับรอง (รหัสผ่าน หรือ JSON ที่มีเฉพาะ privateKey / password / passphrase)"
+  },
+  "API 令牌（留空保留现有值）": {
+    "en": "API token (blank keeps current value)",
+    "th": "โทเคน API (เว้นว่างเพื่อเก็บค่าเดิม)"
+  },
+  "连接凭据": {
+    "en": "Connection credentials",
+    "th": "ข้อมูลรับรองการเชื่อมต่อ"
+  },
+  "留空保留已保存凭据；保存成功后此输入清空": {
+    "en": "Blank keeps saved credentials; input clears after save",
+    "th": "เว้นว่างเพื่อเก็บข้อมูลรับรองเดิม ล้างช่องหลังบันทึก"
+  },
+  "凭据由本机安全存储单独管理": {
+    "en": "Credentials are managed separately in local secure storage",
+    "th": "จัดการข้อมูลรับรองแยกในที่เก็บปลอดภัยของเครื่อง"
+  },
+  "保存时清除已保存的凭据": {
+    "en": "Clear saved credentials when saving",
+    "th": "ลบข้อมูลรับรองเดิมเมื่อบันทึก"
+  },
+  "法规检索": {
+    "en": "Statute search",
+    "th": "ค้นกฎหมาย"
+  },
+  "案例检索": {
+    "en": "Case search",
+    "th": "ค้นคดี"
+  },
+  "超时（秒）": {
+    "en": "Timeout (seconds)",
+    "th": "หมดเวลา (วินาที)"
+  },
+  "单类检索结果上限": {
+    "en": "Maximum results per source type",
+    "th": "ผลลัพธ์สูงสุดต่อประเภท"
+  },
+  "单文件上限（MB）": {
+    "en": "Maximum file size (MB)",
+    "th": "ขนาดไฟล์สูงสุด (MB)"
+  },
+  "本机镜像上限（GB）": {
+    "en": "Local mirror limit (GB)",
+    "th": "ขนาดสำเนาในเครื่องสูงสุด (GB)"
+  },
+  "文件数上限": {
+    "en": "Maximum files",
+    "th": "จำนวนไฟล์สูงสุด"
+  },
+  "保存连接版本": {
+    "en": "Save connection version",
+    "th": "บันทึกรุ่นการเชื่อมต่อ"
+  },
+  "连接已从启用列表移除，历史版本仍保留。": {
+    "en": "Connection removed from active list; history retained.",
+    "th": "นำการเชื่อมต่อออกจากรายการเปิดใช้แล้ว เก็บประวัติไว้"
+  },
+  "移除连接": {
+    "en": "Remove connection",
+    "th": "นำการเชื่อมต่อออก"
+  },
+  "连接验证与资料检索": {
+    "en": "Connection checks and retrieval",
+    "th": "ตรวจการเชื่อมต่อและค้นข้อมูล"
+  },
+  "以下操作只对已保存版本运行；连接测试会访问你配置的服务。": {
+    "en": "These actions use only saved versions. Connection tests access your configured service.",
+    "th": "คำสั่งเหล่านี้ใช้เฉพาะรุ่นที่บันทึก การทดสอบจะเข้าบริการที่คุณตั้งค่า"
+  },
+  "检索词": {
+    "en": "Search query",
+    "th": "คำค้น"
+  },
+  "专业库检索词": {
+    "en": "Professional library query",
+    "th": "คำค้นฐานข้อมูลเฉพาะทาง"
+  },
+  "发现 MCP 工具": {
+    "en": "Discover MCP tools",
+    "th": "ค้นหาเครื่องมือ MCP"
+  },
+  "测试连接": {
+    "en": "Test connection",
+    "th": "ทดสอบการเชื่อมต่อ"
+  },
+  "检索并查看原文": {
+    "en": "Search and read source text",
+    "th": "ค้นและอ่านข้อความต้นฉบับ"
+  },
+  "同步目录至本机": {
+    "en": "Sync directory to this computer",
+    "th": "ซิงก์โฟลเดอร์มายังเครื่องนี้"
+  },
+  "已发现工具（": {
+    "en": "Discovered tools (",
+    "th": "เครื่องมือที่พบ ("
+  },
+  "会写入，禁用": {
+    "en": "Writes data; disabled",
+    "th": "เขียนข้อมูล ปิดใช้งาน"
+  },
+  "服务声明只读": {
+    "en": "Service declares read-only",
+    "th": "บริการระบุว่าอ่านอย่างเดียว"
+  },
+  "需人工核对只读用途": {
+    "en": "Confirm read-only purpose manually",
+    "th": "ต้องตรวจยืนยันว่าใช้เพื่ออ่านเท่านั้น"
+  },
+  "扫描文件": {
+    "en": "Files scanned",
+    "th": "ไฟล์ที่สแกน"
+  },
+  "已下载": {
+    "en": "Downloaded",
+    "th": "ดาวน์โหลดแล้ว"
+  },
+  "未变化": {
+    "en": "Unchanged",
+    "th": "ไม่เปลี่ยนแปลง"
+  },
+  "镜像已移除": {
+    "en": "Removed from mirror",
+    "th": "ลบจากสำเนาแล้ว"
+  },
+  "跳过": {
+    "en": "Skipped",
+    "th": "ข้าม"
+  },
+  "累计字节": {
+    "en": "Total bytes",
+    "th": "จำนวนไบต์สะสม"
+  },
+  "是否部分完成": {
+    "en": "Partial completion",
+    "th": "เสร็จบางส่วนหรือไม่"
+  },
+  "连接成功": {
+    "en": "Connected",
+    "th": "เชื่อมต่อสำเร็จ"
+  },
+  "目录条目": {
+    "en": "Directory entries",
+    "th": "รายการในโฟลเดอร์"
+  },
+  "远端根目录": {
+    "en": "Remote root directory",
+    "th": "โฟลเดอร์รากระยะไกล"
+  },
+  "索引目录：": {
+    "en": "Index directory: ",
+    "th": "โฟลเดอร์ดัชนี: "
+  },
+  "点击后将此目录设为当前本地知识库并建立或更新索引。": {
+    "en": "Set this directory as the current local knowledge source and build or update its index.",
+    "th": "ตั้งโฟลเดอร์นี้เป็นคลังความรู้ปัจจุบันและสร้างหรือปรับปรุงดัชนี"
+  },
+  "设为知识库并建库": {
+    "en": "Use as knowledge source and index",
+    "th": "ใช้เป็นคลังความรู้และสร้างดัชนี"
+  },
+  "检索覆盖与原文片段": {
+    "en": "Retrieval coverage and source excerpts",
+    "th": "ขอบเขตการค้นและข้อความต้นฉบับ"
+  },
+  "条": {
+    "en": " items",
+    "th": " รายการ"
+  },
+  "完整返回文字": {
+    "en": "Full returned text",
+    "th": "ข้อความที่ส่งกลับทั้งหมด"
+  },
+  "片段": {
+    "en": "Excerpt",
+    "th": "ข้อความบางส่วน"
+  },
+  "官方来源": {
+    "en": "Official source",
+    "th": "แหล่งทางการ"
+  },
+  "服务返回资料，效力待核查": {
+    "en": "Service-provided material; validity unverified",
+    "th": "ข้อมูลจากบริการ ยังไม่ยืนยันผลใช้บังคับ"
+  },
+  "未返回可回溯来源链接": {
+    "en": "No traceable source link returned",
+    "th": "ไม่มีลิงก์ที่มาที่ตรวจย้อนกลับได้"
+  },
+  "扫描": {
+    "en": "Scanned",
+    "th": "สแกน"
+  },
+  "下载": {
+    "en": "Downloaded",
+    "th": "ดาวน์โหลด"
+  },
+  "字节": {
+    "en": "Bytes",
+    "th": "ไบต์"
+  },
+  "当前有未保存输入。": {
+    "en": "There are unsaved inputs.",
+    "th": "มีข้อมูลที่ยังไม่บันทึก"
+  },
+  "配置修订 r{v0}": {
+    "en": "Configuration revision r{v0}",
+    "th": "รุ่นตั้งค่า r{v0}"
+  },
+  "新建连接默认停用，请明确勾选后保存。": {
+    "en": "New connections start disabled. Explicitly enable and save when ready.",
+    "th": "การเชื่อมต่อใหม่เริ่มปิดอยู่ โปรดเลือกเปิดและบันทึกเมื่อพร้อม"
+  },
+  "取消当前操作": {
+    "en": "Cancel current operation",
+    "th": "ยกเลิกงานปัจจุบัน"
+  },
+  "中文": {
+    "en": "Chinese",
+    "th": "จีน"
+  },
+  "英文": {
+    "en": "English",
+    "th": "อังกฤษ"
+  },
+  "泰文": {
+    "en": "Thai",
+    "th": "ไทย"
+  },
+  "采购合同": {
+    "en": "Procurement contract",
+    "th": "สัญญาจัดซื้อ"
+  },
+  "服务合同": {
+    "en": "Service contract",
+    "th": "สัญญาบริการ"
+  },
+  "其他业务合同": {
+    "en": "Other business contract",
+    "th": "สัญญาธุรกิจอื่น"
+  },
+  "采购方 / 买方": {
+    "en": "Purchaser / buyer",
+    "th": "ผู้จัดซื้อ / ผู้ซื้อ"
+  },
+  "供应方 / 卖方": {
+    "en": "Supplier / seller",
+    "th": "ผู้จัดหา / ผู้ขาย"
+  },
+  "服务提供方": {
+    "en": "Service provider",
+    "th": "ผู้ให้บริการ"
+  },
+  "服务接受方": {
+    "en": "Service recipient",
+    "th": "ผู้รับบริการ"
+  },
+  "其他立场": {
+    "en": "Other position",
+    "th": "จุดยืนอื่น"
+  },
+  "本次生成已取消，输入保留。此前的合同草稿仍可查看。": {
+    "en": "Generation cancelled; input retained. Previous drafts remain available.",
+    "th": "ยกเลิกการสร้างแล้ว เก็บข้อมูลที่กรอกและยังดูร่างเดิมได้"
+  },
+  "合同草稿已保存。下一步完成程序核验、现有管线审核和逐项人工确认，再导出。": {
+    "en": "Contract draft saved. Complete program checks, review and human confirmation before export.",
+    "th": "บันทึกร่างแล้ว ต้องตรวจโปรแกรม ตรวจสัญญา และให้ผู้ตรวจยืนยันก่อนส่งออก"
+  },
+  "描述生成合同": {
+    "en": "Generate contract from description",
+    "th": "สร้างสัญญาจากคำอธิบาย"
+  },
+  "把交易安排写清楚，生成一份独立合同草稿。": {
+    "en": "Describe the transaction to create a separate contract draft.",
+    "th": "อธิบายข้อตกลงธุรกรรมเพื่อสร้างร่างสัญญาแยก"
+  },
+  "关闭生成合同": {
+    "en": "Close contract generation",
+    "th": "ปิดการสร้างสัญญา"
+  },
+  "当前是界面预览：历史中仅有固定演示草稿，不调用模型、不生成或导出真实文件。": {
+    "en": "Preview only: history contains fixed samples. No model calls, real generation or export.",
+    "th": "โหมดตัวอย่าง: มีร่างสาธิตคงที่เท่านั้น ไม่เรียกโมเดล สร้างหรือส่งออกจริง"
+  },
+  "描述交易需求": {
+    "en": "Describe transaction requirements",
+    "th": "อธิบายความต้องการธุรกรรม"
+  },
+  "模型设置": {
+    "en": "Model settings",
+    "th": "ตั้งค่าโมเดล"
+  },
+  "合同需求描述": {
+    "en": "Contract requirements",
+    "th": "ความต้องการสัญญา"
+  },
+  "例如：我方委托服务商提供一年的系统维护服务，需约定服务范围、响应时间、按验收付款、保密、违约和退出安排。尚未确定的信息请保留待填写。": {
+    "en": "Example: We engage a provider for one year of system maintenance. Specify scope, response times, acceptance-based payments, confidentiality, breach and exit arrangements. Leave unresolved details as placeholders.",
+    "th": "ตัวอย่าง: จ้างผู้ให้บริการดูแลระบบหนึ่งปี ระบุขอบเขต เวลาตอบสนอง ชำระเงินตามการตรวจรับ ความลับ ผิดสัญญา และการยุติ ข้อมูลที่ยังไม่แน่นอนให้เว้นไว้"
+  },
+  "20–12,000 字；说明双方角色、交易内容、交付验收、付款和特别关注事项。": {
+    "en": "20–12,000 characters. Include roles, transaction, delivery, acceptance, payment and key concerns.",
+    "th": "20–12,000 อักขระ ระบุบทบาท ธุรกรรม การส่งมอบ ตรวจรับ ชำระเงิน และประเด็นสำคัญ"
+  },
+  "合同语言": {
+    "en": "Contract language",
+    "th": "ภาษาสัญญา"
+  },
+  "生成合同类型": {
+    "en": "Contract type for generation",
+    "th": "ประเภทสัญญาที่สร้าง"
+  },
+  "生成合同我方立场": {
+    "en": "Our role in generated contract",
+    "th": "จุดยืนของเราในสัญญาที่สร้าง"
+  },
+  "以中国大陆法律为范围，按所选语言起草；缺少的主体、金额和日期需人工补充。生成草稿须经人工审核，法律依据及时效仍需核验。": {
+    "en": "Drafts use mainland Chinese law and the selected language. Complete missing parties, amounts and dates manually. Human review and verification of legal sources and currency remain required.",
+    "th": "ร่างตามกฎหมายจีนแผ่นดินใหญ่และภาษาที่เลือก เติมคู่สัญญา จำนวนเงิน และวันที่เอง ต้องให้ผู้ตรวจตรวจสัญญา แหล่งกฎหมาย และความเป็นปัจจุบัน"
+  },
+  "请先在模型设置中配置可用连接，再生成合同。": {
+    "en": "Configure a working connection in model settings before generating.",
+    "th": "ตั้งค่าการเชื่อมต่อโมเดลที่ใช้งานได้ก่อนสร้าง"
+  },
+  "当前模型：": {
+    "en": "Current model: ",
+    "th": "โมเดลปัจจุบัน: "
+  },
+  "正在生成合同…": {
+    "en": "Generating contract…",
+    "th": "กำลังสร้างสัญญา…"
+  },
+  "生成合同草稿": {
+    "en": "Generate contract draft",
+    "th": "สร้างร่างสัญญา"
+  },
+  "取消本次生成": {
+    "en": "Cancel generation",
+    "th": "ยกเลิกการสร้างครั้งนี้"
+  },
+  "已保存的合同草稿": {
+    "en": "Saved contract drafts",
+    "th": "ร่างสัญญาที่บันทึก"
+  },
+  "刷新合同草稿": {
+    "en": "Refresh contract drafts",
+    "th": "อัปเดตร่างสัญญา"
+  },
+  "刷新": {
+    "en": "Refresh",
+    "th": "อัปเดต"
+  },
+  "合同草稿历史": {
+    "en": "Contract draft history",
+    "th": "ประวัติร่างสัญญา"
+  },
+  "正在读取草稿…": {
+    "en": "Loading drafts…",
+    "th": "กำลังอ่านร่าง…"
+  },
+  "尚未生成合同草稿。": {
+    "en": "No contract drafts yet.",
+    "th": "ยังไม่มีร่างสัญญา"
+  },
+  "固定演示草稿": {
+    "en": "Fixed sample draft",
+    "th": "ร่างสาธิตคงที่"
+  },
+  "待审核草稿": {
+    "en": "Draft awaiting review",
+    "th": "ร่างรอตรวจ"
+  },
+  "待补信息": {
+    "en": "Missing information",
+    "th": "ข้อมูลที่ขาด"
+  },
+  "模型未列出待补信息，仍需逐项核对交易事实。": {
+    "en": "The model listed no missing information. Still verify transaction facts individually.",
+    "th": "โมเดลไม่ระบุข้อมูลที่ขาด แต่ยังต้องตรวจข้อเท็จจริงธุรกรรมทีละรายการ"
+  },
+  "风险提醒与限制": {
+    "en": "Risk notices and limitations",
+    "th": "คำเตือนความเสี่ยงและข้อจำกัด"
+  },
+  "请人工审核条款与业务安排，不能据此认为不存在风险。": {
+    "en": "Review clauses and business arrangements manually. This does not imply absence of risk.",
+    "th": "ตรวจข้อสัญญาและข้อตกลงธุรกิจด้วยผู้ตรวจ ไม่ได้หมายความว่าไม่มีความเสี่ยง"
+  },
+  "使用模型：": {
+    "en": "Model used: ",
+    "th": "โมเดลที่ใช้: "
+  },
+  " · 输入 {v0} tokens": {
+    "en": " · Input {v0} tokens",
+    "th": " · อินพุต {v0} โทเคน"
+  },
+  " · 输出 {v0} tokens": {
+    "en": " · Output {v0} tokens",
+    "th": " · เอาต์พุต {v0} โทเคน"
+  },
+  "合同草稿将在这里预览": {
+    "en": "Contract draft preview appears here",
+    "th": "ตัวอย่างร่างสัญญาจะแสดงที่นี่"
+  },
+  "生成后核验交易信息与占位，审核当前原稿并逐项确认后导出 DOCX。": {
+    "en": "Check transaction facts and placeholders, review the current original and confirm items before exporting DOCX.",
+    "th": "ตรวจข้อมูลธุรกรรมและช่องว่าง ตรวจต้นฉบับปัจจุบันและยืนยันแต่ละรายการก่อนส่งออก DOCX"
+  },
+  "生成后先建立审核原稿；完成核验、审核及人工确认，才可最终导出。": {
+    "en": "Create a review original first. Export after checks, review and human confirmation.",
+    "th": "สร้างต้นฉบับตรวจก่อน ส่งออกหลังตรวจข้อมูล ตรวจสัญญา และผู้ตรวจยืนยัน"
+  },
+  "正在准备审核原稿…": {
+    "en": "Preparing review original…",
+    "th": "กำลังเตรียมต้นฉบับตรวจ…"
+  },
+  "核验、审核并确认": {
+    "en": "Check, review and confirm",
+    "th": "ตรวจข้อมูล ตรวจสัญญา และยืนยัน"
+  },
+  "简体中文": {
+    "en": "Simplified Chinese",
+    "th": "จีนตัวย่อ"
+  },
+  "本机 PDF 转换配置已保存。": {
+    "en": "Local PDF conversion settings saved.",
+    "th": "บันทึกการแปลง PDF ในเครื่องแล้ว"
+  },
+  "所选 OCR 语言包已安装到本机，之后识别不需要联网。": {
+    "en": "Selected OCR language packs installed locally. Recognition can now work offline.",
+    "th": "ติดตั้งชุดภาษา OCR ที่เลือกในเครื่องแล้ว หลังจากนี้รู้จำได้แบบออฟไลน์"
+  },
+  "已取消转换或保存。": {
+    "en": "Conversion or save cancelled.",
+    "th": "ยกเลิกการแปลงหรือบันทึกแล้ว"
+  },
+  "已请求停止，正在释放本机识别资源。": {
+    "en": "Stop requested; releasing local OCR resources.",
+    "th": "ขอหยุดแล้ว กำลังคืนทรัพยากร OCR ในเครื่อง"
+  },
+  "当前转换配置尚未保存。可先保存配置；再次点击关闭将放弃本次配置修改。": {
+    "en": "Conversion settings are unsaved. Save them, or close again to discard changes.",
+    "th": "การตั้งค่าแปลงยังไม่บันทึก โปรดบันทึก หรือกดปิดอีกครั้งเพื่อทิ้งการแก้"
+  },
+  "PDF 转换与本机 OCR": {
+    "en": "PDF conversion and local OCR",
+    "th": "แปลง PDF และ OCR ในเครื่อง"
+  },
+  "关闭": {
+    "en": "Close",
+    "th": "ปิด"
+  },
+  "将 PDF 文字或本机识别结果生成独立 DOCX，之后可审核、逐项修改和导出。转换稿保留原 PDF 页码来源，原 PDF 单独保留；表格、签章、图片和版式需要对照原件检查。": {
+    "en": "Create a separate DOCX from PDF text or local OCR for review and revision. Original page references and PDF remain. Compare tables, seals, images and layout against the original.",
+    "th": "สร้าง DOCX แยกจากข้อความ PDF หรือ OCR ในเครื่องเพื่อตรวจและแก้ เก็บอ้างอิงหน้าและ PDF เดิม ต้องเทียบตาราง ตราประทับ ภาพ และรูปแบบกับต้นฉบับ"
+  },
+  "当前文件": {
+    "en": "Current file",
+    "th": "ไฟล์ปัจจุบัน"
+  },
+  "尚未选择 PDF": {
+    "en": "No PDF selected",
+    "th": "ยังไม่เลือก PDF"
+  },
+  "请返回合同列表选择 PDF 文件后使用转换功能。": {
+    "en": "Select a PDF from the contract list before using conversion.",
+    "th": "เลือก PDF จากรายการสัญญาก่อนแปลง"
+  },
+  "转换方式": {
+    "en": "Conversion method",
+    "th": "วิธีแปลง"
+  },
+  "PDF 转换方式": {
+    "en": "PDF conversion method",
+    "th": "วิธีแปลง PDF"
+  },
+  "优先文字层，无文字页使用本机 OCR": {
+    "en": "Prefer text layer; local OCR for pages without text",
+    "th": "ใช้ชั้นข้อความก่อน ใช้ OCR ในเครื่องกับหน้าที่ไม่มีข้อความ"
+  },
+  "仅提取保存的文字层": {
+    "en": "Extract saved text layer only",
+    "th": "ดึงเฉพาะชั้นข้อความที่บันทึก"
+  },
+  "全部页重新使用本机 OCR": {
+    "en": "Run local OCR again for every page",
+    "th": "ทำ OCR ทุกหน้าใหม่ในเครื่อง"
+  },
+  "自动模式不会识别已有文字页中的图片；若正文扫描图叠加了页眉文字，可选择全部页 OCR。": {
+    "en": "Automatic mode skips images on pages with text. Use OCR on all pages for scans overlaid with header text.",
+    "th": "โหมดอัตโนมัติไม่รู้จำภาพในหน้าที่มีข้อความ หากภาพสแกนซ้อนข้อความหัวกระดาษให้เลือก OCR ทุกหน้า"
+  },
+  "OCR 识别语言": {
+    "en": "OCR languages",
+    "th": "ภาษารู้จำ OCR"
+  },
+  "最大页数": {
+    "en": "Maximum pages",
+    "th": "จำนวนหน้าสูงสุด"
+  },
+  "PDF 最大页数": {
+    "en": "Maximum PDF pages",
+    "th": "จำนวนหน้า PDF สูงสุด"
+  },
+  "识别 DPI": {
+    "en": "Recognition DPI",
+    "th": "DPI การรู้จำ"
+  },
+  "单步骤秒数预算": {
+    "en": "Per-step time budget (seconds)",
+    "th": "งบเวลาต่อขั้นตอน (วินาที)"
+  },
+  "OCR 单页时间预算": {
+    "en": "OCR time budget per page",
+    "th": "งบเวลา OCR ต่อหน้า"
+  },
+  "允许保留未识别页提示并生成部分转换稿": {
+    "en": "Allow partial conversion with unread-page notices",
+    "th": "อนุญาตแปลงบางส่วนพร้อมแจ้งหน้าที่อ่านไม่ได้"
+  },
+  "未识别页不会补造文字，转换稿会标出原 PDF 页码；整份没有识别出文字时仍停止。部分转换稿应人工补齐后再审核。": {
+    "en": "Unread pages are marked with original page numbers; text is never invented. Conversion stops if no text is recognized. Complete partial conversions manually before review.",
+    "th": "หน้าที่อ่านไม่ได้จะแจ้งเลขหน้าเดิม ไม่สร้างข้อความขึ้นเอง หากอ่านไม่ได้ทั้งฉบับจะหยุด ต้องเติมฉบับแปลงบางส่วนให้ครบก่อนตรวจ"
+  },
+  "保存转换配置": {
+    "en": "Save conversion settings",
+    "th": "บันทึกการตั้งค่าแปลง"
+  },
+  "生成并导入 DOCX": {
+    "en": "Create and import DOCX",
+    "th": "สร้างและนำเข้า DOCX"
+  },
+  "本机离线识别环境": {
+    "en": "Local offline OCR environment",
+    "th": "สภาพแวดล้อม OCR ออฟไลน์ในเครื่อง"
+  },
+  "仅点击下面的下载按钮时访问 Tesseract 官方模型仓库，下载所选语言包。合同内容留在本机，转换时不会自动下载模型。": {
+    "en": "Only the download button accesses the official Tesseract model repository for selected packs. Contract content stays local; conversion never downloads models automatically.",
+    "th": "เฉพาะปุ่มดาวน์โหลดจะเข้าคลังโมเดลทางการ Tesseract เพื่อโหลดชุดภาษาที่เลือก เนื้อหาสัญญาอยู่ในเครื่อง การแปลงไม่ดาวน์โหลดโมเดลอัตโนมัติ"
+  },
+  "模型目录": {
+    "en": "Model directory",
+    "th": "โฟลเดอร์โมเดล"
+  },
+  "正在读取": {
+    "en": "Loading",
+    "th": "กำลังอ่าน"
+  },
+  "已就绪 · {v0} MiB": {
+    "en": "Ready · {v0} MiB",
+    "th": "พร้อม · {v0} MiB"
+  },
+  "未安装或文件无效": {
+    "en": "Missing or invalid file",
+    "th": "ยังไม่ติดตั้งหรือไฟล์ไม่ถูกต้อง"
+  },
+  "下载所选离线语言包": {
+    "en": "Download selected offline language packs",
+    "th": "ดาวน์โหลดชุดภาษาออฟไลน์ที่เลือก"
+  },
+  "识别质量受原件清晰度、语言和阅读顺序影响。金额、日期、主体名称及手写内容需人工校对，识别置信度不表示法律判断正确。": {
+    "en": "OCR quality depends on clarity, language and reading order. Check amounts, dates, parties and handwriting manually. Confidence is not legal accuracy.",
+    "th": "คุณภาพ OCR ขึ้นกับความชัด ภาษา และลำดับการอ่าน ต้องตรวจจำนวนเงิน วันที่ ชื่อคู่สัญญา และลายมือเอง ค่าความมั่นใจไม่ใช่ความถูกต้องทางกฎหมาย"
+  },
+  "本机任务准备中": {
+    "en": "Preparing local task",
+    "th": "กำลังเตรียมงานในเครื่อง"
+  },
+  "PDF 转换进度": {
+    "en": "PDF conversion progress",
+    "th": "ความคืบหน้าการแปลง PDF"
+  },
+  "停止任务": {
+    "en": "Stop task",
+    "th": "หยุดงาน"
+  },
+  "使用中": {
+    "en": "Active",
+    "th": "ใช้งานอยู่"
+  },
+  "已归档": {
+    "en": "Archived",
+    "th": "เก็บถาวรแล้ว"
+  },
+  "回收站": {
+    "en": "Trash",
+    "th": "ถังขยะ"
+  },
+  "合同版本与参考译文": {
+    "en": "Contract versions and reference translations",
+    "th": "รุ่นสัญญาและคำแปลอ้างอิง"
+  },
+  "合同、项目与参考译文": {
+    "en": "Contracts, projects and reference translations",
+    "th": "สัญญา โครงการ และคำแปลอ้างอิง"
+  },
+  "关闭合同管理": {
+    "en": "Close contract management",
+    "th": "ปิดการจัดการสัญญา"
+  },
+  "项目与版本": {
+    "en": "Projects and versions",
+    "th": "โครงการและรุ่น"
+  },
+  "参考译文": {
+    "en": "Reference translation",
+    "th": "คำแปลอ้างอิง"
+  },
+  "归档和回收站保留原件、审核与修订记录，恢复后继续使用。项目归档会一并隐藏其下合同；不会自动删除外部知识库或已导出的文件。": {
+    "en": "Archive and trash keep originals, reviews and revisions for recovery. Archiving a project hides its contracts. External knowledge and exported files are not deleted.",
+    "th": "การเก็บถาวรและถังขยะเก็บต้นฉบับ ผลตรวจ และรอยแก้เพื่อคืนค่า การเก็บโครงการจะซ่อนสัญญาภายใน ไม่ลบคลังความรู้ภายนอกหรือไฟล์ส่งออก"
+  },
+  "记录人": {
+    "en": "Recorder",
+    "th": "ผู้บันทึก"
+  },
+  "合同管理记录人": {
+    "en": "Contract management recorder",
+    "th": "ผู้บันทึกการจัดการสัญญา"
+  },
+  "操作／修改原因": {
+    "en": "Operation / edit reason",
+    "th": "เหตุผลการดำเนินการ / แก้ไข"
+  },
+  "合同管理操作原因": {
+    "en": "Contract management operation reason",
+    "th": "เหตุผลการจัดการสัญญา"
+  },
+  "项目": {
+    "en": "Project",
+    "th": "โครงการ"
+  },
+  "项目名称": {
+    "en": "Project name",
+    "th": "ชื่อโครงการ"
+  },
+  "项目已保存。": {
+    "en": "Project saved.",
+    "th": "บันทึกโครงการแล้ว"
+  },
+  "保存项目名称": {
+    "en": "Save project name",
+    "th": "บันทึกชื่อโครงการ"
+  },
+  "创建项目": {
+    "en": "Create project",
+    "th": "สร้างโครงการ"
+  },
+  "取消编辑": {
+    "en": "Cancel editing",
+    "th": "ยกเลิกแก้ไข"
+  },
+  "份合同": {
+    "en": " contracts",
+    "th": " สัญญา"
+  },
+  "编辑": {
+    "en": "Edit",
+    "th": "แก้ไข"
+  },
+  "恢复项目": {
+    "en": "Restore project",
+    "th": "คืนค่าโครงการ"
+  },
+  "归档": {
+    "en": "Archive",
+    "th": "เก็บถาวร"
+  },
+  "移入回收站": {
+    "en": "Move to trash",
+    "th": "ย้ายไปถังขยะ"
+  },
+  "合同状态": {
+    "en": "Contract status",
+    "th": "สถานะสัญญา"
+  },
+  "合同状态筛选": {
+    "en": "Filter contract status",
+    "th": "กรองสถานะสัญญา"
+  },
+  "项目筛选": {
+    "en": "Project filter",
+    "th": "กรองโครงการ"
+  },
+  "全部项目": {
+    "en": "All projects",
+    "th": "ทุกโครงการ"
+  },
+  "未分配项目": {
+    "en": "Unassigned project",
+    "th": "ยังไม่กำหนดโครงการ"
+  },
+  "个版本": {
+    "en": " versions",
+    "th": " รุ่น"
+  },
+  "· 合同标识": {
+    "en": "· Contract ID ",
+    "th": "· รหัสสัญญา "
+  },
+  "所属项目与状态": {
+    "en": "Project assignment and status",
+    "th": "โครงการและสถานะ"
+  },
+  "合同所属项目": {
+    "en": "Contract project",
+    "th": "โครงการของสัญญา"
+  },
+  "合同项目已更新。": {
+    "en": "Contract project updated.",
+    "th": "อัปเดตโครงการสัญญาแล้ว"
+  },
+  "保存所属项目": {
+    "en": "Save project assignment",
+    "th": "บันทึกโครงการที่กำหนด"
+  },
+  "恢复合同": {
+    "en": "Restore contract",
+    "th": "คืนค่าสัญญา"
+  },
+  "归档合同": {
+    "en": "Archive contract",
+    "th": "เก็บสัญญาถาวร"
+  },
+  "查看永久清理清单": {
+    "en": "Preview permanent cleanup",
+    "th": "ดูรายการลบถาวร"
+  },
+  "永久清理此合同": {
+    "en": "Permanently remove this contract",
+    "th": "ลบสัญญานี้ถาวร"
+  },
+  "将移除此合同的": {
+    "en": "This removes ",
+    "th": "จะลบ "
+  },
+  "个原件／修改版本、": {
+    "en": " original / revised versions, ",
+    "th": " รุ่นต้นฉบับ / ฉบับแก้ "
+  },
+  "份关联报告和": {
+    "en": " related reports and ",
+    "th": " รายงานที่เกี่ยวข้องและ "
+  },
+  "组关联本地记录。含本合同资料的跨合同导出快照会整份移除；其他合同原件和独立审核保留。清理后不能从回收站恢复。外部知识库、其他独立合同、已导出文件和历史备份需另行管理。": {
+    "en": " groups of local records. Cross-contract export snapshots containing this contract are removed entirely. Other originals and separate reviews remain. Recovery from trash is impossible after cleanup. Manage external knowledge, exported files and historical backups separately.",
+    "th": " กลุ่มบันทึกในเครื่อง ภาพรวมส่งออกหลายสัญญาที่มีสัญญานี้จะถูกลบทั้งชุด เก็บต้นฉบับอื่นและผลตรวจอิสระ หลังลบจะคืนจากถังขยะไม่ได้ ต้องจัดการคลังภายนอก ไฟล์ส่งออก และสำรองเก่าแยก"
+  },
+  "输入完整合同名称确认：": {
+    "en": "Enter the full contract name to confirm: ",
+    "th": "กรอกชื่อสัญญาเต็มเพื่อยืนยัน: "
+  },
+  "永久清理确认合同名": {
+    "en": "Contract name for permanent removal confirmation",
+    "th": "ชื่อสัญญาเพื่อยืนยันลบถาวร"
+  },
+  "确认永久清理": {
+    "en": "Confirm permanent removal",
+    "th": "ยืนยันลบถาวร"
+  },
+  "取消": {
+    "en": "Cancel",
+    "th": "ยกเลิก"
+  },
+  "版本记录": {
+    "en": "Version history",
+    "th": "ประวัติรุ่น"
+  },
+  "来源版本：{v0}": {
+    "en": "Source version: {v0}",
+    "th": "รุ่นต้นทาง: {v0}"
+  },
+  "首次导入": {
+    "en": "First import",
+    "th": "นำเข้าครั้งแรก"
+  },
+  "查看此版本": {
+    "en": "View this version",
+    "th": "ดูรุ่นนี้"
+  },
+  "管理参考译文": {
+    "en": "Manage reference translations",
+    "th": "จัดการคำแปลอ้างอิง"
+  },
+  "已作为同一合同的新版本导入，原版本保持不变。": {
+    "en": "Imported as a new version of the same contract. Earlier versions remain.",
+    "th": "นำเข้าเป็นรุ่นใหม่ของสัญญาเดิมแล้ว เก็บรุ่นก่อนหน้าไว้"
+  },
+  "导入对方修改稿为新版本": {
+    "en": "Import counterparty revision as new version",
+    "th": "นำเข้าฉบับแก้ของคู่สัญญาเป็นรุ่นใหม่"
+  },
+  "选择合同后查看版本关系。": {
+    "en": "Select a contract to view version relationships.",
+    "th": "เลือกสัญญาเพื่อดูความสัมพันธ์ของรุ่น"
+  },
+  "原文版本": {
+    "en": "Original version",
+    "th": "รุ่นต้นฉบับ"
+  },
+  "译文对应合同版本": {
+    "en": "Contract version for translation",
+    "th": "รุ่นสัญญาของคำแปล"
+  },
+  "原文位置": {
+    "en": "Source location",
+    "th": "ตำแหน่งต้นฉบับ"
+  },
+  "译文原文段落": {
+    "en": "Translation source paragraph",
+    "th": "ย่อหน้าต้นฉบับของคำแปล"
+  },
+  "参考译文语言": {
+    "en": "Reference translation language",
+    "th": "ภาษาคำแปลอ้างอิง"
+  },
+  "译文与原文版本分别保存，不能替代原文；模型重译只生成待保存候选。": {
+    "en": "Translations and source versions are stored separately. Translations do not replace originals. Model retranslation creates an unsaved candidate only.",
+    "th": "เก็บคำแปลและรุ่นต้นฉบับแยกกัน คำแปลไม่แทนต้นฉบับ การแปลใหม่โดยโมเดลสร้างเพียงฉบับรอบันทึก"
+  },
+  "调用已配置模型生成／重译本段": {
+    "en": "Generate / retranslate this paragraph with configured model",
+    "th": "สร้าง / แปลย่อหน้านี้ใหม่ด้วยโมเดลที่ตั้งค่า"
+  },
+  "参考译文内容": {
+    "en": "Reference translation content",
+    "th": "เนื้อหาคำแปลอ้างอิง"
+  },
+  "复核状态": {
+    "en": "Verification status",
+    "th": "สถานะการตรวจทาน"
+  },
+  "待复核": {
+    "en": "Awaiting verification",
+    "th": "รอตรวจทาน"
+  },
+  "已人工复核": {
+    "en": "Human verified",
+    "th": "ผู้ตรวจทานแล้ว"
+  },
+  "有争议": {
+    "en": "Disputed",
+    "th": "มีข้อโต้แย้ง"
+  },
+  "我已对照原文复核本段译文": {
+    "en": "I verified this translation against the original",
+    "th": "ข้าพเจ้าตรวจคำแปลนี้เทียบต้นฉบับแล้ว"
+  },
+  "译文已保存，历史版本保留。": {
+    "en": "Translation saved; history retained.",
+    "th": "บันทึกคำแปลและเก็บประวัติแล้ว"
+  },
+  "保存译文": {
+    "en": "Save translation",
+    "th": "บันทึกคำแปล"
+  },
+  "查看译文历史": {
+    "en": "View translation history",
+    "th": "ดูประวัติคำแปล"
+  },
+  "译文 v": {
+    "en": "Translation v",
+    "th": "คำแปล v"
+  },
+  "法律问题": {
+    "en": "Legal issues",
+    "th": "ประเด็นกฎหมาย"
+  },
+  "商业风险": {
+    "en": "Commercial risks",
+    "th": "ความเสี่ยงธุรกิจ"
+  },
+  "履约事项": {
+    "en": "Performance matters",
+    "th": "ประเด็นการปฏิบัติตามสัญญา"
+  },
+  "高风险": {
+    "en": "High risk",
+    "th": "ความเสี่ยงสูง"
+  },
+  "中风险": {
+    "en": "Medium risk",
+    "th": "ความเสี่ยงปานกลาง"
+  },
+  "低风险": {
+    "en": "Low risk",
+    "th": "ความเสี่ยงต่ำ"
+  },
+  "待判断": {
+    "en": "Unrated",
+    "th": "รอประเมิน"
+  },
+  "金额与付款比例": {
+    "en": "Amounts and payment ratios",
+    "th": "จำนวนเงินและสัดส่วนชำระเงิน"
+  },
+  "日期与付款期限": {
+    "en": "Dates and payment deadlines",
+    "th": "วันที่และกำหนดชำระเงิน"
+  },
+  "内部条款与附件引用": {
+    "en": "Internal clause and appendix references",
+    "th": "การอ้างข้อสัญญาและภาคผนวกภายใน"
+  },
+  "主体名称与编号一致性": {
+    "en": "Party names and identifier consistency",
+    "th": "ความสอดคล้องชื่อและรหัสคู่สัญญา"
+  },
+  "条件、例外与企业配置依据": {
+    "en": "Conditions, exceptions and policy basis",
+    "th": "เงื่อนไข ข้อยกเว้น และฐานนโยบาย"
+  },
+  "条件及例外只做有限字面匹配；排除词命中会跳过此规则。留空表示不限制。": {
+    "en": "Conditions use limited literal matching. Exclusion matches skip the rule. Blank means no restriction.",
+    "th": "เงื่อนไขจับคู่ข้อความตามตัวอักษรอย่างจำกัด หากพบคำยกเว้นจะข้ามกฎ เว้นว่างคือไม่จำกัด"
+  },
+  "限用合同类型（可多选）": {
+    "en": "Contract types (multiple allowed)",
+    "th": "ประเภทสัญญา (เลือกได้หลายข้อ)"
+  },
+  "{v0}条件合同类型": {
+    "en": "{v0} contract type condition",
+    "th": "เงื่อนไขประเภทสัญญา {v0}"
+  },
+  "限用我方立场（可多选）": {
+    "en": "Our roles (multiple allowed)",
+    "th": "จุดยืนของเรา (เลือกได้หลายข้อ)"
+  },
+  "{v0}条件我方立场": {
+    "en": "{v0} role condition",
+    "th": "เงื่อนไขจุดยืน {v0}"
+  },
+  "触发条件词（每行一个）": {
+    "en": "Trigger terms (one per line)",
+    "th": "คำกระตุ้น (หนึ่งคำต่อบรรทัด)"
+  },
+  "{v0}触发条件词": {
+    "en": "{v0} trigger terms",
+    "th": "คำกระตุ้น {v0}"
+  },
+  "触发模式": {
+    "en": "Trigger mode",
+    "th": "รูปแบบกระตุ้น"
+  },
+  "{v0}触发模式": {
+    "en": "{v0} trigger mode",
+    "th": "รูปแบบกระตุ้น {v0}"
+  },
+  "任一触发词出现": {
+    "en": "Any trigger term appears",
+    "th": "พบคำกระตุ้นใดก็ได้"
+  },
+  "全部触发词出现": {
+    "en": "All trigger terms appear",
+    "th": "พบคำกระตุ้นทั้งหมด"
+  },
+  "例外排除词（每行一个）": {
+    "en": "Exclusion terms (one per line)",
+    "th": "คำยกเว้น (หนึ่งคำต่อบรรทัด)"
+  },
+  "{v0}例外排除词": {
+    "en": "{v0} exclusion terms",
+    "th": "คำยกเว้น {v0}"
+  },
+  "适用开始日": {
+    "en": "Applicable start date",
+    "th": "วันเริ่มใช้"
+  },
+  "{v0}适用开始日": {
+    "en": "{v0} applicable start date",
+    "th": "วันเริ่มใช้ {v0}"
+  },
+  "适用结束日": {
+    "en": "Applicable end date",
+    "th": "วันสิ้นสุดใช้"
+  },
+  "{v0}适用结束日": {
+    "en": "{v0} applicable end date",
+    "th": "วันสิ้นสุดใช้ {v0}"
+  },
+  "清除条件和例外": {
+    "en": "Clear conditions and exceptions",
+    "th": "ล้างเงื่อนไขและข้อยกเว้น"
+  },
+  "附企业制度或条款依据": {
+    "en": "Attach enterprise policy or clause basis",
+    "th": "แนบฐานนโยบายหรือข้อสัญญาองค์กร"
+  },
+  "依据名称": {
+    "en": "Basis title",
+    "th": "ชื่อหลักฐานอ้างอิง"
+  },
+  "{v0}依据名称": {
+    "en": "{v0} basis title",
+    "th": "ชื่อหลักฐานอ้างอิง {v0}"
+  },
+  "来源地址或内部文件编号": {
+    "en": "Source address or internal document ID",
+    "th": "ที่มาเอกสารหรือรหัสภายใน"
+  },
+  "{v0}依据来源": {
+    "en": "{v0} basis source",
+    "th": "ที่มาหลักฐาน {v0}"
+  },
+  "依据说明": {
+    "en": "Basis explanation",
+    "th": "คำอธิบายหลักฐาน"
+  },
+  "{v0}依据说明": {
+    "en": "{v0} basis explanation",
+    "th": "คำอธิบายหลักฐาน {v0}"
+  },
+  "该文字按企业配置留档，不会标为已核验法规或自动建立法律效力。": {
+    "en": "Stored as enterprise configuration, not verified legislation or automatic proof of legal effect.",
+    "th": "เก็บเป็นการตั้งค่าองค์กร ไม่ระบุว่าเป็นกฎหมายที่ยืนยันแล้วหรือสร้างผลทางกฎหมายอัตโนมัติ"
+  },
+  "工作日历配置": {
+    "en": "Working calendar settings",
+    "th": "ตั้งค่าปฏิทินทำงาน"
+  },
+  "启用用户维护的工作日历": {
+    "en": "Enable user-maintained working calendar",
+    "th": "เปิดปฏิทินทำงานที่ผู้ใช้ดูแล"
+  },
+  "请录入适用期间全部休息日与补班日。空列表表示用户声明该期间没有额外休息或补班，软件不会联网推定节假日。": {
+    "en": "Enter all additional rest days and make-up workdays for the period. Empty lists declare none; no holidays are inferred from the internet.",
+    "th": "กรอกวันหยุดเพิ่มและวันทำงานชดเชยทั้งหมดในช่วงนี้ รายการว่างหมายถึงผู้ใช้ยืนยันว่าไม่มี ไม่คาดเดาวันหยุดจากอินเทอร์เน็ต"
+  },
+  "工作日历名称": {
+    "en": "Working calendar name",
+    "th": "ชื่อปฏิทินทำงาน"
+  },
+  "日历开始日": {
+    "en": "Calendar start date",
+    "th": "วันเริ่มปฏิทิน"
+  },
+  "日历结束日": {
+    "en": "Calendar end date",
+    "th": "วันสิ้นสุดปฏิทิน"
+  },
+  "每周休息日": {
+    "en": "Weekly rest days",
+    "th": "วันหยุดประจำสัปดาห์"
+  },
+  "日": {
+    "en": "Sun",
+    "th": "อา."
+  },
+  "一": {
+    "en": "Mon",
+    "th": "จ."
+  },
+  "二": {
+    "en": "Tue",
+    "th": "อ."
+  },
+  "三": {
+    "en": "Wed",
+    "th": "พ."
+  },
+  "四": {
+    "en": "Thu",
+    "th": "พฤ."
+  },
+  "五": {
+    "en": "Fri",
+    "th": "ศ."
+  },
+  "六": {
+    "en": "Sat",
+    "th": "ส."
+  },
+  "周": {
+    "en": "Weekday ",
+    "th": "วัน"
+  },
+  "额外休息日（每行 YYYY-MM-DD）": {
+    "en": "Additional rest days (YYYY-MM-DD, one per line)",
+    "th": "วันหยุดเพิ่ม (YYYY-MM-DD หนึ่งวันต่อบรรทัด)"
+  },
+  "额外休息日": {
+    "en": "Additional rest days",
+    "th": "วันหยุดเพิ่ม"
+  },
+  "补班日（每行 YYYY-MM-DD）": {
+    "en": "Make-up workdays (YYYY-MM-DD, one per line)",
+    "th": "วันทำงานชดเชย (YYYY-MM-DD หนึ่งวันต่อบรรทัด)"
+  },
+  "补班日": {
+    "en": "Make-up workdays",
+    "th": "วันทำงานชดเชย"
+  },
+  "目前仅计算“付款起算日：YYYY-MM-DD；付款期限：N工作日；付款截止日：YYYY-MM-DD；不含起算日”的确定关系；其他起算口径提示人工补核。": {
+    "en": "Only explicit “start date; N working days; due date; excluding start date” relationships are calculated. Other start-date rules require human checks.",
+    "th": "คำนวณเฉพาะความสัมพันธ์ชัดเจน “วันเริ่ม; N วันทำงาน; วันครบกำหนด; ไม่รวมวันเริ่ม” วิธีเริ่มนับอื่นต้องตรวจเอง"
+  },
+  "当前有未保存输入。请先保存或撤销编辑，再切换方案；关闭面板会保留输入。": {
+    "en": "Unsaved inputs remain. Save or undo before switching profiles. Closing keeps inputs.",
+    "th": "มีข้อมูลที่ยังไม่บันทึก บันทึกหรือเลิกทำก่อนเปลี่ยนชุด ปิดหน้าต่างแล้วยังคงข้อมูลไว้"
+  },
+  "请填写方案名称、适用范围，以及每条规则的标识、名称和匹配词。": {
+    "en": "Enter profile name, scope, and each rule’s identifier, name and matching terms.",
+    "th": "กรอกชื่อชุด ขอบเขต และรหัส ชื่อ กับคำจับคู่ของแต่ละกฎ"
+  },
+  "预付款阈值须为0–100，最多两位小数；付款天数须为1–3650的整数。留空表示不设置阈值。": {
+    "en": "Advance-payment threshold: 0–100, at most two decimals. Payment days: integer 1–3650. Blank disables a threshold.",
+    "th": "เกณฑ์ชำระล่วงหน้า 0–100 ทศนิยมไม่เกินสองตำแหน่ง วันชำระเป็นจำนวนเต็ม 1–3650 เว้นว่างเพื่อไม่ตั้งเกณฑ์"
+  },
+  "企业方案草稿已保存，尚未发布；审核仅可选择已发布版本。": {
+    "en": "Enterprise draft saved but not published. Reviews can use only published versions.",
+    "th": "บันทึกร่างองค์กรแล้วแต่ยังไม่เผยแพร่ การตรวจใช้ได้เฉพาะรุ่นเผยแพร่"
+  },
+  "请填写1–80字的发布记录标签，不含换行或控制字符。": {
+    "en": "Enter a publishing label of 1–80 characters without newlines or controls.",
+    "th": "กรอกป้ายผู้เผยแพร่ 1–80 อักขระ ไม่มีบรรทัดใหม่หรืออักขระควบคุม"
+  },
+  "已发布新版本。历史版本与已完成审核使用的版本保持不变。": {
+    "en": "New version published. History and versions used by completed reviews remain unchanged.",
+    "th": "เผยแพร่รุ่นใหม่แล้ว ประวัติและรุ่นที่ผลตรวจเดิมใช้ไม่เปลี่ยน"
+  },
+  "企业审核标准": {
+    "en": "Enterprise review standards",
+    "th": "มาตรฐานตรวจสัญญาองค์กร"
+  },
+  "配置可调整的审核规则，保存草稿后再发布不可变版本。": {
+    "en": "Configure review rules, save a draft, then publish an immutable version.",
+    "th": "ตั้งกฎการตรวจ บันทึกร่าง แล้วเผยแพร่รุ่นที่แก้ทับไม่ได้"
+  },
+  "关闭企业审核标准": {
+    "en": "Close enterprise review standards",
+    "th": "ปิดมาตรฐานตรวจองค์กร"
+  },
+  "当前为内存演示；保存和发布不调用真实服务、不写入本机资料，刷新页面后清空。": {
+    "en": "In-memory demo only. Save and publish do not call real services or write local data. Refresh clears changes.",
+    "th": "สาธิตในหน่วยความจำเท่านั้น การบันทึกและเผยแพร่ไม่เรียกบริการจริงหรือเขียนข้อมูลในเครื่อง รีเฟรชเพื่อล้าง"
+  },
+  "企业方案": {
+    "en": "Enterprise profiles",
+    "th": "ชุดองค์กร"
+  },
+  "新建企业方案": {
+    "en": "New enterprise profile",
+    "th": "สร้างชุดองค์กร"
+  },
+  "个已发布版本": {
+    "en": " published versions",
+    "th": " รุ่นเผยแพร่"
+  },
+  "新建方案": {
+    "en": "New profile",
+    "th": "สร้างชุด"
+  },
+  "刷新记录（保留输入）": {
+    "en": "Refresh records (keep inputs)",
+    "th": "อัปเดตบันทึก (เก็บข้อมูลที่กรอก)"
+  },
+  "· 修订号": {
+    "en": "· Revision ",
+    "th": "· รุ่นแก้ไข "
+  },
+  "方案名称": {
+    "en": "Profile name",
+    "th": "ชื่อชุด"
+  },
+  "方案说明": {
+    "en": "Profile description",
+    "th": "คำอธิบายชุด"
+  },
+  "适用合同类型": {
+    "en": "Applicable contract types",
+    "th": "ประเภทสัญญาที่ใช้"
+  },
+  "适用我方立场": {
+    "en": "Applicable roles",
+    "th": "จุดยืนที่ใช้"
+  },
+  "企业规则": {
+    "en": "Enterprise rules",
+    "th": "กฎองค์กร"
+  },
+  "增加规则": {
+    "en": "Add rule",
+    "th": "เพิ่มกฎ"
+  },
+  "规则": {
+    "en": "Rule",
+    "th": "กฎ"
+  },
+  "启用": {
+    "en": "Enable",
+    "th": "เปิดใช้"
+  },
+  "删除规则{v0}": {
+    "en": "Delete rule {v0}",
+    "th": "ลบกฎ {v0}"
+  },
+  "删除": {
+    "en": "Delete",
+    "th": "ลบ"
+  },
+  "规则标识": {
+    "en": "Rule identifier",
+    "th": "รหัสกฎ"
+  },
+  "规则{v0}标识": {
+    "en": "Rule {v0} identifier",
+    "th": "รหัสกฎ {v0}"
+  },
+  "规则名称": {
+    "en": "Rule name",
+    "th": "ชื่อกฎ"
+  },
+  "规则{v0}名称": {
+    "en": "Rule {v0} name",
+    "th": "ชื่อกฎ {v0}"
+  },
+  "规则类型": {
+    "en": "Rule type",
+    "th": "ประเภทกฎ"
+  },
+  "规则{v0}类型": {
+    "en": "Rule {v0} type",
+    "th": "ประเภทกฎ {v0}"
+  },
+  "必需事项 · 未匹配时提示": {
+    "en": "Required item · flag if missing",
+    "th": "สิ่งที่ต้องมี · แจ้งเมื่อไม่พบ"
+  },
+  "关注措辞 · 匹配时提示": {
+    "en": "Watched wording · flag on match",
+    "th": "คำที่เฝ้าระวัง · แจ้งเมื่อพบ"
+  },
+  "风险类别": {
+    "en": "Risk category",
+    "th": "ประเภทความเสี่ยง"
+  },
+  "规则{v0}类别": {
+    "en": "Rule {v0} category",
+    "th": "ประเภทกฎ {v0}"
+  },
+  "风险等级": {
+    "en": "Risk level",
+    "th": "ระดับความเสี่ยง"
+  },
+  "规则{v0}风险等级": {
+    "en": "Rule {v0} risk level",
+    "th": "ระดับความเสี่ยงกฎ {v0}"
+  },
+  "匹配词（每行一个）": {
+    "en": "Matching terms (one per line)",
+    "th": "คำจับคู่ (หนึ่งคำต่อบรรทัด)"
+  },
+  "规则{v0}匹配词": {
+    "en": "Rule {v0} matching terms",
+    "th": "คำจับคู่กฎ {v0}"
+  },
+  "处理建议": {
+    "en": "Suggested handling",
+    "th": "ข้อเสนอการจัดการ"
+  },
+  "规则{v0}处理建议": {
+    "en": "Rule {v0} suggested handling",
+    "th": "ข้อเสนอการจัดการกฎ {v0}"
+  },
+  "程序核验": {
+    "en": "Program checks",
+    "th": "การตรวจโดยโปรแกรม"
+  },
+  "预付款比例上限（%）": {
+    "en": "Advance-payment ratio limit (%)",
+    "th": "เพดานสัดส่วนชำระล่วงหน้า (%)"
+  },
+  "预付款比例上限": {
+    "en": "Advance-payment ratio limit",
+    "th": "เพดานสัดส่วนชำระล่วงหน้า"
+  },
+  "最多两位小数；留空表示不设置阈值": {
+    "en": "At most two decimals; blank disables threshold",
+    "th": "ทศนิยมไม่เกินสองตำแหน่ง เว้นว่างเพื่อไม่ตั้งเกณฑ์"
+  },
+  "付款期限上限（天）": {
+    "en": "Payment period limit (days)",
+    "th": "เพดานระยะเวลาชำระ (วัน)"
+  },
+  "付款期限上限": {
+    "en": "Payment period limit",
+    "th": "เพดานระยะเวลาชำระ"
+  },
+  "留空表示不设置阈值": {
+    "en": "Blank disables threshold",
+    "th": "เว้นว่างเพื่อไม่ตั้งเกณฑ์"
+  },
+  "执行企业规则": {
+    "en": "Run enterprise rules",
+    "th": "ใช้กฎองค์กร"
+  },
+  "高风险处理建议": {
+    "en": "High-risk handling suggestion",
+    "th": "ข้อเสนอจัดการความเสี่ยงสูง"
+  },
+  "建议人工复核": {
+    "en": "Suggest human review",
+    "th": "แนะนำให้ผู้ตรวจทบทวน"
+  },
+  "建议升级处理": {
+    "en": "Suggest escalation",
+    "th": "แนะนำส่งต่อระดับสูง"
+  },
+  "仅形成处理建议，不自动完成审批或改变处置状态。": {
+    "en": "Suggestions only; no automatic approval or disposition changes.",
+    "th": "เป็นเพียงข้อเสนอ ไม่อนุมัติหรือเปลี่ยนสถานะจัดการอัตโนมัติ"
+  },
+  "已发布版本 · 不可变": {
+    "en": "Published versions · immutable",
+    "th": "รุ่นเผยแพร่ · แก้ทับไม่ได้"
+  },
+  "查看已发布版本": {
+    "en": "View published version",
+    "th": "ดูรุ่นเผยแพร่"
+  },
+  "版本": {
+    "en": "Version",
+    "th": "รุ่น"
+  },
+  "内容摘要": {
+    "en": "Content digest",
+    "th": "แฮชเนื้อหา"
+  },
+  "发布时间": {
+    "en": "Published at",
+    "th": "เวลาเผยแพร่"
+  },
+  "发布标签": {
+    "en": "Publisher label",
+    "th": "ป้ายผู้เผยแพร่"
+  },
+  "未填写说明。": {
+    "en": "No description provided.",
+    "th": "ไม่มีคำอธิบาย"
+  },
+  "程序核验：": {
+    "en": "Program checks: ",
+    "th": "การตรวจโดยโปรแกรม: "
+  },
+  "全部关闭": {
+    "en": "All disabled",
+    "th": "ปิดทั้งหมด"
+  },
+  "已将此版本填写到可编辑草稿。保存并发布会形成新版本，不覆盖原版本。": {
+    "en": "Version copied to editable draft. Saving and publishing creates a new version, preserving the original.",
+    "th": "คัดลอกรุ่นนี้เป็นร่างแก้ไขแล้ว บันทึกและเผยแพร่เพื่อสร้างรุ่นใหม่โดยเก็บรุ่นเดิม"
+  },
+  "从此版本填写草稿": {
+    "en": "Create draft from this version",
+    "th": "สร้างร่างจากรุ่นนี้"
+  },
+  "尚无已发布版本。保存草稿后发布，才能在审核中选择。": {
+    "en": "No published versions. Save and publish a draft to make it available for review.",
+    "th": "ยังไม่มีรุ่นเผยแพร่ บันทึกและเผยแพร่ร่างเพื่อใช้ในการตรวจ"
+  },
+  "有未保存输入；关闭面板会保留。": {
+    "en": "Unsaved inputs are retained when closing.",
+    "th": "ปิดแล้วยังคงข้อมูลที่ยังไม่บันทึก"
+  },
+  "草稿已同步，发布后供新审核选择。": {
+    "en": "Draft synchronized; publish to use in new reviews.",
+    "th": "ร่างซิงก์แล้ว เผยแพร่เพื่อใช้ในการตรวจใหม่"
+  },
+  "填写方案后保存草稿，再发布供审核选择。": {
+    "en": "Fill out and save a draft, then publish it for review selection.",
+    "th": "กรอกและบันทึกร่าง แล้วเผยแพร่เพื่อเลือกตรวจ"
+  },
+  "保存标准草稿": {
+    "en": "Save standards draft",
+    "th": "บันทึกร่างมาตรฐาน"
+  },
+  "发布记录标签": {
+    "en": "Publishing record label",
+    "th": "ป้ายบันทึกเผยแพร่"
+  },
+  "发布新版本": {
+    "en": "Publish new version",
+    "th": "เผยแพร่รุ่นใหม่"
+  },
+  "发布记录标签用于留档，不是经过认证的账号身份；本轮不执行多人审批或自动学习规则。": {
+    "en": "Publishing labels are records, not authenticated accounts. No multi-person approval or automatic rule learning is performed.",
+    "th": "ป้ายเผยแพร่ใช้เป็นบันทึก ไม่ใช่บัญชีที่ยืนยันตัวตน ไม่มีการอนุมัติหลายคนหรือเรียนรู้กฎอัตโนมัติ"
+  },
+  "采购": {
+    "en": "Procurement",
+    "th": "จัดซื้อ"
+  },
+  "服务": {
+    "en": "Service",
+    "th": "บริการ"
+  },
+  "其他": {
+    "en": "Other",
+    "th": "อื่น"
+  },
+  "采购方": {
+    "en": "Purchaser",
+    "th": "ผู้จัดซื้อ"
+  },
+  "供应方": {
+    "en": "Supplier",
+    "th": "ผู้จัดหา"
+  },
+  "待人工确认": {
+    "en": "Awaiting human confirmation",
+    "th": "รอผู้ตรวจยืนยัน"
+  },
+  "已批准": {
+    "en": "Approved",
+    "th": "อนุมัติแล้ว"
+  },
+  "已停用": {
+    "en": "Disabled",
+    "th": "ปิดใช้แล้ว"
+  },
+  "有效人工意见": {
+    "en": "Active human opinion",
+    "th": "ความเห็นผู้ตรวจที่ใช้งาน"
+  },
+  "已移除；历史仍保存，切换到历史记录可恢复为待确认版本。": {
+    "en": "Removed; history retained. Restore a past version as pending from history.",
+    "th": "นำออกแล้ว เก็บประวัติไว้ คืนค่ารุ่นเก่าเป็นรอยืนยันได้จากประวัติ"
+  },
+  "经验、模板与人工意见": {
+    "en": "Experience, templates and human opinions",
+    "th": "ประสบการณ์ แม่แบบ และความเห็นผู้ตรวจ"
+  },
+  "保存人工确认的工作经验，按明确范围复用；所有修改保留历史。": {
+    "en": "Save human-confirmed experience for reuse within explicit scopes. All edits retain history.",
+    "th": "บันทึกประสบการณ์ที่ผู้ตรวจยืนยันเพื่อใช้ตามขอบเขตชัดเจน เก็บประวัติการแก้ทั้งหมด"
+  },
+  "关闭资料库": {
+    "en": "Close library",
+    "th": "ปิดคลังข้อมูล"
+  },
+  "资料库模块": {
+    "en": "Library modules",
+    "th": "หมวดคลังข้อมูล"
+  },
+  "可撤销经验学习": {
+    "en": "Reversible experience learning",
+    "th": "การเรียนรู้ประสบการณ์ที่ย้อนกลับได้"
+  },
+  "企业模板起草": {
+    "en": "Enterprise template drafting",
+    "th": "ร่างจากแม่แบบองค์กร"
+  },
+  "人工审核意见": {
+    "en": "Human review opinions",
+    "th": "ความเห็นตรวจสัญญาของผู้ตรวจ"
+  },
+  "顾问与样本回归": {
+    "en": "Advisers and sample regression",
+    "th": "ที่ปรึกษาและการทดสอบตัวอย่าง"
+  },
+  "含已移除记录": {
+    "en": "Include removed records",
+    "th": "รวมบันทึกที่นำออก"
+  },
+  "新建": {
+    "en": "New",
+    "th": "สร้างใหม่"
+  },
+  "刷新资料库": {
+    "en": "Refresh library",
+    "th": "อัปเดตคลังข้อมูล"
+  },
+  "已移除": {
+    "en": "Removed",
+    "th": "นำออกแล้ว"
+  },
+  "已保存": {
+    "en": "Saved",
+    "th": "บันทึกแล้ว"
+  },
+  "暂无记录。": {
+    "en": "No records yet.",
+    "th": "ยังไม่มีบันทึก"
+  },
+  "企业范围指当前本机工作空间；记录人是留档标签，不代表身份认证。": {
+    "en": "Enterprise scope means this local workspace. Recorder labels do not authenticate identity.",
+    "th": "ขอบเขตองค์กรหมายถึงพื้นที่ทำงานในเครื่องนี้ ป้ายผู้บันทึกไม่ยืนยันตัวตน"
+  },
+  "此记录已移除。请在下方查看历史并从未移除版本恢复为待确认副本，再重新批准或启用。": {
+    "en": "This record is removed. Restore a non-removed historical version as a pending copy, then approve or enable again.",
+    "th": "บันทึกนี้ถูกนำออกแล้ว คืนค่ารุ่นในประวัติที่ยังไม่นำออกเป็นสำเนารอยืนยัน แล้วอนุมัติหรือเปิดใหม่"
+  },
+  "资料库记录人": {
+    "en": "Library recorder",
+    "th": "ผู้บันทึกคลังข้อมูล"
+  },
+  "候选和停用记录不参与审核。经验只作为人工偏好或条款资料，不替代法律依据；项目经验仅在项目标识一致时复用。": {
+    "en": "Candidate and disabled records do not enter reviews. Experience is a human preference or clause reference, not legal authority. Project experience requires matching project IDs.",
+    "th": "บันทึกรอพิจารณาหรือปิดใช้ไม่เข้าการตรวจ ประสบการณ์เป็นความชอบหรือข้อสัญญาอ้างอิง ไม่แทนฐานกฎหมาย ประสบการณ์โครงการใช้เมื่อรหัสโครงการตรงกัน"
+  },
+  "经验名称": {
+    "en": "Experience name",
+    "th": "ชื่อประสบการณ์"
+  },
+  "经验类型": {
+    "en": "Experience type",
+    "th": "ประเภทประสบการณ์"
+  },
+  "审核偏好": {
+    "en": "Review preference",
+    "th": "ความชอบในการตรวจ"
+  },
+  "候选规则说明": {
+    "en": "Candidate rule description",
+    "th": "คำอธิบายกฎรอพิจารณา"
+  },
+  "可复用条款": {
+    "en": "Reusable clause",
+    "th": "ข้อสัญญาใช้ซ้ำ"
+  },
+  "经验状态": {
+    "en": "Experience status",
+    "th": "สถานะประสบการณ์"
+  },
+  "经验内容": {
+    "en": "Experience content",
+    "th": "เนื้อหาประสบการณ์"
+  },
+  "经验优先级与明确覆盖": {
+    "en": "Experience priority and explicit overrides",
+    "th": "ลำดับประสบการณ์และการแทนที่ชัดเจน"
+  },
+  "本次任务要求优先于项目、企业和个人；项目优先于企业，企业优先于个人；只对相同冲突键做比较。法律约束不会被低风险偏好或放宽请求覆盖。同范围无明确覆盖时保留冲突说明并暂停取用。": {
+    "en": "Task requirements take priority over project, enterprise and personal experience. Project overrides enterprise, which overrides personal, only for the same conflict key. Legal guardrails cannot be relaxed by preferences. Unresolved same-scope conflicts are retained and withheld from use.",
+    "th": "ข้อกำหนดงานสำคัญกว่าโครงการ องค์กร และบุคคล โครงการเหนือองค์กร องค์กรเหนือบุคคล เฉพาะคีย์ขัดแย้งเดียวกัน ความชอบไม่อาจผ่อนข้อจำกัดกฎหมาย ความขัดแย้งระดับเดียวกันที่ยังไม่แก้จะเก็บไว้และไม่ใช้"
+  },
+  "冲突键（留空表示独立补充）": {
+    "en": "Conflict key (blank means independent supplement)",
+    "th": "คีย์ขัดแย้ง (เว้นว่างคือข้อมูลเสริมอิสระ)"
+  },
+  "经验冲突键": {
+    "en": "Experience conflict key",
+    "th": "คีย์ขัดแย้งประสบการณ์"
+  },
+  "约束领域": {
+    "en": "Guardrail domain",
+    "th": "ขอบเขตข้อจำกัด"
+  },
+  "经验约束领域": {
+    "en": "Experience guardrail domain",
+    "th": "ขอบเขตข้อจำกัดประสบการณ์"
+  },
+  "业务关注与偏好": {
+    "en": "Business concerns and preferences",
+    "th": "ประเด็นและความชอบธุรกิจ"
+  },
+  "人工标记法律约束（不可自动放宽）": {
+    "en": "Human-marked legal guardrail (never relaxed automatically)",
+    "th": "ข้อจำกัดกฎหมายที่ผู้ตรวจระบุ (ไม่ผ่อนอัตโนมัติ)"
+  },
+  "作用": {
+    "en": "Effect",
+    "th": "ผล"
+  },
+  "经验作用": {
+    "en": "Experience effect",
+    "th": "ผลของประสบการณ์"
+  },
+  "补充": {
+    "en": "Supplement",
+    "th": "เพิ่มเติม"
+  },
+  "收紧": {
+    "en": "Tighten",
+    "th": "เข้มขึ้น"
+  },
+  "放宽业务要求": {
+    "en": "Relax business requirements",
+    "th": "ผ่อนข้อกำหนดธุรกิจ"
+  },
+  "同范围明确覆盖目标（可多选）": {
+    "en": "Same-scope explicit override targets (multiple allowed)",
+    "th": "เป้าหมายแทนที่ระดับเดียวกัน (เลือกได้หลายข้อ)"
+  },
+  "经验覆盖目标": {
+    "en": "Experience override targets",
+    "th": "เป้าหมายแทนที่ประสบการณ์"
+  },
+  "明确覆盖原因": {
+    "en": "Explicit override reason",
+    "th": "เหตุผลการแทนที่ชัดเจน"
+  },
+  "经验覆盖原因": {
+    "en": "Experience override reason",
+    "th": "เหตุผลแทนที่ประสบการณ์"
+  },
+  "预览项目标识": {
+    "en": "Preview project ID",
+    "th": "รหัสโครงการสำหรับตัวอย่าง"
+  },
+  "经验预览项目": {
+    "en": "Experience preview project",
+    "th": "โครงการตัวอย่างประสบการณ์"
+  },
+  "预览当前类型与立场的经验选择": {
+    "en": "Preview experience selection for current type and role",
+    "th": "ดูตัวอย่างประสบการณ์สำหรับประเภทและจุดยืนปัจจุบัน"
+  },
+  "采用：": {
+    "en": "Selected: ",
+    "th": "เลือกใช้: "
+  },
+  "无": {
+    "en": "None",
+    "th": "ไม่มี"
+  },
+  "抑制": {
+    "en": "Suppressed",
+    "th": "ระงับใช้"
+  },
+  "待人工解决": {
+    "en": "Needs human resolution",
+    "th": "ต้องให้ผู้ตรวจแก้ไข"
+  },
+  "策略": {
+    "en": "Policy",
+    "th": "นโยบาย"
+  },
+  "来源": {
+    "en": "Source",
+    "th": "ที่มา"
+  },
+  "人工录入并留档": {
+    "en": "Manually entered and recorded",
+    "th": "ผู้ใช้กรอกและบันทึกเอง"
+  },
+  "当前审核结果": {
+    "en": "Current review result",
+    "th": "ผลตรวจปัจจุบัน"
+  },
+  "当前审核风险": {
+    "en": "Current review risk",
+    "th": "ความเสี่ยงในผลตรวจปัจจุบัน"
+  },
+  "已留档的合同修改": {
+    "en": "Recorded contract edits",
+    "th": "การแก้สัญญาที่บันทึกไว้"
+  },
+  "来源风险": {
+    "en": "Source risk",
+    "th": "ความเสี่ยงต้นทาง"
+  },
+  "来源修改": {
+    "en": "Source edit",
+    "th": "การแก้ไขต้นทาง"
+  },
+  "已保存来源 ·": {
+    "en": "Saved source · ",
+    "th": "ที่มาที่บันทึก · "
+  },
+  "待决定": {
+    "en": "Undecided",
+    "th": "รอตัดสินใจ"
+  },
+  "保存、批准或停用原因": {
+    "en": "Reason for saving, approving or disabling",
+    "th": "เหตุผลบันทึก อนุมัติ หรือปิดใช้"
+  },
+  "经验原因": {
+    "en": "Experience reason",
+    "th": "เหตุผลประสบการณ์"
+  },
+  "我已人工确认内容、来源和适用范围，同意供后续审核复用": {
+    "en": "I confirmed content, source and scope and agree to reuse in future reviews",
+    "th": "ข้าพเจ้ายืนยันเนื้อหา ที่มา และขอบเขตแล้ว และยอมให้ใช้ในการตรวจต่อไป"
+  },
+  "保存经验版本": {
+    "en": "Save experience version",
+    "th": "บันทึกรุ่นประสบการณ์"
+  },
+  "生成{v0}个候选。{v1}": {
+    "en": "Generated {v0} candidates. {v1}",
+    "th": "สร้างฉบับรอพิจารณา {v0} รายการ {v1}"
+  },
+  "从重复采纳生成候选": {
+    "en": "Create candidates from repeated acceptance",
+    "th": "สร้างฉบับรอพิจารณาจากการยอมรับซ้ำ"
+  },
+  "继续已保存的起草核验": {
+    "en": "Continue saved drafting checks",
+    "th": "ดำเนินการตรวจร่างที่บันทึกต่อ"
+  },
+  "从当前导入合同提取文字，使用": {
+    "en": "Extract text from the current contract and use ",
+    "th": "ดึงข้อความจากสัญญาปัจจุบันและใช้ "
+  },
+  "{{字段名}}": {
+    "en": "{{field name}}",
+    "th": "{{ชื่อช่อง}}"
+  },
+  "标记可填字段。装配生成新的规范排版 DOCX，来源文件格式、表格布局和修订记录不随模板文字复制。": {
+    "en": " to mark fillable fields. Assembly creates a newly formatted DOCX. Original formatting, tables and revision history are not copied with template text.",
+    "th": " เพื่อระบุช่องกรอก สร้าง DOCX รูปแบบใหม่ ไม่คัดลอกรูปแบบ ตาราง และประวัติรอยแก้จากไฟล์เดิม"
+  },
+  "模板名称": {
+    "en": "Template name",
+    "th": "ชื่อแม่แบบ"
+  },
+  "新模板名称": {
+    "en": "New template name",
+    "th": "ชื่อแม่แบบใหม่"
+  },
+  "已提取模板文字；请编辑字段并人工批准。": {
+    "en": "Template text extracted. Edit fields and approve manually.",
+    "th": "ดึงข้อความแม่แบบแล้ว โปรดแก้ช่องและให้ผู้ตรวจอนุมัติ"
+  },
+  "从当前合同建立模板草稿": {
+    "en": "Create template draft from current contract",
+    "th": "สร้างร่างแม่แบบจากสัญญาปัจจุบัน"
+  },
+  "请先导入一份合同。": {
+    "en": "Import a contract first.",
+    "th": "โปรดนำเข้าสัญญาก่อน"
+  },
+  "模板语言": {
+    "en": "Template language",
+    "th": "ภาษาแม่แบบ"
+  },
+  "模板状态": {
+    "en": "Template status",
+    "th": "สถานะแม่แบบ"
+  },
+  "合同正文（每行一个段落）": {
+    "en": "Contract body (one paragraph per line)",
+    "th": "เนื้อหาสัญญา (หนึ่งย่อหน้าต่อบรรทัด)"
+  },
+  "模板正文": {
+    "en": "Template body",
+    "th": "เนื้อหาแม่แบบ"
+  },
+  "保存或批准原因": {
+    "en": "Reason for saving or approval",
+    "th": "เหตุผลบันทึกหรืออนุมัติ"
+  },
+  "我已确认模板内容、字段及适用范围，批准本版本": {
+    "en": "I verified template content, fields and scope, and approve this version",
+    "th": "ข้าพเจ้าตรวจเนื้อหา ช่อง และขอบเขตแม่แบบแล้ว และอนุมัติรุ่นนี้"
+  },
+  "保存模板版本": {
+    "en": "Save template version",
+    "th": "บันทึกรุ่นแม่แบบ"
+  },
+  "文件摘要": {
+    "en": "File digest",
+    "th": "แฮชไฟล์"
+  },
+  "填写字段并装配合同": {
+    "en": "Fill fields and assemble contract",
+    "th": "กรอกช่องและประกอบสัญญา"
+  },
+  "本次合同类型": {
+    "en": "Contract type for this task",
+    "th": "ประเภทสัญญาครั้งนี้"
+  },
+  "本次我方立场": {
+    "en": "Our role for this task",
+    "th": "จุดยืนของเราครั้งนี้"
+  },
+  "模板字段{v0}": {
+    "en": "Template field {v0}",
+    "th": "ช่องแม่แบบ {v0}"
+  },
+  "附加已批准条款": {
+    "en": "Append approved clauses",
+    "th": "แนบข้อสัญญาที่อนุมัติ"
+  },
+  "项目标识（使用项目模板或条款时填写）": {
+    "en": "Project ID (required for project templates or clauses)",
+    "th": "รหัสโครงการ (กรอกเมื่อใช้แม่แบบหรือข้อสัญญาโครงการ)"
+  },
+  "未填写的字段保留原占位符，并列入待确认信息。": {
+    "en": "Unfilled fields keep placeholders and become confirmation items.",
+    "th": "ช่องที่ไม่กรอกจะคงที่ว่างและเข้ารายการรอยืนยัน"
+  },
+  "装配后核验、审核与确认": {
+    "en": "Check, review and confirm after assembly",
+    "th": "ตรวจข้อมูล ตรวจสัญญา และยืนยันหลังประกอบ"
+  },
+  "请先选择一份审核结果，再补录或修订人工意见。": {
+    "en": "Select a review result before adding or revising human opinions.",
+    "th": "เลือกผลตรวจก่อนเพิ่มหรือแก้ความเห็นผู้ตรวจ"
+  },
+  "原报告保持不变。人工意见单独留档，报告导出展示其内容和修改原因；人工关注等级不会改写原风险等级。": {
+    "en": "Original reports remain unchanged. Human opinions and edit reasons are recorded separately and included in exports. Human attention levels do not rewrite original risk levels.",
+    "th": "ไม่เปลี่ยนรายงานเดิม เก็บความเห็นผู้ตรวจและเหตุผลแยกและรวมในการส่งออก ระดับที่ผู้ตรวจสนใจไม่แก้ระดับความเสี่ยงเดิม"
+  },
+  "关联原风险": {
+    "en": "Related original risk",
+    "th": "ความเสี่ยงเดิมที่เกี่ยวข้อง"
+  },
+  "人工意见原风险": {
+    "en": "Human opinion original risk",
+    "th": "ความเสี่ยงเดิมของความเห็นผู้ตรวจ"
+  },
+  "新增漏检事项": {
+    "en": "Add missed issue",
+    "th": "เพิ่มประเด็นที่ตรวจพลาด"
+  },
+  "人工意见标题": {
+    "en": "Human opinion title",
+    "th": "หัวข้อความเห็นผู้ตรวจ"
+  },
+  "商业事项": {
+    "en": "Commercial matters",
+    "th": "ประเด็นธุรกิจ"
+  },
+  "人工关注等级": {
+    "en": "Human attention level",
+    "th": "ระดับความสำคัญที่ผู้ตรวจกำหนด"
+  },
+  "高": {
+    "en": "High",
+    "th": "สูง"
+  },
+  "中": {
+    "en": "Medium",
+    "th": "ปานกลาง"
+  },
+  "低": {
+    "en": "Low",
+    "th": "ต่ำ"
+  },
+  "问题分析": {
+    "en": "Issue analysis",
+    "th": "วิเคราะห์ปัญหา"
+  },
+  "人工问题分析": {
+    "en": "Human issue analysis",
+    "th": "การวิเคราะห์ปัญหาโดยผู้ตรวจ"
+  },
+  "人工处理建议": {
+    "en": "Human handling suggestion",
+    "th": "ข้อเสนอจัดการโดยผู้ตรวจ"
+  },
+  "关联原文段落（可多选）": {
+    "en": "Related source paragraphs (multiple allowed)",
+    "th": "ย่อหน้าต้นฉบับที่เกี่ยวข้อง (เลือกได้หลายข้อ)"
+  },
+  "原文摘录（原样填写）": {
+    "en": "Original quote (enter verbatim)",
+    "th": "ข้อความต้นฉบับ (กรอกตามจริง)"
+  },
+  "新增或修订原因": {
+    "en": "Reason for adding or revising",
+    "th": "เหตุผลเพิ่มหรือแก้ไข"
+  },
+  "人工意见原因": {
+    "en": "Human opinion reason",
+    "th": "เหตุผลความเห็นผู้ตรวจ"
+  },
+  "停用，保留历史": {
+    "en": "Disable and retain history",
+    "th": "ปิดใช้และเก็บประวัติ"
+  },
+  "保存人工意见版本": {
+    "en": "Save human opinion version",
+    "th": "บันทึกรุ่นความเห็นผู้ตรวจ"
+  },
+  "查看版本历史": {
+    "en": "View version history",
+    "th": "ดูประวัติรุ่น"
+  },
+  "移除（保留历史）": {
+    "en": "Remove (retain history)",
+    "th": "นำออก (เก็บประวัติ)"
+  },
+  "查看此版本内容": {
+    "en": "View version content",
+    "th": "ดูเนื้อหารุ่นนี้"
+  },
+  "以此版本建立待确认副本": {
+    "en": "Create pending copy from this version",
+    "th": "สร้างสำเนารอยืนยันจากรุ่นนี้"
+  },
+  "正在保存或读取本地记录…": {
+    "en": "Saving or loading local records…",
+    "th": "กำลังบันทึกหรืออ่านข้อมูลในเครื่อง…"
+  },
+  "当前修订号 r{v0}，保存采用版本校验；冲突时保留输入，请刷新后核对。": {
+    "en": "Current revision r{v0}. Saving checks the version. Inputs remain on conflict; refresh and compare.",
+    "th": "รุ่นปัจจุบัน r{v0} ตรวจรุ่นเมื่อบันทึก หากขัดแย้งจะเก็บข้อมูลที่กรอก โปรดอัปเดตแล้วเปรียบเทียบ"
+  },
+  "手工保存前请核对来源和适用范围。": {
+    "en": "Check source and scope before saving manually.",
+    "th": "ตรวจที่มาและขอบเขตก่อนบันทึกเอง"
+  },
+  "适用范围": {
+    "en": "Applicable scope",
+    "th": "ขอบเขตที่ใช้"
+  },
+  "范围": {
+    "en": "Scope",
+    "th": "ขอบเขต"
+  },
+  "经验适用范围": {
+    "en": "Experience scope",
+    "th": "ขอบเขตประสบการณ์"
+  },
+  "本机个人": {
+    "en": "Local personal",
+    "th": "ส่วนบุคคลในเครื่อง"
+  },
+  "本工作空间企业": {
+    "en": "Enterprise in this workspace",
+    "th": "องค์กรในพื้นที่ทำงานนี้"
+  },
+  "指定项目": {
+    "en": "Specified project",
+    "th": "โครงการที่ระบุ"
+  },
+  "项目标识（须与审核项目一致）": {
+    "en": "Project ID (must match review project)",
+    "th": "รหัสโครงการ (ต้องตรงกับโครงการตรวจ)"
+  },
+  "同步中": {
+    "en": "Syncing",
+    "th": "กำลังซิงก์"
+  },
+  "已完成": {
+    "en": "Completed",
+    "th": "เสร็จแล้ว"
+  },
+  "部分完成": {
+    "en": "Partially completed",
+    "th": "เสร็จบางส่วน"
+  },
+  "已取消": {
+    "en": "Cancelled",
+    "th": "ยกเลิกแล้ว"
+  },
+  "失败": {
+    "en": "Failed",
+    "th": "ล้มเหลว"
+  },
+  "上次任务中断": {
+    "en": "Previous task interrupted",
+    "th": "งานก่อนหน้าถูกขัดจังหวะ"
+  },
+  "本地资料索引": {
+    "en": "Local document index",
+    "th": "ดัชนีเอกสารในเครื่อง"
+  },
+  "刷新本地知识库状态": {
+    "en": "Refresh local knowledge status",
+    "th": "อัปเดตสถานะคลังความรู้ในเครื่อง"
+  },
+  "首次手动建库完成后，应用空闲时每 {v0} 分钟增量同步；重启时自动增量核对，并恢复中断任务。": {
+    "en": "After the first manual build, incrementally sync every {v0} idle minutes. Startup checks changes and resumes interrupted work.",
+    "th": "หลังสร้างครั้งแรกเอง ซิงก์ส่วนเปลี่ยนทุก {v0} นาทีเมื่อว่าง เมื่อเปิดจะตรวจการเปลี่ยนและทำงานที่ค้างต่อ"
+  },
+  "自动同步已关闭。可按需手动增量更新或完整核验。": {
+    "en": "Auto sync is off. Run incremental updates or full verification when needed.",
+    "th": "ปิดซิงก์อัตโนมัติ อัปเดตส่วนเปลี่ยนหรือตรวจเต็มได้เมื่อต้องการ"
+  },
+  "下方展示最近一轮状态，源文件保持只读。": {
+    "en": "Latest task status shown below. Source files are read-only.",
+    "th": "ด้านล่างเป็นสถานะงานล่าสุด อ่านไฟล์ต้นทางอย่างเดียว"
+  },
+  "浏览器界面预览未读取文件，不能建立索引或执行真实检索。": {
+    "en": "Browser preview does not read files or perform indexing and real searches.",
+    "th": "ตัวอย่างเบราว์เซอร์ไม่อ่านไฟล์ สร้างดัชนี หรือค้นจริง"
+  },
+  "选择资料文件夹并保存配置后，即可建立本地索引。": {
+    "en": "Choose a source folder and save settings to build the local index.",
+    "th": "เลือกโฟลเดอร์ข้อมูลและบันทึกการตั้งค่าเพื่อสร้างดัชนีในเครื่อง"
+  },
+  "当前目录或个性化设置尚未保存。请先保存配置，再建立或更新索引。": {
+    "en": "Directory or personalization settings are unsaved. Save before building or updating the index.",
+    "th": "โฟลเดอร์หรือการตั้งค่าส่วนตัวยังไม่บันทึก โปรดบันทึกก่อนสร้างหรืออัปเดตดัชนี"
+  },
+  "增量更新": {
+    "en": "Incremental update",
+    "th": "อัปเดตส่วนที่เปลี่ยน"
+  },
+  "建立 / 增量更新": {
+    "en": "Build / incremental update",
+    "th": "สร้าง / อัปเดตส่วนที่เปลี่ยน"
+  },
+  "完整核验": {
+    "en": "Full verification",
+    "th": "ตรวจเต็มรูปแบบ"
+  },
+  "取消同步": {
+    "en": "Cancel sync",
+    "th": "ยกเลิกซิงก์"
+  },
+  "读取索引状态失败：": {
+    "en": "Failed to read index status: ",
+    "th": "อ่านสถานะดัชนีไม่ได้: "
+  },
+  "已存储文件": {
+    "en": "Stored files",
+    "th": "ไฟล์ที่เก็บ"
+  },
+  "已存储片段": {
+    "en": "Stored excerpts",
+    "th": "ข้อความส่วนที่เก็บ"
+  },
+  "待更新文件": {
+    "en": "Files awaiting update",
+    "th": "ไฟล์รออัปเดต"
+  },
+  "最近同步：": {
+    "en": "Last sync: ",
+    "th": "ซิงก์ล่าสุด: "
+  },
+  "尚未同步": {
+    "en": "Not synced yet",
+    "th": "ยังไม่ซิงก์"
+  },
+  "。存储计数可能包含已被当前规则排除的历史版本，不等于本次可检索范围。": {
+    "en": ". Counts may include historical versions excluded by current rules and do not equal the current searchable scope.",
+    "th": " จำนวนอาจรวมรุ่นเก่าที่กฎปัจจุบันไม่รวม จึงไม่เท่ากับขอบเขตที่ค้นได้ปัจจุบัน"
+  },
+  "资料范围或个性化设置已变更，需要同步后才能补齐当前范围的索引。": {
+    "en": "Source scope or settings changed. Sync to complete the current scope’s index.",
+    "th": "ขอบเขตข้อมูลหรือการตั้งค่าเปลี่ยน โปรดซิงก์เพื่อให้ดัชนีปัจจุบันครบ"
+  },
+  "正在读取已保存文件夹的索引状态…": {
+    "en": "Reading index status for the saved folder…",
+    "th": "กำลังอ่านสถานะดัชนีของโฟลเดอร์ที่บันทึก…"
+  },
+  "此任务属于此前保存的文件夹：": {
+    "en": "This task belongs to the previously saved folder: ",
+    "th": "งานนี้เป็นของโฟลเดอร์เดิมที่บันทึก: "
+  },
+  "入库": {
+    "en": "Indexed",
+    "th": "เข้าดัชนี"
+  },
+  "未变更": {
+    "en": "Unchanged",
+    "th": "ไม่เปลี่ยน"
+  },
+  "增量同步": {
+    "en": "Incremental sync",
+    "th": "ซิงก์ส่วนที่เปลี่ยน"
+  },
+  "目录遍历已完成": {
+    "en": "Directory traversal completed",
+    "th": "สำรวจโฟลเดอร์เสร็จ"
+  },
+  "目录遍历尚未完成": {
+    "en": "Directory traversal pending",
+    "th": "ยังสำรวจโฟลเดอร์ไม่เสร็จ"
+  },
+  "目录遍历未完成": {
+    "en": "Directory traversal incomplete",
+    "th": "สำรวจโฟลเดอร์ไม่ครบ"
+  },
+  "· 开始于": {
+    "en": "· Started at ",
+    "th": "· เริ่มเมื่อ "
+  },
+  " · 结束于 {v0}": {
+    "en": " · Finished at {v0}",
+    "th": " · เสร็จเมื่อ {v0}"
+  },
+  "查看": {
+    "en": "View",
+    "th": "ดู"
+  },
+  "项文件问题": {
+    "en": " file issues",
+    "th": " ปัญหาไฟล์"
+  },
+  "索引覆盖与限制": {
+    "en": "Index coverage and limitations",
+    "th": "ขอบเขตดัชนีและข้อจำกัด"
+  },
+  "索引引擎": {
+    "en": "Index engine",
+    "th": "ระบบดัชนี"
+  },
+  "· 分词版本": {
+    "en": "· Tokenizer version ",
+    "th": "· รุ่นตัดคำ "
+  },
+  "测试本地资料检索": {
+    "en": "Test local document search",
+    "th": "ทดสอบค้นเอกสารในเครื่อง"
+  },
+  "自由输入关键词，只查本地索引，不联网、不调用模型。": {
+    "en": "Enter keywords to search only the local index. No network or model calls.",
+    "th": "กรอกคำค้นเพื่อค้นเฉพาะดัชนีในเครื่อง ไม่เข้าค้นเครือข่ายหรือเรียกโมเดล"
+  },
+  "例如：验收 付款 保密": {
+    "en": "For example: acceptance payment confidentiality",
+    "th": "เช่น ตรวจรับ ชำระเงิน ความลับ"
+  },
+  "检索": {
+    "en": "Search",
+    "th": "ค้นหา"
+  },
+  "清除知识库提示": {
+    "en": "Clear knowledge notices",
+    "th": "ล้างข้อความแจ้งคลังความรู้"
+  },
+  "项片段": {
+    "en": " excerpts",
+    "th": " ส่วนข้อความ"
+  },
+  "查询：": {
+    "en": "Query: ",
+    "th": "คำค้น: "
+  },
+  " · 检索词：{v0}": {
+    "en": " · Search terms: {v0}",
+    "th": " · คำที่ค้น: {v0}"
+  },
+  "本次没有匹配片段。可调整关键词，并查看索引覆盖范围和同步状态。": {
+    "en": "No matching excerpts. Adjust keywords and check index coverage and sync status.",
+    "th": "ไม่พบส่วนข้อความที่ตรง ลองเปลี่ยนคำค้นและตรวจขอบเขตดัชนีกับสถานะซิงก์"
+  },
+  "在系统中显示来源文件": {
+    "en": "Show source file in system",
+    "th": "แสดงไฟล์ต้นทางในระบบ"
+  },
+  "显示来源文件：{v0}": {
+    "en": "Show source file: {v0}",
+    "th": "แสดงไฟล์ต้นทาง: {v0}"
+  },
+  "原文片段全文": {
+    "en": "Full source excerpt",
+    "th": "ข้อความต้นฉบับส่วนนี้ทั้งหมด"
+  },
+  "重新读取已索引片段": {
+    "en": "Reload indexed excerpt",
+    "th": "อ่านข้อความส่วนดัชนีใหม่"
+  },
+  "来源、版本与校验值": {
+    "en": "Source, version and checksums",
+    "th": "ที่มา รุ่น และค่าตรวจสอบ"
+  },
+  "版本 ID": {
+    "en": "Version ID",
+    "th": "รหัสรุ่น"
+  },
+  "文件 SHA-256": {
+    "en": "File SHA-256",
+    "th": "SHA-256 ของไฟล์"
+  },
+  "片段 SHA-256": {
+    "en": "Excerpt SHA-256",
+    "th": "SHA-256 ของส่วนข้อความ"
+  },
+  "索引时间": {
+    "en": "Indexed at",
+    "th": "เวลาสร้างดัชนี"
+  },
+  "备份已保存：{v0}。可通过“选择并检查备份”核验后恢复。": {
+    "en": "Backup saved: {v0}. Use “Choose and inspect backup” to verify before restoring.",
+    "th": "บันทึกสำรองแล้ว: {v0} ใช้ “เลือกและตรวจสำรอง” เพื่อตรวจก่อนคืนค่า"
+  },
+  "已读取备份清单。请核对版本、日期和文件摘要后再确认恢复。": {
+    "en": "Backup manifest loaded. Check version, date and file digests before confirming restore.",
+    "th": "อ่านรายการสำรองแล้ว ตรวจรุ่น วันที่ และแฮชไฟล์ก่อนยืนยันคืนค่า"
+  },
+  "本地数据、备份与恢复": {
+    "en": "Local data, backup and restore",
+    "th": "ข้อมูลในเครื่อง สำรอง และคืนค่า"
+  },
+  "管理当前工作空间的数据副本，查看并清理可重建的知识索引。": {
+    "en": "Manage workspace copies and inspect or clear rebuildable knowledge indexes.",
+    "th": "จัดการสำเนาพื้นที่ทำงาน ตรวจหรือล้างดัชนีความรู้ที่สร้างใหม่ได้"
+  },
+  "关闭数据管理": {
+    "en": "Close data management",
+    "th": "ปิดการจัดการข้อมูล"
+  },
+  "工作空间": {
+    "en": "Workspace",
+    "th": "พื้นที่ทำงาน"
+  },
+  "刷新状态": {
+    "en": "Refresh status",
+    "th": "อัปเดตสถานะ"
+  },
+  "尚未取得": {
+    "en": "Not retrieved yet",
+    "th": "ยังไม่ได้ข้อมูล"
+  },
+  "合同原件、历史审核和人工操作记录长期保留，由用户主动管理。备份和清理均由本机执行，不会向网络上传数据。凭据的恢复能力取决于本机系统安全存储，迁移到其他电脑后可能需要重新配置。": {
+    "en": "Original contracts, reviews and human records are retained for user management. Backup and cleanup stay local. Credential recovery depends on OS secure storage; other computers may require reconfiguration.",
+    "th": "เก็บต้นฉบับสัญญา ผลตรวจ และบันทึกผู้ตรวจให้ผู้ใช้จัดการ สำรองและล้างในเครื่องเท่านั้น การคืนข้อมูลรับรองขึ้นกับที่เก็บปลอดภัยระบบ ย้ายเครื่องอาจต้องตั้งใหม่"
+  },
+  "知识索引状态": {
+    "en": "Knowledge index status",
+    "th": "สถานะดัชนีความรู้"
+  },
+  "导出备份": {
+    "en": "Export backup",
+    "th": "ส่งออกสำรอง"
+  },
+  "选择一个新的备份目录，保存数据库、合同和相关工作资产，并写入可核验的清单。": {
+    "en": "Choose a new backup directory for the database, contracts, assets and verifiable manifest.",
+    "th": "เลือกโฟลเดอร์สำรองใหม่สำหรับฐานข้อมูล สัญญา ทรัพย์สินงาน และรายการตรวจสอบได้"
+  },
+  "同时包含知识索引与相关缓存（可能占用较多空间）": {
+    "en": "Include knowledge index and caches (may be large)",
+    "th": "รวมดัชนีความรู้และแคช (อาจใช้พื้นที่มาก)"
+  },
+  "选择目录并创建备份": {
+    "en": "Choose directory and create backup",
+    "th": "เลือกโฟลเดอร์และสำรอง"
+  },
+  "检查并恢复备份": {
+    "en": "Inspect and restore backup",
+    "th": "ตรวจและคืนค่าสำรอง"
+  },
+  "先选择备份目录检查清单，再确认恢复。恢复前软件会保留当前工作空间的副本，恢复后需要重启。": {
+    "en": "Inspect the backup directory manifest before confirming. A copy of the current workspace is kept first; restart is required after restore.",
+    "th": "ตรวจรายการโฟลเดอร์สำรองก่อนยืนยัน เก็บสำเนาพื้นที่ทำงานปัจจุบันก่อน ต้องเปิดโปรแกรมใหม่หลังคืนค่า"
+  },
+  "选择并检查备份": {
+    "en": "Choose and inspect backup",
+    "th": "เลือกและตรวจสำรอง"
+  },
+  "所选备份": {
+    "en": "Selected backup",
+    "th": "สำรองที่เลือก"
+  },
+  "备份清单": {
+    "en": "Backup manifest",
+    "th": "รายการสำรอง"
+  },
+  "我已核对备份来源与日期，确认以该备份恢复当前工作空间": {
+    "en": "I checked the backup source and date and confirm restoring this workspace from it",
+    "th": "ข้าพเจ้าตรวจที่มาและวันที่สำรองแล้ว และยืนยันคืนพื้นที่ทำงานจากสำรองนี้"
+  },
+  "输入“恢复”后执行": {
+    "en": "Type “恢复” to proceed",
+    "th": "พิมพ์ “恢复” เพื่อดำเนินการ"
+  },
+  "恢复备份确认文字": {
+    "en": "Backup restore confirmation text",
+    "th": "ข้อความยืนยันคืนค่าสำรอง"
+  },
+  "确认恢复并准备重启": {
+    "en": "Confirm restore and prepare restart",
+    "th": "ยืนยันคืนค่าและเตรียมเปิดใหม่"
+  },
+  "清理本地知识索引": {
+    "en": "Clear local knowledge index",
+    "th": "ล้างดัชนีความรู้ในเครื่อง"
+  },
+  "将当前可重建的索引移到可恢复目录，保留原始资料文件和合同审核记录。需要检索时可重新建库。": {
+    "en": "Move rebuildable indexes to a recoverable directory. Source files and contract review records remain; rebuild for future searches.",
+    "th": "ย้ายดัชนีที่สร้างใหม่ได้ไปโฟลเดอร์คืนค่า เก็บไฟล์ต้นทางและผลตรวจสัญญา สร้างดัชนีใหม่เมื่อจะค้น"
+  },
+  "我确认暂时清理当前知识索引，并保留恢复副本": {
+    "en": "I confirm clearing the current knowledge index and keeping a recovery copy",
+    "th": "ข้าพเจ้ายืนยันล้างดัชนีปัจจุบันและเก็บสำเนาคืนค่า"
+  },
+  "保留副本并清理索引": {
+    "en": "Keep copy and clear index",
+    "th": "เก็บสำเนาและล้างดัชนี"
+  },
+  "撤销上次清理": {
+    "en": "Undo last cleanup",
+    "th": "เลิกทำการล้างล่าสุด"
+  },
+  "不会自动清理合同、报告或企业标准。恢复副本的永久删除和自动保留期限可在明确备份策略后再启用。": {
+    "en": "Contracts, reports and standards are never cleaned automatically. Permanent deletion of recovery copies and retention periods need an explicit backup policy first.",
+    "th": "ไม่ล้างสัญญา รายงาน หรือมาตรฐานอัตโนมัติ การลบสำเนาคืนค่าถาวรและกำหนดอายุเก็บต้องมีนโยบายสำรองชัดเจนก่อน"
+  },
+  "… 文件操作收尾前请保持窗口打开。": {
+    "en": "… Keep this window open until file operations finish.",
+    "th": "… เปิดหน้าต่างไว้จนกว่างานไฟล์เสร็จ"
+  },
+  "操作只影响当前本地工作空间。": {
+    "en": "Only this local workspace is affected.",
+    "th": "มีผลต่อพื้นที่ทำงานในเครื่องนี้เท่านั้น"
+  },
+  "进行中": {
+    "en": "Running",
+    "th": "กำลังทำงาน"
+  },
+  "完成": {
+    "en": "Completed",
+    "th": "เสร็จสิ้น"
+  },
+  "成功": {
+    "en": "Succeeded",
+    "th": "สำเร็จ"
+  },
+  "已中断": {
+    "en": "Interrupted",
+    "th": "ถูกขัดจังหวะ"
+  },
+  "配置已保存，仅用于该服务地址与模型；运行中的任务继续使用已冻结配置。": {
+    "en": "Settings saved for this service and model only. Running tasks keep their frozen configuration.",
+    "th": "บันทึกการตั้งค่าสำหรับบริการและโมเดลนี้เท่านั้น งานที่กำลังรันใช้ค่าที่ตรึงไว้"
+  },
+  "{v0} 探测结论已填入表单，请保存后启用。": {
+    "en": "{v0} probe result filled in. Save to enable.",
+    "th": "เติมผลทดสอบ {v0} แล้ว บันทึกเพื่อเปิดใช้"
+  },
+  "模型运行与用量": {
+    "en": "Model runtime and usage",
+    "th": "การรันโมเดลและปริมาณใช้"
+  },
+  "按服务与模型保存能力、预算及重试策略。所有探测都可能产生一次真实调用费用。": {
+    "en": "Save capabilities, budgets and retry policies per service/model. Each probe may incur one real call charge.",
+    "th": "บันทึกความสามารถ งบ และนโยบายลองใหม่แยกตามบริการและโมเดล แต่ละการทดสอบอาจมีค่าเรียกจริงหนึ่งครั้ง"
+  },
+  "关闭模型运行配置": {
+    "en": "Close model runtime settings",
+    "th": "ปิดตั้งค่าการรันโมเดล"
+  },
+  "请先取消或等待能力探测完成。": {
+    "en": "Cancel or wait for the capability probe first.",
+    "th": "ยกเลิกหรือรอทดสอบความสามารถให้เสร็จก่อน"
+  },
+  "有未保存配置，请先保存，或撤销编辑后关闭。": {
+    "en": "Unsaved settings remain. Save or undo before closing.",
+    "th": "การตั้งค่ายังไม่บันทึก โปรดบันทึกหรือเลิกทำก่อนปิด"
+  },
+  "绑定指纹": {
+    "en": "Binding fingerprint",
+    "th": "ลายนิ้วมือการผูกค่า"
+  },
+  "服务能力": {
+    "en": "Service capabilities",
+    "th": "ความสามารถบริการ"
+  },
+  "HTTP流式": {
+    "en": "HTTP streaming",
+    "th": "สตรีม HTTP"
+  },
+  "JSON对象": {
+    "en": "JSON object",
+    "th": "ออบเจ็กต์ JSON"
+  },
+  "Token用量返回": {
+    "en": "Token usage reporting",
+    "th": "การส่งปริมาณโทเคน"
+  },
+  "{v0}能力": {
+    "en": "{v0} capability",
+    "th": "ความสามารถ {v0}"
+  },
+  "未确认": {
+    "en": "Unconfirmed",
+    "th": "ยังไม่ยืนยัน"
+  },
+  "支持": {
+    "en": "Supported",
+    "th": "รองรับ"
+  },
+  "不支持": {
+    "en": "Unsupported",
+    "th": "ไม่รองรับ"
+  },
+  "付费最小探测一次": {
+    "en": "Run one minimal paid probe",
+    "th": "ทดสอบขั้นต่ำแบบมีค่าใช้จ่ายหนึ่งครั้ง"
+  },
+  "声明上下文上限（留空沿用模型设置）": {
+    "en": "Declared context limit (blank uses model settings)",
+    "th": "ขีดจำกัดบริบทที่ระบุ (เว้นว่างใช้ค่าโมเดล)"
+  },
+  "使用已确认的HTTP流式；不支持时停止并提示，用户关闭后再手动重跑": {
+    "en": "Use confirmed HTTP streaming. Unsupported services stop with a notice; disable it and rerun manually.",
+    "th": "ใช้สตรีม HTTP ที่ยืนยัน หากไม่รองรับจะหยุดแจ้ง ผู้ใช้ปิดแล้วรันใหม่เอง"
+  },
+  "单任务累计预算": {
+    "en": "Cumulative per-task budget",
+    "th": "งบสะสมต่องาน"
+  },
+  "最多请求次数（包括重试）": {
+    "en": "Maximum calls (including retries)",
+    "th": "จำนวนเรียกสูงสุด (รวมลองใหม่)"
+  },
+  "Token上限（留空不限）": {
+    "en": "Token limit (blank is unlimited)",
+    "th": "เพดานโทเคน (เว้นว่างคือไม่จำกัด)"
+  },
+  "金额上限（须已填单位价格）": {
+    "en": "Cost limit (unit prices required)",
+    "th": "เพดานค่าใช้จ่าย (ต้องกรอกราคาต่อหน่วย)"
+  },
+  "币种": {
+    "en": "Currency",
+    "th": "สกุลเงิน"
+  },
+  "每百万输入Token价格": {
+    "en": "Price per million input tokens",
+    "th": "ราคาต่อล้านโทเคนเข้า"
+  },
+  "每百万输出Token价格": {
+    "en": "Price per million output tokens",
+    "th": "ราคาต่อล้านโทเคนออก"
+  },
+  "未知价格或服务未回传用量时，实际费用显示“未知”。预算预检按保守文字大小与输出上限预留；不能保证供应商账单完全一致。": {
+    "en": "Actual cost is “unknown” if prices or usage are unavailable. Preflight reserves conservative text/output estimates; vendor invoices may differ.",
+    "th": "ค่าใช้จ่ายจริงเป็น “ไม่ทราบ” เมื่อไม่มีราคาหรือปริมาณ ก่อนเรียกกันงบจากข้อความและเพดานเอาต์พุตแบบเผื่อไว้ ใบแจ้งหนี้ผู้ให้บริการอาจต่างกัน"
+  },
+  "明确启用后才重试": {
+    "en": "Retry only when explicitly enabled",
+    "th": "ลองใหม่เมื่อเปิดชัดเจนเท่านั้น"
+  },
+  "允许对指定HTTP错误重复调用，可能额外计费": {
+    "en": "Allow repeat calls for selected HTTP errors; extra charges may apply",
+    "th": "ยอมให้เรียกซ้ำสำหรับข้อผิดพลาด HTTP ที่เลือก อาจมีค่าใช้จ่ายเพิ่ม"
+  },
+  "总尝试次数": {
+    "en": "Total attempts",
+    "th": "จำนวนพยายามรวม"
+  },
+  "首次等待（毫秒）": {
+    "en": "Initial wait (ms)",
+    "th": "รอเริ่มต้น (มิลลิวินาที)"
+  },
+  "最多等待（毫秒）": {
+    "en": "Maximum wait (ms)",
+    "th": "รอสูงสุด (มิลลิวินาที)"
+  },
+  "允许状态：": {
+    "en": "Allowed statuses: ",
+    "th": "สถานะที่อนุญาต: "
+  },
+  "遵守Retry-After；超过等待上限则停止。网络中断、已产生部分内容、取消和Codex失败不会自动重试。": {
+    "en": "Honours Retry-After and stops above the wait limit. No automatic retry for network loss, partial output, cancellation or Codex failure.",
+    "th": "ทำตาม Retry-After และหยุดเมื่อเกินเวลารอ ไม่ลองใหม่อัตโนมัติเมื่อเครือข่ายขาด ได้เนื้อหาบางส่วน ยกเลิก หรือ Codex ล้มเหลว"
+  },
+  "保存运行配置": {
+    "en": "Save runtime settings",
+    "th": "บันทึกตั้งค่าการรัน"
+  },
+  "撤销编辑": {
+    "en": "Undo editing",
+    "th": "เลิกทำการแก้"
+  },
+  "保存模型配置后可管理运行策略；历史台账仍可在右侧查看。": {
+    "en": "Save a model connection to manage runtime policies. Existing ledgers remain on the right.",
+    "th": "บันทึกการเชื่อมต่อโมเดลเพื่อจัดการนโยบายการรัน ยังดูบัญชีเดิมด้านขวาได้"
+  },
+  "取消能力探测": {
+    "en": "Cancel capability probe",
+    "th": "ยกเลิกทดสอบความสามารถ"
+  },
+  "第": {
+    "en": "Call ",
+    "th": "คำขอที่ "
+  },
+  "次请求 · 收到": {
+    "en": " · Received ",
+    "th": " · ได้รับ "
+  },
+  "字符": {
+    "en": " characters",
+    "th": " อักขระ"
+  },
+  "等待模型输出…": {
+    "en": "Waiting for model output…",
+    "th": "กำลังรอเอาต์พุตโมเดล…"
+  },
+  "仅为未校验的有限预览，不是审核结论；不会写入调用台账。": {
+    "en": "Limited, unvalidated preview only; not a review conclusion and not stored in the ledger.",
+    "th": "ตัวอย่างจำกัดที่ยังไม่ตรวจ ไม่ใช่ข้อสรุปการตรวจและไม่เก็บในบัญชีการเรียก"
+  },
+  "最近调用任务": {
+    "en": "Recent model tasks",
+    "th": "งานโมเดลล่าสุด"
+  },
+  "刷新台账": {
+    "en": "Refresh ledger",
+    "th": "อัปเดตบัญชี"
+  },
+  "仅保存版本指纹、用量及状态，不保存合同提示词、模型输出和凭据。": {
+    "en": "Stores fingerprints, usage and status only; no contract prompts, model output or credentials.",
+    "th": "เก็บเฉพาะลายนิ้วมือรุ่น ปริมาณใช้ และสถานะ ไม่เก็บคำสั่งสัญญา เอาต์พุตโมเดล หรือข้อมูลรับรอง"
+  },
+  "次 · Token": {
+    "en": " calls · Tokens ",
+    "th": " ครั้ง · โทเคน "
+  },
+  "用量不完整": {
+    "en": "Incomplete usage",
+    "th": "ปริมาณใช้ไม่ครบ"
+  },
+  "费用未知": {
+    "en": "Cost unknown",
+    "th": "ไม่ทราบค่าใช้จ่าย"
+  },
+  "暂无模型调用台账。": {
+    "en": "No model call records yet.",
+    "th": "ยังไม่มีบันทึกเรียกโมเดล"
+  },
+  "任务调用明细": {
+    "en": "Task call details",
+    "th": "รายละเอียดการเรียกของงาน"
+  },
+  "任务": {
+    "en": "Task",
+    "th": "งาน"
+  },
+  "文档": {
+    "en": "Document",
+    "th": "เอกสาร"
+  },
+  "未关联": {
+    "en": "Not linked",
+    "th": "ยังไม่ผูก"
+  },
+  "审核": {
+    "en": "Review",
+    "th": "ตรวจสัญญา"
+  },
+  "输入": {
+    "en": "Input",
+    "th": "อินพุต"
+  },
+  "未知": {
+    "en": "Unknown",
+    "th": "ไม่ทราบ"
+  },
+  "/ 输出": {
+    "en": "/ Output ",
+    "th": "/ เอาต์พุต "
+  },
+  "预算占用": {
+    "en": "Budget reserved",
+    "th": "งบที่กันไว้"
+  },
+  "Token（用量未知时保留预留值）": {
+    "en": "Tokens (reservation kept if usage is unknown)",
+    "th": "โทเคน (คงค่ากันไว้หากไม่ทราบปริมาณใช้)"
+  },
+  "费用": {
+    "en": "Cost",
+    "th": "ค่าใช้จ่าย"
+  },
+  "错误": {
+    "en": "Error",
+    "th": "ข้อผิดพลาด"
+  },
+  "未提供": {
+    "en": "Not provided",
+    "th": "ไม่ได้ระบุ"
+  },
+  "模板": {
+    "en": "Template",
+    "th": "แม่แบบ"
+  },
+  "模板SHA256": {
+    "en": "Template SHA-256",
+    "th": "SHA-256 ของแม่แบบ"
+  },
+  "输入SHA256": {
+    "en": "Input SHA-256",
+    "th": "SHA-256 ของอินพุต"
+  },
+  "条款与附件引用": {
+    "en": "Clause and appendix references",
+    "th": "อ้างอิงข้อสัญญาและภาคผนวก"
+  },
+  "已完成扫描": {
+    "en": "Scan completed",
+    "th": "สแกนเสร็จ"
+  },
+  "当时已关闭": {
+    "en": "Disabled at review time",
+    "th": "ปิดไว้ขณะตรวจ"
+  },
+  "{v0} 项提示": {
+    "en": "{v0} notices",
+    "th": "{v0} ข้อแจ้ง"
+  },
+  "当时未执行": {
+    "en": "Not run at review time",
+    "th": "ไม่ได้รันขณะตรวจ"
+  },
+  "以下为本次审核保存的程序核验快照，独立于模型分析。扫描计数不代表合同已通过法律审核。": {
+    "en": "This is the saved program-check snapshot, separate from model analysis. Scan counts do not mean the contract passed legal review.",
+    "th": "นี่คือภาพรวมการตรวจโปรแกรมที่บันทึก แยกจากการวิเคราะห์โมเดล จำนวนสแกนไม่ได้แสดงว่าสัญญาผ่านการตรวจกฎหมาย"
+  },
+  "扫描计数": {
+    "en": "Scan count",
+    "th": "จำนวนที่สแกน"
+  },
+  "程序核验 ·": {
+    "en": "Program check · ",
+    "th": "ตรวจโปรแกรม · "
+  },
+  "计算或核对式": {
+    "en": "Calculation or comparison",
+    "th": "สูตรคำนวณหรือตรวจเทียบ"
+  },
+  "定位核验原文": {
+    "en": "Locate checked source text",
+    "th": "ไปข้อความต้นฉบับที่ตรวจ"
+  },
+  "执行引擎：": {
+    "en": "Engine: ",
+    "th": "ระบบตรวจ: "
+  },
+  "。程序命中与模型判断分别保留，均需结合原文复核。": {
+    "en": ". Program matches and model judgments are retained separately; verify both against the original.",
+    "th": " เก็บผลจับคู่โปรแกรมและความเห็นโมเดลแยก ต้องเทียบทั้งคู่กับต้นฉบับ"
+  },
+  "本次历史审核未保存程序核验结果，标记为当时未执行；不会用当前设置补写旧报告。": {
+    "en": "This historical review has no program-check result. Marked as not run then; current settings never backfill old reports.",
+    "th": "ผลตรวจเก่านี้ไม่มีผลตรวจโปรแกรม จึงระบุว่าไม่ได้รันในครั้งนั้น ไม่ใช้ค่าปัจจุบันเติมรายงานเก่า"
+  },
+  "关闭资料连接设置": {
+    "en": "Close source connection settings",
+    "th": "ปิดตั้งค่าการเชื่อมต่อข้อมูล"
+  },
+  "资料连接设置": {
+    "en": "Source connection settings",
+    "th": "ตั้งค่าการเชื่อมต่อข้อมูล"
+  },
+  "让审核连接到真实资料": {
+    "en": "Connect reviews to real sources",
+    "th": "เชื่อมการตรวจกับข้อมูลจริง"
+  },
+  "客户维护知识内容，工作台只读检索。文件夹与知识库 API 可以同时启用。": {
+    "en": "Customers maintain knowledge content; the app retrieves read-only. Folders and knowledge APIs may run together.",
+    "th": "ลูกค้าดูแลเนื้อหาความรู้ แอปค้นแบบอ่านอย่างเดียว ใช้โฟลเดอร์และ API ความรู้ร่วมกันได้"
+  },
+  "搜索服务只接收固定的法律主题查询；官方目录关键词在本机匹配，不发送合同原文。审核时，取回的资料片段将与合同内容一起交给你配置的模型分析。": {
+    "en": "Search receives only fixed legal-topic queries. Catalogue titles are matched locally without sending contract text. Retrieved excerpts and contract content go to your configured model during review.",
+    "th": "บริการค้นได้รับเฉพาะคำค้นหัวข้อกฎหมายคงที่ จับคู่ชื่อสารบัญในเครื่องโดยไม่ส่งสัญญา ระหว่างตรวจจะส่งข้อความที่ค้นได้พร้อมสัญญาให้โมเดลที่คุณตั้งค่า"
+  },
+  "浏览器只预览配置界面，不联网、不读取文件。真实连接请在桌面应用中测试。": {
+    "en": "Browser preview shows settings only, without network or file access. Test real connections in the desktop app.",
+    "th": "ตัวอย่างเบราว์เซอร์แสดงตั้งค่าเท่านั้น ไม่เข้าเครือข่ายหรืออ่านไฟล์ ทดสอบการเชื่อมต่อจริงในแอปเดสก์ท็อป"
+  },
+  "企业知识库": {
+    "en": "Enterprise knowledge base",
+    "th": "คลังความรู้องค์กร"
+  },
+  "启用企业知识库检索": {
+    "en": "Enable enterprise knowledge search",
+    "th": "เปิดค้นคลังความรู้องค์กร"
+  },
+  "已启用": {
+    "en": "Enabled",
+    "th": "เปิดแล้ว"
+  },
+  "已关闭": {
+    "en": "Off",
+    "th": "ปิดแล้ว"
+  },
+  "本地资料文件夹": {
+    "en": "Local source folder",
+    "th": "โฟลเดอร์ข้อมูลในเครื่อง"
+  },
+  "尚未选择文件夹": {
+    "en": "No folder selected",
+    "th": "ยังไม่เลือกโฟลเดอร์"
+  },
+  "选择中…": {
+    "en": "Choosing…",
+    "th": "กำลังเลือก…"
+  },
+  "选择文件夹": {
+    "en": "Choose folder",
+    "th": "เลือกโฟลเดอร์"
+  },
+  "移除知识库文件夹": {
+    "en": "Remove knowledge folder",
+    "th": "นำโฟลเดอร์ความรู้ออก"
+  },
+  "只读检索 DOCX、PDF、TXT、MD 文件，不修改源文件。": {
+    "en": "Read-only search of DOCX, PDF, TXT and MD; source files are not modified.",
+    "th": "ค้น DOCX, PDF, TXT และ MD แบบอ่านอย่างเดียว ไม่แก้ไฟล์ต้นทาง"
+  },
+  "启用外部知识库 API": {
+    "en": "Enable external knowledge API",
+    "th": "เปิด API คลังความรู้ภายนอก"
+  },
+  "知识库服务类型": {
+    "en": "Knowledge service type",
+    "th": "ประเภทบริการความรู้"
+  },
+  "Dify 知识库": {
+    "en": "Dify knowledge base",
+    "th": "คลังความรู้ Dify"
+  },
+  "标准检索 API": {
+    "en": "Standard search API",
+    "th": "API ค้นหามาตรฐาน"
+  },
+  "知识库 API 地址": {
+    "en": "Knowledge API URL",
+    "th": "URL API คลังความรู้"
+  },
+  "远端及内网服务使用 HTTPS；本机服务可使用 HTTP。": {
+    "en": "Use HTTPS for remote and intranet services; local services may use HTTP.",
+    "th": "ใช้ HTTPS กับบริการระยะไกลและอินทราเน็ต บริการในเครื่องใช้ HTTP ได้"
+  },
+  "知识库 / 集合 ID": {
+    "en": "Knowledge base / collection ID",
+    "th": "รหัสคลังความรู้ / คอลเลกชัน"
+  },
+  "知识库 API 密钥": {
+    "en": "Knowledge API key",
+    "th": "คีย์ API คลังความรู้"
+  },
+  "已有密钥": {
+    "en": "Key already saved",
+    "th": "มีคีย์ที่บันทึก"
+  },
+  "留空保留已保存的密钥": {
+    "en": "Blank keeps saved key",
+    "th": "เว้นว่างเพื่อเก็บคีย์เดิม"
+  },
+  "按服务要求填写": {
+    "en": "Follow service requirements",
+    "th": "กรอกตามข้อกำหนดบริการ"
+  },
+  "保存后不回显；留空保持原有密钥。": {
+    "en": "Key is hidden after saving; blank keeps the current key.",
+    "th": "ซ่อนคีย์หลังบันทึก เว้นว่างเพื่อเก็บคีย์ปัจจุบัน"
+  },
+  "保存时移除知识库密钥": {
+    "en": "Remove knowledge key when saving",
+    "th": "นำคีย์ความรู้ออกเมื่อบันทึก"
+  },
+  "官方公开来源": {
+    "en": "Official public sources",
+    "th": "แหล่งทางการสาธารณะ"
+  },
+  "无需密钥": {
+    "en": "No key required",
+    "th": "ไม่ต้องใช้คีย์"
+  },
+  "启用官方公开来源检索": {
+    "en": "Enable official public source search",
+    "th": "เปิดค้นแหล่งทางการสาธารณะ"
+  },
+  "读取国家行政法规库及已选择最高法栏目的公开目录，在本机匹配标题，再读取命中的原文。合同示范文本可指定链接；搜索服务命中受支持的官方详情地址时优先用站点正文解析。": {
+    "en": "Read public administrative-regulation and selected Supreme People’s Court catalogues, match titles locally, then read matching originals. Specify model-contract links. Supported official search hits use site-specific body parsing first.",
+    "th": "อ่านสารบัญกฎฝ่ายบริหารและหมวดศาลประชาชนสูงสุดที่เลือก จับคู่ชื่อในเครื่องแล้วอ่านต้นฉบับ ระบุลิงก์แบบสัญญาได้ ผลค้นทางการที่รองรับจะใช้ตัวแยกเนื้อหาเฉพาะเว็บก่อน"
+  },
+  "每类目录页数上限": {
+    "en": "Maximum pages per catalogue type",
+    "th": "จำนวนหน้าสูงสุดต่อประเภทสารบัญ"
+  },
+  "每类目录 1–10 页，共享结果及原文读取预算。仅匹配已读标题，不代表全文检索或覆盖整个数据库。": {
+    "en": "1–10 pages per catalogue, sharing result and body-reading budgets. Only read titles are matched; this is not full-text or whole-database coverage.",
+    "th": "1–10 หน้าต่อสารบัญ ใช้งบผลลัพธ์และอ่านเนื้อหาร่วมกัน จับคู่เฉพาะชื่อที่อ่าน ไม่ใช่ค้นข้อความเต็มหรือทั้งฐานข้อมูล"
+  },
+  "追加官方栏目（可选）": {
+    "en": "Additional official sections (optional)",
+    "th": "หมวดทางการเพิ่มเติม (ไม่บังคับ)"
+  },
+  "公开栏目包含历史、修改和废止材料，不自动认定现行有效。案例仍通过指定链接或已配置专业服务／SearXNG发现。": {
+    "en": "Sections include historical, amended and repealed materials; current validity is not inferred. Cases are found through specified links, configured professional services or SearXNG.",
+    "th": "หมวดมีเอกสารเก่า แก้ไข และยกเลิก ไม่ถือว่าใช้บังคับปัจจุบันอัตโนมัติ ค้นคดีผ่านลิงก์ที่ระบุ บริการเฉพาะทางที่ตั้งค่า หรือ SearXNG"
+  },
+  "指定官方原文链接（可选，一行一个）": {
+    "en": "Official source URLs (optional; one per line)",
+    "th": "URL ต้นฉบับทางการ (ไม่บังคับ หนึ่งลิงก์ต่อบรรทัด)"
+  },
+  "最多 8 个 HTTPS 原文链接。支持国家行政法规库详情、最高法公开发布页、合同示范文本库详情；保存时校验地址。": {
+    "en": "Up to 8 HTTPS detail URLs from supported administrative-regulation, Supreme People’s Court or model-contract sites. URLs are checked when saving.",
+    "th": "สูงสุด 8 URL HTTPS ของหน้ารายละเอียดจากเว็บกฎฝ่ายบริหาร ศาลประชาชนสูงสุด หรือแบบสัญญาที่รองรับ ตรวจ URL เมื่อบันทึก"
+  },
+  "目录标题关键词（本机匹配）": {
+    "en": "Catalogue title keywords (matched locally)",
+    "th": "คำค้นชื่อสารบัญ (จับคู่ในเครื่อง)"
+  },
+  "例如：数据、保密、仲裁": {
+    "en": "For example: data, confidentiality, arbitration",
+    "th": "เช่น ข้อมูล ความลับ อนุญาโตตุลาการ"
+  },
+  "请填写具体主题；通用“合同、服务、采购”不用于扩大匹配。测试不查企业资料、不调用模型。": {
+    "en": "Use specific topics. Generic “contract, service, procurement” does not broaden matching. Tests use no enterprise files or model calls.",
+    "th": "ใช้หัวข้อเฉพาะ คำทั่วไป “สัญญา บริการ จัดซื้อ” ไม่ขยายการจับคู่ การทดสอบไม่ใช้ข้อมูลองค์กรหรือเรียกโมเดล"
+  },
+  "国家法律法规数据库本次公开入口存在访问限制，尚未接通稳定开放API；可用授权专业MCP／知识库连接器或导入合法取得的原文。本软件不绕过登录或验证码。": {
+    "en": "The national law database public entry has access restrictions and no stable open API is connected. Use authorized MCP/knowledge connectors or legally obtained originals. Login and CAPTCHA are not bypassed.",
+    "th": "ทางเข้าสาธารณะฐานกฎหมายแห่งชาติมีข้อจำกัดและยังไม่มี API เปิดที่เสถียร ใช้ MCP/ตัวเชื่อมความรู้ที่อนุญาต หรือนำเข้าต้นฉบับที่ได้โดยชอบ ไม่ข้ามล็อกอินหรือ CAPTCHA"
+  },
+  "正在读取官方来源…": {
+    "en": "Reading official sources…",
+    "th": "กำลังอ่านแหล่งทางการ…"
+  },
+  "测试已保存的官方来源": {
+    "en": "Test saved official sources",
+    "th": "ทดสอบแหล่งทางการที่บันทึก"
+  },
+  "取消本次测试": {
+    "en": "Cancel this test",
+    "th": "ยกเลิกทดสอบครั้งนี้"
+  },
+  "界面预览未联网，官方来源测试仅在桌面应用中可用。": {
+    "en": "Preview is offline. Official-source tests require the desktop app.",
+    "th": "ตัวอย่างไม่เข้าค้นเครือข่าย ต้องใช้แอปเดสก์ท็อปเพื่อทดสอบแหล่งทางการ"
+  },
+  "官方来源配置尚未保存，请先点击底部“保存配置”。": {
+    "en": "Official-source settings are unsaved. Click “Save settings” below first.",
+    "th": "การตั้งค่าแหล่งทางการยังไม่บันทึก โปรดกด “บันทึกการตั้งค่า” ด้านล่างก่อน"
+  },
+  "先启用官方公开来源，再保存配置即可测试。": {
+    "en": "Enable official sources and save settings before testing.",
+    "th": "เปิดแหล่งทางการและบันทึกก่อนทดสอบ"
+  },
+  "通用搜索服务": {
+    "en": "General search service",
+    "th": "บริการค้นทั่วไป"
+  },
+  "启用互联网检索": {
+    "en": "Enable internet search",
+    "th": "เปิดค้นอินเทอร์เน็ต"
+  },
+  "Brave 已暂缓。旧搜索连接不会启用；请配置 SearXNG 后重新保存，旧密钥不会沿用。": {
+    "en": "Brave is deferred. Old search connections remain disabled. Configure SearXNG and save again; old keys are not reused.",
+    "th": "พัก Brave ไว้ การเชื่อมต่อค้นเก่าไม่เปิดใช้ โปรดตั้ง SearXNG และบันทึกใหม่ ไม่ใช้คีย์เก่าต่อ"
+  },
+  "搜索服务": {
+    "en": "Search service",
+    "th": "บริการค้นหา"
+  },
+  "搜索 API 地址": {
+    "en": "Search API URL",
+    "th": "URL API ค้นหา"
+  },
+  "搜索 API 密钥": {
+    "en": "Search API key",
+    "th": "คีย์ API ค้นหา"
+  },
+  "服务无密钥时可留空": {
+    "en": "Leave blank if service needs no key",
+    "th": "เว้นว่างหากบริการไม่ต้องใช้คีย์"
+  },
+  "密钥保存后不回显，留空保持原有值。": {
+    "en": "Saved keys are hidden. Blank keeps the current value.",
+    "th": "ซ่อนคีย์ที่บันทึก เว้นว่างเพื่อเก็บค่าเดิม"
+  },
+  "保存时移除搜索密钥": {
+    "en": "Remove search key when saving",
+    "th": "นำคีย์ค้นออกเมื่อบันทึก"
+  },
+  "来源域名白名单": {
+    "en": "Source domain allowlist",
+    "th": "รายการโดเมนแหล่งข้อมูลที่อนุญาต"
+  },
+  "每行一个域名，不含协议或路径；也可用逗号分隔。": {
+    "en": "One domain per line without protocol or path; commas also accepted.",
+    "th": "หนึ่งโดเมนต่อบรรทัด ไม่มีโปรโตคอลหรือพาธ คั่นด้วยจุลภาคได้"
+  },
+  "获取搜索结果的原始正文": {
+    "en": "Fetch original body of search results",
+    "th": "ดึงเนื้อหาต้นฉบับของผลค้น"
+  },
+  "未取回正文的材料会标为“搜索摘要”，不会显示为已核验法律依据。": {
+    "en": "Material without a retrieved body is labelled “search snippet”, never verified legal authority.",
+    "th": "ข้อมูลที่ไม่ได้เนื้อหาจะระบุ “ข้อความย่อค้นหา” ไม่แสดงเป็นฐานกฎหมายที่ยืนยันแล้ว"
+  },
+  "与官方公开来源独立开关。需要通用搜索时，可连接自己的 SearXNG 服务并设置来源域名范围。": {
+    "en": "Independent of official sources. Connect your own SearXNG service and restrict source domains for general search.",
+    "th": "เปิดปิดแยกจากแหล่งทางการ เชื่อม SearXNG ของคุณและจำกัดโดเมนเมื่อต้องค้นทั่วไป"
+  },
+  "检索限制": {
+    "en": "Retrieval limits",
+    "th": "ขีดจำกัดการค้น"
+  },
+  "分别应用于每一路请求": {
+    "en": "Applied separately to each request route",
+    "th": "ใช้แยกต่อช่องทางคำขอ"
+  },
+  "每路结果上限": {
+    "en": "Maximum results per route",
+    "th": "ผลสูงสุดต่อช่องทาง"
+  },
+  "请求超时（秒）": {
+    "en": "Request timeout (seconds)",
+    "th": "หมดเวลาคำขอ (วินาที)"
+  },
+  "本次官方来源测试": {
+    "en": "Current official-source test",
+    "th": "ทดสอบแหล่งทางการครั้งนี้"
+  },
+  "以下是本次实际读取的范围与原文片段；未覆盖的目录不能视为已检索。": {
+    "en": "Only actually read coverage and excerpts appear below. Unread catalogues must not be treated as searched.",
+    "th": "ด้านล่างแสดงเฉพาะขอบเขตและข้อความที่อ่านจริง สารบัญที่ยังไม่อ่านไม่ถือว่าค้นแล้ว"
+  },
+  "本次检索测试": {
+    "en": "Current retrieval test",
+    "th": "ทดสอบค้นครั้งนี้"
+  },
+  "设置仅暂存在页面内存，刷新后清空。": {
+    "en": "Settings remain in page memory only and clear on refresh.",
+    "th": "ตั้งค่าเก็บในหน่วยความจำหน้าเท่านั้น ล้างเมื่อรีเฟรช"
+  },
+  "知识库密钥与搜索密钥单独保存，不写入检索查询、报告或普通日志。": {
+    "en": "Knowledge and search keys are stored separately, excluded from queries, reports and ordinary logs.",
+    "th": "เก็บคีย์ความรู้และค้นแยก ไม่ใส่ในคำค้น รายงาน หรือบันทึกทั่วไป"
+  },
+  "正在检索…": {
+    "en": "Searching…",
+    "th": "กำลังค้น…"
+  },
+  "保存并测试检索": {
+    "en": "Save and test search",
+    "th": "บันทึกและทดสอบค้น"
+  },
+  "保存中…": {
+    "en": "Saving…",
+    "th": "กำลังบันทึก…"
+  },
+  "保存配置": {
+    "en": "Save settings",
+    "th": "บันทึกการตั้งค่า"
+  },
+  "未配置": {
+    "en": "Not configured",
+    "th": "ยังไม่ตั้งค่า"
+  },
+  "未执行": {
+    "en": "Not run",
+    "th": "ไม่ได้รัน"
+  },
+  "检索完成": {
+    "en": "Retrieval completed",
+    "th": "ค้นเสร็จ"
+  },
+  "无结果": {
+    "en": "No results",
+    "th": "ไม่มีผลลัพธ์"
+  },
+  "超时": {
+    "en": "Timed out",
+    "th": "หมดเวลา"
+  },
+  "企业资料": {
+    "en": "Enterprise materials",
+    "th": "ข้อมูลองค์กร"
+  },
+  "法律法规": {
+    "en": "Laws and regulations",
+    "th": "กฎหมายและกฎระเบียบ"
+  },
+  "司法解释": {
+    "en": "Judicial interpretations",
+    "th": "คำตีความศาล"
+  },
+  "案例": {
+    "en": "Cases",
+    "th": "คดี"
+  },
+  "相关论述": {
+    "en": "Commentary",
+    "th": "บทวิเคราะห์"
+  },
+  "合同示范文本": {
+    "en": "Model contracts",
+    "th": "แบบสัญญา"
+  },
+  "已取正文": {
+    "en": "Body retrieved",
+    "th": "ได้เนื้อหาแล้ว"
+  },
+  "资料片段": {
+    "en": "Source excerpt",
+    "th": "ข้อความจากแหล่งข้อมูล"
+  },
+  "搜索摘要 · 未取正文": {
+    "en": "Search snippet · body not retrieved",
+    "th": "ข้อความย่อค้นหา · ยังไม่ได้เนื้อหา"
+  },
+  "本地知识库": {
+    "en": "Local knowledge base",
+    "th": "คลังความรู้ในเครื่อง"
+  },
+  "标准知识库 API": {
+    "en": "Standard knowledge API",
+    "th": "API ความรู้มาตรฐาน"
+  },
+  "官方目录检索": {
+    "en": "Official catalogue search",
+    "th": "ค้นสารบัญทางการ"
+  },
+  "指定官方原文": {
+    "en": "Specified official original",
+    "th": "ต้นฉบับทางการที่ระบุ"
+  },
+  "远端知识库索引": {
+    "en": "Remote knowledge index",
+    "th": "ดัชนีความรู้ระยะไกล"
+  },
+  "未命名资料": {
+    "en": "Untitled material",
+    "th": "ข้อมูลไม่มีชื่อ"
+  },
+  "在文件管理器中显示来源文件": {
+    "en": "Show source file in file manager",
+    "th": "แสดงไฟล์ต้นทางในตัวจัดการไฟล์"
+  },
+  "使用系统浏览器打开来源": {
+    "en": "Open source in system browser",
+    "th": "เปิดที่มาในเบราว์เซอร์ระบบ"
+  },
+  "打开来源：{v0}": {
+    "en": "Open source: {v0}",
+    "th": "เปิดที่มา: {v0}"
+  },
+  "仅根据来源地址判断域名归属；不代表页面真实性、内容时效或法律效力已核实": {
+    "en": "Domain attribution uses the source URL only. Page authenticity, currency and legal effect are not verified.",
+    "th": "ระบุเจ้าของโดเมนจาก URL เท่านั้น ไม่ได้ยืนยันความแท้ ความเป็นปัจจุบัน หรือผลทางกฎหมาย"
+  },
+  "官方域名": {
+    "en": "Official domain",
+    "th": "โดเมนทางการ"
+  },
+  "效力 / 时效未确认": {
+    "en": "Legal effect / currency unconfirmed",
+    "th": "ผลใช้บังคับ / ความเป็นปัจจุบันยังไม่ยืนยัน"
+  },
+  "检索时尚未到生效日": {
+    "en": "Not yet effective when retrieved",
+    "th": "ยังไม่ถึงวันมีผลขณะค้น"
+  },
+  "发布日期晚于检索时间": {
+    "en": "Publication date is later than retrieval",
+    "th": "วันเผยแพร่หลังเวลาที่ค้น"
+  },
+  "引用文字已匹配资料片段": {
+    "en": "Quoted text matches the excerpt",
+    "th": "ข้อความอ้างตรงกับส่วนที่ค้นได้"
+  },
+  "引用文字未匹配资料片段": {
+    "en": "Quoted text does not match the excerpt",
+    "th": "ข้อความอ้างไม่ตรงกับส่วนที่ค้นได้"
+  },
+  "不代表法律适用已核验": {
+    "en": "Legal applicability is not verified",
+    "th": "ยังไม่ยืนยันการใช้กฎหมาย"
+  },
+  "查看取回片段": {
+    "en": "View retrieved excerpt",
+    "th": "ดูข้อความที่ค้นได้"
+  },
+  "此来源未返回可展示的正文片段。": {
+    "en": "No displayable body excerpt returned.",
+    "th": "ไม่มีข้อความเนื้อหาที่แสดงได้ส่งกลับ"
+  },
+  "定位": {
+    "en": "Location",
+    "th": "ตำแหน่ง"
+  },
+  "未提供具体位置": {
+    "en": "Specific location not supplied",
+    "th": "ไม่ระบุตำแหน่งเฉพาะ"
+  },
+  "检索时间": {
+    "en": "Retrieved at",
+    "th": "เวลาค้น"
+  },
+  "发布日期": {
+    "en": "Publication date",
+    "th": "วันเผยแพร่"
+  },
+  "生效日期": {
+    "en": "Effective date",
+    "th": "วันมีผล"
+  },
+  "发布机关": {
+    "en": "Issuing authority",
+    "th": "หน่วยงานผู้ออก"
+  },
+  "文号": {
+    "en": "Document number",
+    "th": "เลขเอกสาร"
+  },
+  "相关条文": {
+    "en": "Related article",
+    "th": "มาตราที่เกี่ยวข้อง"
+  },
+  "取得方式": {
+    "en": "Acquisition method",
+    "th": "วิธีได้ข้อมูล"
+  },
+  "公开目录标题匹配": {
+    "en": "Public catalogue title matching",
+    "th": "จับคู่ชื่อสารบัญสาธารณะ"
+  },
+  "搜索服务发现地址，站点原文解析": {
+    "en": "URL found by search; body parsed from site",
+    "th": "พบ URL จากการค้น แยกเนื้อหาจากเว็บ"
+  },
+  "用户指定的官方原文链接": {
+    "en": "User-specified official source URL",
+    "th": "URL ต้นฉบับทางการที่ผู้ใช้ระบุ"
+  },
+  "目录入口": {
+    "en": "Catalogue entry",
+    "th": "ทางเข้าสารบัญ"
+  },
+  "时效说明": {
+    "en": "Currency note",
+    "th": "หมายเหตุความเป็นปัจจุบัน"
+  },
+  "引用版本与校验值": {
+    "en": "Cited version and checksums",
+    "th": "รุ่นที่อ้างและค่าตรวจสอบ"
+  },
+  "索引版本": {
+    "en": "Index version",
+    "th": "รุ่นดัชนี"
+  },
+  "来源未提供可打开的地址": {
+    "en": "Source supplied no openable address",
+    "th": "แหล่งข้อมูลไม่มีที่อยู่ที่เปิดได้"
+  },
+  "取回": {
+    "en": "Retrieved ",
+    "th": "ได้รับ "
+  },
+  "项材料 ·": {
+    "en": " materials · ",
+    "th": " รายการ · "
+  },
+  "次查询": {
+    "en": " queries",
+    "th": " คำค้น"
+  },
+  "本次读取覆盖": {
+    "en": "Coverage read this time",
+    "th": "ขอบเขตที่อ่านครั้งนี้"
+  },
+  "行政法规目录": {
+    "en": "Administrative regulation catalogue",
+    "th": "สารบัญกฎฝ่ายบริหาร"
+  },
+  "成功读取": {
+    "en": "Read successfully ",
+    "th": "อ่านสำเร็จ "
+  },
+  "/ 请求": {
+    "en": "/ Requested ",
+    "th": "/ ขอ "
+  },
+  "页；上限": {
+    "en": " pages; limit ",
+    "th": " หน้า; สูงสุด "
+  },
+  "页": {
+    "en": " pages",
+    "th": " หน้า"
+  },
+  "目录总页": {
+    "en": "Total catalogue pages",
+    "th": "จำนวนหน้าสารบัญทั้งหมด"
+  },
+  "目录候选": {
+    "en": "Catalogue candidates",
+    "th": "รายการสารบัญที่พิจารณา"
+  },
+  "项；标题匹配": {
+    "en": " items; title matches ",
+    "th": " รายการ; ชื่อตรง "
+  },
+  "项": {
+    "en": " items",
+    "th": " รายการ"
+  },
+  "指定链接": {
+    "en": "Specified links",
+    "th": "ลิงก์ที่ระบุ"
+  },
+  "个": {
+    "en": " links",
+    "th": " ลิงก์"
+  },
+  "读取失败": {
+    "en": "Read failures",
+    "th": "ครั้งที่อ่านไม่ได้"
+  },
+  "次": {
+    "en": " calls",
+    "th": " ครั้ง"
+  },
+  "栏目页数": {
+    "en": "Section pages",
+    "th": "หน้าหมวด"
+  },
+  "；共": {
+    "en": "; total ",
+    "th": "; รวม "
+  },
+  "栏目候选": {
+    "en": "Section candidates",
+    "th": "รายการหมวดที่พิจารณา"
+  },
+  "项，标题匹配": {
+    "en": " items; title matches ",
+    "th": " รายการ; ชื่อตรง "
+  },
+  "原文": {
+    "en": "Original text",
+    "th": "ต้นฉบับ"
+  },
+  "取得": {
+    "en": "Retrieved",
+    "th": "ได้รับ"
+  },
+  "项；失败": {
+    "en": " items; failures ",
+    "th": " รายการ; ไม่สำเร็จ "
+  },
+  "栏目或结果覆盖不完整，仍需补查。": {
+    "en": "Section or result coverage is incomplete. Further checks are needed.",
+    "th": "ขอบเขตหมวดหรือผลลัพธ์ไม่ครบ ต้องค้นเพิ่ม"
+  },
+  "已到此栏目末页，未代表法规或案例全库检索。": {
+    "en": "Reached this section’s last page. This is not a search of the entire statute or case database.",
+    "th": "ถึงหน้าสุดท้ายของหมวดนี้แล้ว ไม่ใช่ค้นทั้งฐานกฎหมายหรือคดี"
+  },
+  "尚未确认栏目末页。": {
+    "en": "Section last page not confirmed.",
+    "th": "ยังไม่ยืนยันหน้าสุดท้ายของหมวด"
+  },
+  "本次达到读取或结果上限，覆盖不完整。": {
+    "en": "Read or result limit reached; coverage is incomplete.",
+    "th": "ถึงเพดานอ่านหรือผลลัพธ์ ขอบเขตไม่ครบ"
+  },
+  "本分支未读取目录。": {
+    "en": "This branch did not read a catalogue.",
+    "th": "สาขานี้ไม่ได้อ่านสารบัญ"
+  },
+  "已到本次目录的末页；不代表覆盖所有法律资料。": {
+    "en": "Reached the last page of this catalogue, without covering all legal materials.",
+    "th": "ถึงหน้าสุดท้ายของสารบัญนี้ ไม่ได้ครอบคลุมข้อมูลกฎหมายทั้งหมด"
+  },
+  "本次未确认已读到目录末页。": {
+    "en": "Reaching the catalogue’s last page was not confirmed.",
+    "th": "ยังไม่ยืนยันว่าอ่านถึงหน้าสุดท้ายของสารบัญ"
+  },
+  "无匹配结果不代表相关规定不存在。": {
+    "en": "No matches does not mean relevant rules do not exist.",
+    "th": "ไม่พบผลตรงไม่ได้หมายความว่าไม่มีกฎที่เกี่ยวข้อง"
+  },
+  "本次没有已执行的检索请求记录。": {
+    "en": "No executed search requests were recorded for this review.",
+    "th": "ไม่มีบันทึกคำขอค้นที่รันในครั้งนี้"
+  },
+  "查询内容": {
+    "en": "Query content",
+    "th": "เนื้อหาคำค้น"
+  },
+  "开始": {
+    "en": "Started",
+    "th": "เริ่ม"
+  },
+  "结束": {
+    "en": "Finished",
+    "th": "สิ้นสุด"
+  },
+  "本次资料与检索记录": {
+    "en": "Materials and retrieval records",
+    "th": "ข้อมูลและบันทึกการค้นครั้งนี้"
+  },
+  "审核时的检索快照": {
+    "en": "Retrieval snapshot at review time",
+    "th": "ภาพรวมการค้นขณะตรวจ"
+  },
+  "检索完成表示材料已经取回。引文匹配、资料效力和法律适用需要分别判断。": {
+    "en": "Completed retrieval means materials were obtained. Quote matching, source legal effect and applicability are separate judgments.",
+    "th": "ค้นเสร็จหมายถึงได้ข้อมูลแล้ว การตรงของข้อความ ผลกฎหมายของข้อมูล และการใช้บังคับต้องพิจารณาแยก"
+  },
+  "查看查询与各路结果": {
+    "en": "View queries and route results",
+    "th": "ดูคำค้นและผลแต่ละช่องทาง"
+  },
+  "次请求": {
+    "en": " requests",
+    "th": " คำขอ"
+  },
+  "本次没有可展示的来源材料": {
+    "en": "No source materials to display for this review",
+    "th": "ไม่มีข้อมูลแหล่งที่แสดงได้ในการตรวจนี้"
+  },
+  "请结合上方检索状态和限制阅读审核结果。": {
+    "en": "Read results with the retrieval statuses and limitations above.",
+    "th": "อ่านผลพร้อมสถานะและข้อจำกัดการค้นข้างต้น"
+  },
+  "互联网检索": {
+    "en": "Internet search",
+    "th": "ค้นอินเทอร์เน็ต"
+  },
+  "本地规则检查不执行知识库或互联网检索。": {
+    "en": "Local rules do not run knowledge or internet searches.",
+    "th": "กฎในเครื่องไม่ค้นคลังความรู้หรืออินเทอร์เน็ต"
+  },
+  "该历史审核未保存检索来源记录，请以当时报告中的范围和限制为准。": {
+    "en": "This historical review has no retrieval-source record. Follow the saved scope and limitations.",
+    "th": "ผลตรวจเก่านี้ไม่มีบันทึกแหล่งค้น โปรดอ้างขอบเขตและข้อจำกัดที่บันทึกไว้"
+  },
+  "关键事实": {
+    "en": "Key facts",
+    "th": "ข้อเท็จจริงสำคัญ"
+  },
+  "审核假设": {
+    "en": "Review assumptions",
+    "th": "สมมติฐานการตรวจ"
+  },
+  "待确认问题": {
+    "en": "Open questions",
+    "th": "คำถามที่ต้องยืนยัน"
+  },
+  "已人工确认": {
+    "en": "Human confirmed",
+    "th": "ผู้ตรวจยืนยันแล้ว"
+  },
+  "人工标记不适用": {
+    "en": "Marked not applicable by a person",
+    "th": "ผู้ตรวจระบุว่าไม่เกี่ยวข้อง"
+  },
+  "未核实": {
+    "en": "Not verified",
+    "th": "ยังไม่ตรวจยืนยัน"
+  },
+  "待核实": {
+    "en": "Awaiting verification",
+    "th": "รอตรวจยืนยัน"
+  },
+  "已人工核实（限记录范围）": {
+    "en": "Human verified (within recorded scope)",
+    "th": "ผู้ตรวจยืนยัน (ภายในขอบเขตที่บันทึก)"
+  },
+  "补资料暂停": {
+    "en": "Paused for missing information",
+    "th": "หยุดรอข้อมูลเพิ่มเติม"
+  },
+  "已准备，可开始审核": {
+    "en": "Prepared; ready to review",
+    "th": "เตรียมแล้ว พร้อมตรวจ"
+  },
+  "等待风险人工处置": {
+    "en": "Awaiting human risk disposition",
+    "th": "รอผู้ตรวจจัดการความเสี่ยง"
+  },
+  "有限流程完成": {
+    "en": "Limited workflow completed",
+    "th": "กระบวนการจำกัดเสร็จ"
+  },
+  "有未保存的资料或核验输入；先保存，或再次关闭以放弃本次输入。": {
+    "en": "Unsaved facts or verification inputs remain. Save first, or close again to discard.",
+    "th": "ข้อมูลหรือการยืนยันยังไม่บันทึก โปรดบันทึก หรือปิดอีกครั้งเพื่อทิ้ง"
+  },
+  "审核资料与流程": {
+    "en": "Review information and workflow",
+    "th": "ข้อมูลและกระบวนการตรวจ"
+  },
+  "审核资料、流程与来源核验": {
+    "en": "Review facts, workflow and source verification",
+    "th": "ข้อมูลตรวจ กระบวนการ และตรวจยืนยันแหล่ง"
+  },
+  "。人工记录保存在本地，并保留修订历史。": {
+    "en": ". Human records stay local with revision history.",
+    "th": " บันทึกผู้ตรวจอยู่ในเครื่องพร้อมประวัติแก้ไข"
+  },
+  "将业务事实、假设和待确认问题分开。确认假设表示接受它作为本轮分析前提，仍然不会把假设变成已证明的事实。": {
+    "en": "Separate facts, assumptions and open questions. Confirming an assumption accepts it as an analysis premise, not a proven fact.",
+    "th": "แยกข้อเท็จจริง สมมติฐาน และคำถาม การยืนยันสมมติฐานคือยอมรับเป็นฐานวิเคราะห์ ไม่ทำให้เป็นข้อเท็จจริงที่พิสูจน์แล้ว"
+  },
+  "人工记录标签": {
+    "en": "Human record label",
+    "th": "ป้ายบันทึกผู้ตรวจ"
+  },
+  "审核补全记录人": {
+    "en": "Review completion recorder",
+    "th": "ผู้บันทึกข้อมูลตรวจ"
+  },
+  "本机留档标签，不代表已认证身份。": {
+    "en": "Local record label, not authenticated identity.",
+    "th": "ป้ายบันทึกในเครื่อง ไม่ใช่ตัวตนที่ยืนยัน"
+  },
+  "结构化审核资料": {
+    "en": "Structured review information",
+    "th": "ข้อมูลตรวจแบบมีโครงสร้าง"
+  },
+  "增加": {
+    "en": "Add",
+    "th": "เพิ่ม"
+  },
+  "移除此条（保存后留历史）": {
+    "en": "Remove item (history kept after save)",
+    "th": "นำรายการออก (เก็บประวัติหลังบันทึก)"
+  },
+  "事项": {
+    "en": "Item",
+    "th": "รายการ"
+  },
+  "资料{v0}事项": {
+    "en": "Information item {v0}",
+    "th": "รายการข้อมูล {v0}"
+  },
+  "事实内容、分析前提或待补问题": {
+    "en": "Fact, analysis premise or missing question",
+    "th": "ข้อเท็จจริง ฐานวิเคราะห์ หรือคำถามที่ขาด"
+  },
+  "确认状态": {
+    "en": "Confirmation status",
+    "th": "สถานะยืนยัน"
+  },
+  "资料{v0}状态": {
+    "en": "Information {v0} status",
+    "th": "สถานะข้อมูล {v0}"
+  },
+  "本轮必需资料": {
+    "en": "Required for this review",
+    "th": "ข้อมูลจำเป็นครั้งนี้"
+  },
+  "影响的审核范围（每行一项，如付款条件、主体资格）": {
+    "en": "Affected review scope (one per line, e.g. payment or party qualifications)",
+    "th": "ขอบเขตตรวจที่กระทบ (หนึ่งรายการต่อบรรทัด เช่น เงื่อนไขชำระหรือคุณสมบัติคู่สัญญา)"
+  },
+  "关联原文段落（可选）": {
+    "en": "Related source paragraph (optional)",
+    "th": "ย่อหน้าต้นฉบับที่เกี่ยวข้อง (ไม่บังคับ)"
+  },
+  "资料{v0}关联段落": {
+    "en": "Information {v0} related paragraph",
+    "th": "ย่อหน้าที่เกี่ยวข้องข้อมูล {v0}"
+  },
+  "业务资料／未关联段落": {
+    "en": "Business information / no linked paragraph",
+    "th": "ข้อมูลธุรกิจ / ไม่ผูกย่อหน้า"
+  },
+  "原文直接引文（选填，保存时精确核对）": {
+    "en": "Direct source quote (optional; checked exactly on save)",
+    "th": "อ้างต้นฉบับตรง (ไม่บังคับ ตรวจตรงเมื่อบันทึก)"
+  },
+  "确认／不适用理由及补充材料说明": {
+    "en": "Confirmation / inapplicability reason and additional materials",
+    "th": "เหตุผลยืนยัน / ไม่เกี่ยวข้อง และข้อมูลเสริม"
+  },
+  "尚未登记资料。没有登记不等于资料齐全。": {
+    "en": "No information recorded. This does not establish completeness.",
+    "th": "ยังไม่บันทึกข้อมูล ไม่ได้ยืนยันว่าข้อมูลครบ"
+  },
+  "本次资料修改说明": {
+    "en": "Reason for this information change",
+    "th": "เหตุผลเปลี่ยนข้อมูลครั้งนี้"
+  },
+  "资料修改说明": {
+    "en": "Information change reason",
+    "th": "เหตุผลเปลี่ยนข้อมูล"
+  },
+  "保存资料修订": {
+    "en": "Save information revision",
+    "th": "บันทึกรุ่นข้อมูล"
+  },
+  "资料历史 ·": {
+    "en": "Information history · ",
+    "th": "ประวัติข้อมูล · "
+  },
+  "版": {
+    "en": " versions",
+    "th": " รุ่น"
+  },
+  "本轮有限流程": {
+    "en": "Limited workflow for this review",
+    "th": "กระบวนการจำกัดครั้งนี้"
+  },
+  "始终执行": {
+    "en": "Always run",
+    "th": "รันเสมอ"
+  },
+  "高风险分支": {
+    "en": "High-risk branch",
+    "th": "สาขาความเสี่ยงสูง"
+  },
+  "待确认资料分支": {
+    "en": "Unconfirmed-information branch",
+    "th": "สาขาข้อมูลที่ยังไม่ยืนยัน"
+  },
+  " · 缺必需资料时保留局限继续": {
+    "en": " · Continue with limitations if required information is missing",
+    "th": " · ดำเนินการต่อพร้อมข้อจำกัดเมื่อข้อมูลจำเป็นขาด"
+  },
+  " · 缺必需资料时暂停": {
+    "en": " · Pause if required information is missing",
+    "th": " · หยุดเมื่อข้อมูลจำเป็นขาด"
+  },
+  "企业标准面板可发布新的流程版本。此处准备检查点，不调用模型；资料暂停后先保存补充信息，再准备新检查点并开始审核。": {
+    "en": "Publish workflow versions in enterprise standards. Preparing checkpoints does not call a model. After a pause, save added facts, prepare again, then start review.",
+    "th": "เผยแพร่รุ่นกระบวนการในมาตรฐานองค์กร เตรียมจุดตรวจไม่เรียกโมเดล หลังหยุดให้บันทึกข้อมูลเพิ่ม เตรียมใหม่ แล้วเริ่มตรวจ"
+  },
+  "检查资料／准备继续": {
+    "en": "Check facts / prepare to continue",
+    "th": "ตรวจข้อมูล / เตรียมดำเนินต่อ"
+  },
+  "刷新人工处置节点": {
+    "en": "Refresh human disposition node",
+    "th": "อัปเดตขั้นตอนจัดการโดยผู้ตรวจ"
+  },
+  "运行记录 ·": {
+    "en": "Run history · ",
+    "th": "ประวัติการรัน · "
+  },
+  "轮": {
+    "en": " runs",
+    "th": " รอบ"
+  },
+  "· 资料 r": {
+    "en": "· Information r",
+    "th": "· ข้อมูล r"
+  },
+  "来源人工核验与采信理由": {
+    "en": "Human source verification and adoption reasons",
+    "th": "การยืนยันแหล่งและเหตุผลเลือกใช้โดยผู้ตรวจ"
+  },
+  "核验记录只适用于当前报告保存的来源版本和片段。来源文字匹配、官方标记和模型输出均不会自动完成此处核验；法律效力、适用时点与冲突采信由记录人说明。": {
+    "en": "Verification applies only to the report’s frozen source version and excerpt. Text matches, official labels and model output never verify automatically. Record legal effect, relevant time and conflict resolution reasons.",
+    "th": "การยืนยันใช้เฉพาะรุ่นแหล่งและข้อความที่ตรึงในรายงาน ข้อความตรง ป้ายทางการ และโมเดลไม่ยืนยันอัตโนมัติ ผู้บันทึกต้องระบุผลกฎหมาย เวลาที่ใช้ และเหตุผลแก้ความขัดแย้ง"
+  },
+  "选择审核来源": {
+    "en": "Select review source",
+    "th": "เลือกแหล่งข้อมูลตรวจ"
+  },
+  "人工核验来源": {
+    "en": "Source for human verification",
+    "th": "แหล่งที่ผู้ตรวจจะยืนยัน"
+  },
+  "请先保存当前来源核验输入，再选择其他来源。": {
+    "en": "Save the current source verification before selecting another source.",
+    "th": "บันทึกการยืนยันแหล่งปัจจุบันก่อนเลือกแหล่งอื่น"
+  },
+  "选择一个冻结来源": {
+    "en": "Choose a frozen source",
+    "th": "เลือกแหล่งที่ตรึงไว้"
+  },
+  "人工核验状态": {
+    "en": "Human verification status",
+    "th": "สถานะยืนยันโดยผู้ตรวจ"
+  },
+  "来源人工核验状态": {
+    "en": "Source human verification status",
+    "th": "สถานะยืนยันแหล่งโดยผู้ตรวจ"
+  },
+  "真实性核验说明": {
+    "en": "Authenticity verification notes",
+    "th": "บันทึกตรวจความแท้"
+  },
+  "效力判断及核对依据": {
+    "en": "Legal effect assessment and basis",
+    "th": "การประเมินผลกฎหมายและฐานอ้างอิง"
+  },
+  "适用事项／主体／地域范围": {
+    "en": "Applicable matter / parties / territory",
+    "th": "เรื่อง / คู่สัญญา / เขตพื้นที่ที่ใช้"
+  },
+  "与其他材料冲突及采信理由": {
+    "en": "Conflicts and reasons for choosing a source",
+    "th": "ความขัดแย้งและเหตุผลเลือกแหล่ง"
+  },
+  "本次核验／变更理由": {
+    "en": "Reason for this verification / change",
+    "th": "เหตุผลยืนยัน / เปลี่ยนครั้งนี้"
+  },
+  "人工认定适用开始日（可未知）": {
+    "en": "Human-assessed applicable start (may be unknown)",
+    "th": "วันเริ่มใช้ที่ผู้ตรวจประเมิน (ไม่ทราบได้)"
+  },
+  "人工认定适用结束日（可未知）": {
+    "en": "Human-assessed applicable end (may be unknown)",
+    "th": "วันสิ้นสุดใช้ที่ผู้ตรวจประเมิน (ไม่ทราบได้)"
+  },
+  "保存来源核验": {
+    "en": "Save source verification",
+    "th": "บันทึกยืนยันแหล่ง"
+  },
+  "核验历史 ·": {
+    "en": "Verification history · ",
+    "th": "ประวัติยืนยัน · "
+  },
+  "真实性：": {
+    "en": "Authenticity: ",
+    "th": "ความแท้: "
+  },
+  "未说明": {
+    "en": "Not explained",
+    "th": "ไม่ระบุคำอธิบาย"
+  },
+  "；效力：": {
+    "en": "; legal effect: ",
+    "th": "; ผลกฎหมาย: "
+  },
+  "；适用范围：": {
+    "en": "; scope: ",
+    "th": "; ขอบเขต: "
+  },
+  "；时点：": {
+    "en": "; time: ",
+    "th": "; เวลา: "
+  },
+  "至": {
+    "en": " to ",
+    "th": " ถึง "
+  },
+  "；冲突及采信：": {
+    "en": "; conflicts and adoption: ",
+    "th": "; ความขัดแย้งและการเลือกใช้: "
+  },
+  "当前没有已保存的检索来源，先完成带来源的审核后再登记。": {
+    "en": "No saved retrieval sources. Complete a source-backed review first.",
+    "th": "ยังไม่มีแหล่งค้นที่บันทึก โปรดตรวจพร้อมแหล่งอ้างอิงก่อน"
+  },
+  "正在读写本地记录": {
+    "en": "Reading / writing local records",
+    "th": "กำลังอ่าน / เขียนบันทึกในเครื่อง"
+  },
+  "依赖记录已有更新，建议核对并重审": {
+    "en": "Dependencies have updates; check and review again",
+    "th": "ข้อมูลที่พึ่งพามีรุ่นใหม่ โปรดตรวจและทบทวนใหม่"
+  },
+  "部分依赖版本未知，不能确认报告仍适用": {
+    "en": "Some dependency versions are unknown; report applicability is unconfirmed",
+    "th": "ไม่ทราบรุ่นข้อมูลที่พึ่งพาบางรายการ ยังยืนยันไม่ได้ว่ารายงานใช้ได้"
+  },
+  "本工作区暂未发现依赖更新": {
+    "en": "No dependency updates found in this workspace",
+    "th": "ยังไม่พบรุ่นใหม่ของข้อมูลที่พึ่งพาในพื้นที่นี้"
+  },
+  "比较范围 ·": {
+    "en": "Comparison scope · ",
+    "th": "ขอบเขตเปรียบเทียบ · "
+  },
+  "有限审核流程配置": {
+    "en": "Limited review workflow configuration",
+    "th": "ตั้งค่ากระบวนการตรวจแบบจำกัด"
+  },
+  "有限审核流程": {
+    "en": "Limited review workflow",
+    "th": "กระบวนการตรวจแบบจำกัด"
+  },
+  "为此标准发布独立流程": {
+    "en": "Publish a separate workflow for this standard",
+    "th": "เผยแพร่กระบวนการแยกสำหรับมาตรฐานนี้"
+  },
+  "按资料收集 → 程序核验 → 检索 → 审核 → 人工处置串联。条件不满足的节点跳过；资料不足可暂停，补充并重新准备后继续。没有自定义流程时使用软件默认流程。": {
+    "en": "Facts → program checks → retrieval → review → human disposition. Unmet conditions skip nodes; missing information can pause. Save additions and prepare again to continue. Without a custom workflow, use the default.",
+    "th": "ข้อมูล → ตรวจโปรแกรม → ค้น → ตรวจสัญญา → จัดการโดยผู้ตรวจ ข้ามขั้นตอนเมื่อเงื่อนไขไม่ตรง ข้อมูลขาดหยุดได้ เติมและเตรียมใหม่เพื่อทำต่อ หากไม่กำหนดใช้ค่าเริ่มต้น"
+  },
+  "启用{v0}节点": {
+    "en": "Enable {v0} node",
+    "th": "เปิดขั้นตอน {v0}"
+  },
+  "必需信息未确认": {
+    "en": "Required information unconfirmed",
+    "th": "ข้อมูลจำเป็นยังไม่ยืนยัน"
+  },
+  "资料缺口处理": {
+    "en": "Missing-information handling",
+    "th": "วิธีจัดการข้อมูลขาด"
+  },
+  "暂停，补资料后继续": {
+    "en": "Pause; continue after adding information",
+    "th": "หยุด แล้วทำต่อเมื่อเติมข้อมูล"
+  },
+  "保留局限继续审核": {
+    "en": "Continue review with limitations",
+    "th": "ตรวจต่อพร้อมข้อจำกัด"
+  },
+  "执行条件": {
+    "en": "Execution condition",
+    "th": "เงื่อนไขการรัน"
+  },
+  "{v0}条件": {
+    "en": "{v0} condition",
+    "th": "เงื่อนไข {v0}"
+  },
+  "出现高风险时执行": {
+    "en": "Run when high risk is present",
+    "th": "รันเมื่อมีความเสี่ยงสูง"
+  },
+  "存在待确认信息时执行": {
+    "en": "Run when information is unconfirmed",
+    "th": "รันเมื่อมีข้อมูลยังไม่ยืนยัน"
+  },
+  "审核节点始终保留。流程完成不表示合同获准签署。": {
+    "en": "The review node is always retained. Workflow completion does not approve contract signing.",
+    "th": "คงขั้นตอนตรวจสัญญาไว้เสมอ กระบวนการเสร็จไม่ได้อนุมัติให้ลงนาม"
+  },
+  "待处理": {
+    "en": "Pending",
+    "th": "รอดำเนินการ"
+  },
+  "已确认问题": {
+    "en": "Issue confirmed",
+    "th": "ยืนยันปัญหาแล้ว"
+  },
+  "已升级处理": {
+    "en": "Escalated",
+    "th": "ส่งต่อระดับสูงแล้ว"
+  },
+  "业务接受风险": {
+    "en": "Business accepts risk",
+    "th": "ธุรกิจยอมรับความเสี่ยง"
+  },
+  "人工标记已整改": {
+    "en": "Human marked as resolved",
+    "th": "ผู้ตรวจระบุว่าแก้แล้ว"
+  },
+  "人工判断误报": {
+    "en": "Human judged false positive",
+    "th": "ผู้ตรวจเห็นว่าแจ้งผิด"
+  },
+  "已刷新处理记录和修订号，当前未提交的说明保留；请核对后重新提交。": {
+    "en": "Disposition records and revision refreshed. Unsaved notes remain; check and submit again.",
+    "th": "อัปเดตบันทึกจัดการและรุ่นแล้ว เก็บคำอธิบายที่ยังไม่ส่ง โปรดตรวจและส่งใหม่"
+  },
+  "当前有未提交的处置说明，请先提交或撤销，再选择其他风险。": {
+    "en": "Disposition notes are unsubmitted. Submit or undo before selecting another risk.",
+    "th": "คำอธิบายจัดการยังไม่ส่ง โปรดส่งหรือเลิกทำก่อนเลือกความเสี่ยงอื่น"
+  },
+  "处置记录已保存。风险等级、原审核意见及修改建议的采纳状态保留。": {
+    "en": "Disposition saved. Risk level, original review and edit acceptance remain unchanged.",
+    "th": "บันทึกการจัดการแล้ว เก็บระดับความเสี่ยง ผลตรวจเดิม และสถานะยอมรับการแก้"
+  },
+  "人工风险处置": {
+    "en": "Human risk disposition",
+    "th": "การจัดการความเสี่ยงโดยผู้ตรวจ"
+  },
+  "人工处理状态与风险等级分别记录。业务接受风险不代表条款合法或已整改；采纳修改建议也不会自动改变这里的状态。": {
+    "en": "Human handling and risk levels are separate. Business acceptance does not establish legality or resolution. Accepting edits does not change this status automatically.",
+    "th": "สถานะจัดการและระดับความเสี่ยงแยกกัน ธุรกิจยอมรับไม่ได้ยืนยันว่าชอบด้วยกฎหมายหรือแก้แล้ว ยอมรับการแก้ไม่เปลี่ยนสถานะนี้อัตโนมัติ"
+  },
+  "当前为内存演示，提交不调用真实服务、不落盘，也不会将误报反馈自动学习为新规则。": {
+    "en": "In-memory demo: no real calls or disk writes. False-positive feedback never becomes a new rule automatically.",
+    "th": "สาธิตในหน่วยความจำ ไม่เรียกจริงหรือเขียนดิสก์ ไม่เรียนรู้คำแจ้งผิดเป็นกฎใหม่อัตโนมัติ"
+  },
+  "人工处理状态筛选": {
+    "en": "Filter human handling status",
+    "th": "กรองสถานะจัดการโดยผู้ตรวจ"
+  },
+  "全部人工处理状态": {
+    "en": "All human handling statuses",
+    "th": "ทุกสถานะจัดการโดยผู้ตรวจ"
+  },
+  "刷新处理记录": {
+    "en": "Refresh disposition records",
+    "th": "อัปเดตบันทึกจัดการ"
+  },
+  "当前筛选下没有风险事项。": {
+    "en": "No risk items match this filter.",
+    "th": "ไม่มีความเสี่ยงตรงตัวกรอง"
+  },
+  "原风险等级：": {
+    "en": "Original risk level: ",
+    "th": "ระดับความเสี่ยงเดิม: "
+  },
+  "定位原文": {
+    "en": "Locate original",
+    "th": "ไปต้นฉบับ"
+  },
+  "本次标准建议：": {
+    "en": "This standard suggests: ",
+    "th": "มาตรฐานครั้งนี้แนะนำ: "
+  },
+  "升级处理": {
+    "en": "Escalation",
+    "th": "ส่งต่อระดับสูง"
+  },
+  "人工复核": {
+    "en": "Human verification",
+    "th": "ผู้ตรวจทบทวน"
+  },
+  "；请人工决定，未自动改变状态。": {
+    "en": "; decide manually. Status was not changed automatically.",
+    "th": "; โปรดตัดสินใจเอง ไม่มีการเปลี่ยนสถานะอัตโนมัติ"
+  },
+  "处置状态": {
+    "en": "Disposition status",
+    "th": "สถานะการจัดการ"
+  },
+  "处置理由或说明（每次必填）": {
+    "en": "Disposition reason / notes (required each time)",
+    "th": "เหตุผล / คำอธิบายจัดการ (จำเป็นทุกครั้ง)"
+  },
+  "处置理由或说明": {
+    "en": "Disposition reason / notes",
+    "th": "เหตุผล / คำอธิบายจัดการ"
+  },
+  "说明判断依据、待补资料、升级对象或业务接受风险的背景。": {
+    "en": "Explain the basis, missing materials, escalation recipient or context of business risk acceptance.",
+    "th": "อธิบายฐานตัดสิน ข้อมูลที่ขาด ผู้รับการส่งต่อ หรือบริบทธุรกิจที่ยอมรับความเสี่ยง"
+  },
+  "风险记录人标签": {
+    "en": "Risk recorder label",
+    "th": "ป้ายผู้บันทึกความเสี่ยง"
+  },
+  "仅作为记录标签，不是账号认证。": {
+    "en": "Record label only, not account authentication.",
+    "th": "เป็นป้ายบันทึกเท่านั้น ไม่ใช่การยืนยันบัญชี"
+  },
+  "业务接受仅记录业务决策，不等于法律合规确认，也不会降低原风险等级。": {
+    "en": "Business acceptance records a business decision only; it is not legal compliance confirmation and does not lower original risk.",
+    "th": "การยอมรับของธุรกิจบันทึกการตัดสินใจธุรกิจเท่านั้น ไม่ยืนยันการปฏิบัติตามกฎหมายหรือปรับความเสี่ยงเดิมลง"
+  },
+  "提交处置记录": {
+    "en": "Submit disposition",
+    "th": "ส่งบันทึกจัดการ"
+  },
+  "撤销未提交说明": {
+    "en": "Undo unsubmitted notes",
+    "th": "เลิกทำคำอธิบายที่ยังไม่ส่ง"
+  },
+  "这项风险的处置历史": {
+    "en": "Disposition history for this risk",
+    "th": "ประวัติการจัดการความเสี่ยงนี้"
+  },
+  "本次审核没有可处置的风险事项。": {
+    "en": "This review has no risk items for disposition.",
+    "th": "ผลตรวจนี้ไม่มีความเสี่ยงให้จัดการ"
+  },
+  "通过": {
+    "en": "Passed",
+    "th": "ผ่าน"
+  },
+  "有提示": {
+    "en": "Notices",
+    "th": "มีข้อแจ้ง"
+  },
+  "未检测": {
+    "en": "Not checked",
+    "th": "ยังไม่ตรวจ"
+  },
+  "关闭环境与知识库配置": {
+    "en": "Close environment and knowledge setup",
+    "th": "ปิดตั้งค่าสภาพแวดล้อมและคลังความรู้"
+  },
+  "环境与知识库配置": {
+    "en": "Environment and knowledge setup",
+    "th": "ตั้งค่าสภาพแวดล้อมและคลังความรู้"
+  },
+  "打开软件，按步骤完成配置": {
+    "en": "Open the app and follow setup steps",
+    "th": "เปิดแอปแล้วทำตามขั้นตอนตั้งค่า"
+  },
+  "桌面版自带所需运行环境。打开软件后，点击检查即可初始化本机存储和检索组件，再选择你自己的资料目录。": {
+    "en": "The desktop app includes required runtimes. Click check to initialize local storage and retrieval, then choose your own document directory.",
+    "th": "แอปเดสก์ท็อปรวมสภาพแวดล้อมที่จำเป็น กดตรวจเพื่อเตรียมที่เก็บและระบบค้นในเครื่อง แล้วเลือกโฟลเดอร์ข้อมูลของคุณ"
+  },
+  "本地建库和检索无需模型 API": {
+    "en": "Local indexing and retrieval need no model API",
+    "th": "สร้างดัชนีและค้นในเครื่องไม่ต้องใช้ API โมเดล"
+  },
+  "浏览器界面预览不检查本机运行环境、不读取资料，也不能保存或建立真实知识库。请在桌面应用中使用这些按钮。": {
+    "en": "Browser preview does not inspect local runtimes, read files, save or build real knowledge bases. Use these buttons in the desktop app.",
+    "th": "ตัวอย่างเบราว์เซอร์ไม่ตรวจสภาพแวดล้อม อ่านไฟล์ บันทึก หรือสร้างคลังจริง ใช้ปุ่มเหล่านี้ในแอปเดสก์ท็อป"
+  },
+  "检查本机环境": {
+    "en": "Check local environment",
+    "th": "ตรวจสภาพแวดล้อมในเครื่อง"
+  },
+  "结果来自桌面服务的实际检测；失败项可以修复后重试。": {
+    "en": "Results come from real desktop checks. Fix failed items and retry.",
+    "th": "ผลมาจากการตรวจจริงของเดสก์ท็อป แก้รายการที่ไม่ผ่านแล้วลองใหม่"
+  },
+  "正在检查与初始化…": {
+    "en": "Checking and initializing…",
+    "th": "กำลังตรวจและเตรียม…"
+  },
+  "检查并初始化环境": {
+    "en": "Check and initialize environment",
+    "th": "ตรวจและเตรียมสภาพแวดล้อม"
+  },
+  "浏览器预览 · 未执行本机检测": {
+    "en": "Browser preview · local checks not run",
+    "th": "ตัวอย่างเบราว์เซอร์ · ยังไม่ตรวจในเครื่อง"
+  },
+  "环境已就绪": {
+    "en": "Environment ready",
+    "th": "สภาพแวดล้อมพร้อม"
+  },
+  "环境尚未就绪": {
+    "en": "Environment not ready",
+    "th": "สภาพแวดล้อมยังไม่พร้อม"
+  },
+  "尚未执行检查。点击上方按钮开始。": {
+    "en": "No checks run yet. Click above to start.",
+    "th": "ยังไม่ตรวจ กดปุ่มด้านบนเพื่อเริ่ม"
+  },
+  "配置自己的知识库": {
+    "en": "Configure your knowledge base",
+    "th": "ตั้งค่าคลังความรู้ของคุณ"
+  },
+  "这些设置控制本机资料的读取范围和自动更新方式。": {
+    "en": "These settings control local source scope and automatic updates.",
+    "th": "ค่าต่อไปนี้กำหนดขอบเขตอ่านข้อมูลในเครื่องและอัปเดตอัตโนมัติ"
+  },
+  "知识库名称": {
+    "en": "Knowledge base name",
+    "th": "ชื่อคลังความรู้"
+  },
+  "例如：公司合同与合规资料库": {
+    "en": "For example: company contracts and compliance library",
+    "th": "เช่น คลังสัญญาและการปฏิบัติตามกฎของบริษัท"
+  },
+  "资料目录": {
+    "en": "Source directory",
+    "th": "โฟลเดอร์ข้อมูล"
+  },
+  "选择存放本地资料的文件夹": {
+    "en": "Choose a folder containing local documents",
+    "th": "เลือกโฟลเดอร์เอกสารในเครื่อง"
+  },
+  "选择资料目录": {
+    "en": "Choose source directory",
+    "th": "เลือกโฟลเดอร์ข้อมูล"
+  },
+  "通过系统窗口授权目录。只读读取资料，保留源文件。": {
+    "en": "Authorize the directory through the system picker. Sources are read-only and preserved.",
+    "th": "อนุญาตโฟลเดอร์ผ่านตัวเลือกระบบ อ่านข้อมูลอย่างเดียวและเก็บไฟล์ต้นทาง"
+  },
+  "读取的文件类型": {
+    "en": "File types to read",
+    "th": "ชนิดไฟล์ที่อ่าน"
+  },
+  "至少选择一种。扫描型 PDF 仍需要先提供可提取文字的版本。": {
+    "en": "Select at least one. Scanned PDFs still require a text-extractable version first.",
+    "th": "เลือกอย่างน้อยหนึ่งชนิด PDF สแกนยังต้องเตรียมรุ่นที่ดึงข้อความได้ก่อน"
+  },
+  "排除目录（相对路径，一行一项）": {
+    "en": "Excluded directories (relative paths, one per line)",
+    "th": "โฟลเดอร์ยกเว้น (พาธสัมพัทธ์ หนึ่งรายการต่อบรรทัด)"
+  },
+  "归档\n人事/敏感资料": {
+    "en": "Archive\nHR/sensitive",
+    "th": "เอกสารเก็บ\nบุคคล/ข้อมูลอ่อนไหว"
+  },
+  "相对于上方资料目录，最多 32 项；不支持绝对路径、上级路径或通配符。": {
+    "en": "Relative to the source directory; up to 32 entries. No absolute paths, parent paths or wildcards.",
+    "th": "สัมพัทธ์จากโฟลเดอร์ข้อมูล สูงสุด 32 รายการ ห้ามพาธสัมบูรณ์ พาธย้อนขึ้น หรือไวลด์การ์ด"
+  },
+  "更改资料目录、格式、排除目录或大小上限，会取消正在进行的模型审核；请按新范围重新开始。": {
+    "en": "Changing source directory, types, exclusions or size limits cancels active model reviews. Restart using the new scope.",
+    "th": "เปลี่ยนโฟลเดอร์ ชนิด ข้อยกเว้น หรือขนาดจะยกเลิกการตรวจโมเดลที่กำลังรัน โปรดเริ่มใหม่ตามขอบเขตใหม่"
+  },
+  "启用自动同步": {
+    "en": "Enable automatic sync",
+    "th": "เปิดซิงก์อัตโนมัติ"
+  },
+  "首次手动建库后，应用空闲时按设定间隔增量更新。": {
+    "en": "After the first manual build, update incrementally at the configured idle interval.",
+    "th": "หลังสร้างครั้งแรกเอง อัปเดตส่วนเปลี่ยนตามช่วงว่างที่ตั้งไว้"
+  },
+  "同步间隔（分钟）": {
+    "en": "Sync interval (minutes)",
+    "th": "ช่วงซิงก์ (นาที)"
+  },
+  "5–1440 分钟": {
+    "en": "5–1440 minutes",
+    "th": "5–1440 นาที"
+  },
+  "单文件上限（MiB）": {
+    "en": "Maximum file size (MiB)",
+    "th": "ขนาดไฟล์สูงสุด (MiB)"
+  },
+  "1–50 MiB，超过上限会跳过并记录": {
+    "en": "1–50 MiB; larger files are skipped and recorded",
+    "th": "1–50 MiB ไฟล์ใหญ่กว่าจะข้ามและบันทึกไว้"
+  },
+  "知识库正在同步，配置字段已暂时锁定；可以在下方取消同步。": {
+    "en": "Knowledge sync is running; settings are temporarily locked. Cancel sync below if needed.",
+    "th": "กำลังซิงก์ความรู้ ล็อกช่องตั้งค่าชั่วคราว ยกเลิกด้านล่างได้"
+  },
+  "查看知识库状态": {
+    "en": "View knowledge status",
+    "th": "ดูสถานะคลังความรู้"
+  },
+  "此处显示已保存知识库的真实状态，可取消任务或测试关键词。": {
+    "en": "Shows real saved knowledge status. Cancel tasks or test keywords here.",
+    "th": "แสดงสถานะจริงของคลังที่บันทึก ยกเลิกงานหรือทดสอบคำค้นที่นี่"
+  },
+  "继续配置其他连接": {
+    "en": "Configure other connections",
+    "th": "ตั้งค่าการเชื่อมต่ออื่น"
+  },
+  "需要模型审核时，再接入你自己的模型 API；外部知识库和互联网检索可在高级设置中管理。": {
+    "en": "Connect your own model API for model reviews. Manage external knowledge and web search in advanced settings.",
+    "th": "เชื่อม API โมเดลของคุณเมื่อต้องการตรวจด้วยโมเดล จัดการความรู้ภายนอกและค้นเว็บในการตั้งค่าขั้นสูง"
+  },
+  "外部知识库与搜索高级设置": {
+    "en": "External knowledge and advanced search settings",
+    "th": "ตั้งค่าความรู้ภายนอกและค้นขั้นสูง"
+  },
+  "当前是浏览器预览，真实初始化和建库请在桌面应用中执行。": {
+    "en": "Browser preview only. Initialize and build real knowledge bases in the desktop app.",
+    "th": "นี่คือตัวอย่างเบราว์เซอร์ เตรียมและสร้างคลังจริงในแอปเดสก์ท็อป"
+  },
+  "同步会在后台继续；下方状态面板可查看进度和取消。": {
+    "en": "Sync continues in the background. View progress or cancel below.",
+    "th": "ซิงก์ทำต่อเบื้องหลัง ดูความคืบหน้าหรือยกเลิกด้านล่าง"
+  },
+  "先检查环境，再保存并建立知识库。": {
+    "en": "Check the environment, then save and build the knowledge base.",
+    "th": "ตรวจสภาพแวดล้อม แล้วบันทึกและสร้างคลังความรู้"
+  },
+  "保存配置时保留已有的模型、外部知识库和搜索连接。": {
+    "en": "Saving preserves existing model, external knowledge and search connections.",
+    "th": "การบันทึกเก็บการเชื่อมต่อโมเดล ความรู้ภายนอก และค้นที่มีอยู่"
+  },
+  "仅保存配置": {
+    "en": "Save settings only",
+    "th": "บันทึกการตั้งค่าเท่านั้น"
+  },
+  "知识库正在同步": {
+    "en": "Knowledge sync running",
+    "th": "กำลังซิงก์คลังความรู้"
+  },
+  "保存并建立知识库": {
+    "en": "Save and build knowledge base",
+    "th": "บันทึกและสร้างคลังความรู้"
+  },
+  "本次任务的特别要求（可选） ·": {
+    "en": "Task-specific requirements (optional) · ",
+    "th": "ข้อกำหนดเฉพาะงาน (ไม่บังคับ) · "
+  },
+  "填写与经验配置一致的冲突键，以便解释本次要求与项目、企业和个人偏好的取舍。商业偏好不能放宽法律约束。": {
+    "en": "Use matching conflict keys to explain task/project/enterprise/personal priority. Business preferences cannot relax legal guardrails.",
+    "th": "ใช้คีย์ขัดแย้งตรงกันเพื่ออธิบายลำดับงาน โครงการ องค์กร และบุคคล ความชอบธุรกิจไม่อาจผ่อนข้อจำกัดกฎหมาย"
+  },
+  "冲突键": {
+    "en": "Conflict key",
+    "th": "คีย์ขัดแย้ง"
+  },
+  "任务要求冲突键": {
+    "en": "Task requirement conflict key",
+    "th": "คีย์ขัดแย้งข้อกำหนดงาน"
+  },
+  "例如 payment_period": {
+    "en": "For example, payment_period",
+    "th": "เช่น payment_period"
+  },
+  "处理方式": {
+    "en": "Handling mode",
+    "th": "วิธีจัดการ"
+  },
+  "任务要求处理方式": {
+    "en": "Task requirement handling mode",
+    "th": "วิธีจัดการข้อกำหนดงาน"
+  },
+  "补充要求": {
+    "en": "Additional requirement",
+    "th": "ข้อกำหนดเพิ่มเติม"
+  },
+  "收紧商业条件": {
+    "en": "Tighten business terms",
+    "th": "เข้มเงื่อนไขธุรกิจขึ้น"
+  },
+  "放宽商业条件": {
+    "en": "Relax business terms",
+    "th": "ผ่อนเงื่อนไขธุรกิจ"
+  },
+  "具体要求": {
+    "en": "Specific requirement",
+    "th": "ข้อกำหนดเฉพาะ"
+  },
+  "任务特别要求": {
+    "en": "Task-specific requirement",
+    "th": "ข้อกำหนดเฉพาะงาน"
+  },
+  "移除此项": {
+    "en": "Remove item",
+    "th": "นำรายการนี้ออก"
+  },
+  "添加任务要求": {
+    "en": "Add task requirement",
+    "th": "เพิ่มข้อกำหนดงาน"
+  },
+  "{v0} 如记录已更新，请刷新修改记录后重试。": {
+    "en": "{v0} If records changed, refresh change records and retry.",
+    "th": "{v0} หากบันทึกเปลี่ยน โปรดอัปเดตบันทึกแก้ไขแล้วลองใหม่"
+  },
+  "{v0} 如记录已更新，可点击“刷新修改记录”后重试。": {
+    "en": "{v0} If records changed, click “Refresh change records” and retry.",
+    "th": "{v0} หากบันทึกเปลี่ยน กด “อัปเดตบันทึกแก้ไข” แล้วลองใหม่"
+  },
+  "本次改写请求已结束，已保存内容仍需逐项确认。": {
+    "en": "Rewrite request ended. Saved content still needs item-by-item confirmation.",
+    "th": "คำขอเขียนใหม่สิ้นสุดแล้ว เนื้อหาที่บันทึกยังต้องยืนยันทีละรายการ"
+  },
+  "具体改写已生成，尚未采纳。请核对业务事实和原文含义，必要时编辑后保存。": {
+    "en": "Replacement generated but not accepted. Check business facts and source meaning, and edit before saving if needed.",
+    "th": "สร้างข้อความแทนแล้วแต่ยังไม่ยอมรับ ตรวจข้อเท็จจริงและความหมายต้นฉบับ แก้ก่อนบันทึกได้"
+  },
+  "本次改写已取消，原件和已保存的修改记录保留。": {
+    "en": "Rewrite cancelled. Original and saved change records remain.",
+    "th": "ยกเลิกเขียนใหม่แล้ว เก็บต้นฉบับและบันทึกการแก้เดิม"
+  },
+  "修改稿 v{v0} 和变更清单已导出。原件及原审核保留，修改稿可在合同列表中重新审核。": {
+    "en": "Revision v{v0} and change list exported. Originals and reviews remain; the revision can be reviewed from the contract list.",
+    "th": "ส่งออกฉบับแก้ v{v0} และรายการแล้ว เก็บต้นฉบับและผลตรวจ ตรวจฉบับแก้ใหม่ได้จากรายการสัญญา"
+  },
+  "保存连接": {
+    "en": "Save connection",
+    "th": "บันทึกการเชื่อมต่อ"
+  },
+  "固定参数含无效 JSON，请先修正后保存。": {
+    "en": "Fixed parameters contain invalid JSON. Correct before saving.",
+    "th": "พารามิเตอร์คงที่มี JSON ไม่ถูกต้อง โปรดแก้ก่อนบันทึก"
+  },
+  "请先保存当前连接和凭据，再运行此操作。": {
+    "en": "Save the connection and credentials before running this operation.",
+    "th": "บันทึกการเชื่อมต่อและข้อมูลรับรองก่อนทำงานนี้"
+  },
+  "刷新列表": {
+    "en": "Refresh list",
+    "th": "อัปเดตรายการ"
+  },
+  "选择共享目录": {
+    "en": "Choose shared directory",
+    "th": "เลือกโฟลเดอร์แชร์"
+  },
+  "停用并移除": {
+    "en": "Disable and remove",
+    "th": "ปิดใช้และนำออก"
+  },
+  "启用知识库目录": {
+    "en": "Enable knowledge directory",
+    "th": "เปิดใช้โฟลเดอร์ความรู้"
+  },
+  "取消请求未成功：{v0}。界面不会采用本次迟到结果，请刷新草稿记录核对状态。": {
+    "en": "Cancellation failed: {v0}. Late results will not be adopted. Refresh draft history to check status.",
+    "th": "ยกเลิกไม่สำเร็จ: {v0} จะไม่ใช้ผลที่มาช้า โปรดอัปเดตประวัติร่างเพื่อตรวจสถานะ"
+  },
+  "{v0} 输入已保留，可调整后重试。": {
+    "en": "{v0} Input retained. Adjust and retry.",
+    "th": "{v0} เก็บข้อมูลที่กรอกแล้ว ปรับและลองใหม่ได้"
+  },
+  "转换稿已生成{v0}。{v1}{v2}": {
+    "en": "Conversion created{v0}. {v1}{v2}",
+    "th": "สร้างฉบับแปลงแล้ว{v0} {v1}{v2}"
+  },
+  "请填写本次操作原因。": {
+    "en": "Enter a reason for this operation.",
+    "th": "กรอกเหตุผลการดำเนินการครั้งนี้"
+  },
+  "已移入回收站，可随时恢复。": {
+    "en": "Moved to trash; recover at any time.",
+    "th": "ย้ายไปถังขยะแล้ว คืนค่าได้ทุกเมื่อ"
+  },
+  "状态已更新。": {
+    "en": "Status updated.",
+    "th": "อัปเดตสถานะแล้ว"
+  },
+  "已生成候选，请人工核对后保存。": {
+    "en": "Candidate generated. Check manually before saving.",
+    "th": "สร้างฉบับรอพิจารณาแล้ว โปรดตรวจก่อนบันทึก"
+  },
+  "规则{index}": {
+    "en": "Rule {index}",
+    "th": "กฎ {index}"
+  },
+  "已刷新最新修订号与版本记录，当前输入保留。请核对差异后再保存。": {
+    "en": "Latest revision and version history refreshed. Inputs retained; compare before saving.",
+    "th": "อัปเดตรุ่นและประวัติล่าสุดแล้ว เก็บข้อมูลที่กรอก โปรดเทียบก่อนบันทึก"
+  },
+  "{v0} 可刷新记录并保留当前输入，核对后重试。": {
+    "en": "{v0} Refresh records, retain inputs, compare and retry.",
+    "th": "{v0} อัปเดตบันทึก เก็บข้อมูลที่กรอก ตรวจเทียบแล้วลองใหม่"
+  },
+  "{v0} 请刷新版本记录后重试。": {
+    "en": "{v0} Refresh version history and retry.",
+    "th": "{v0} อัปเดตประวัติรุ่นแล้วลองใหม่"
+  },
+  "请先填写移除原因。": {
+    "en": "Enter a reason for removal first.",
+    "th": "กรอกเหตุผลนำออกก่อน"
+  },
+  "请先保存模板修改，再重新批准后导出。": {
+    "en": "Save template changes and approve again before export.",
+    "th": "บันทึกการแก้แม่แบบและอนุมัติใหม่ก่อนส่งออก"
+  },
+  "经验已保存；只有人工批准且适用范围匹配的版本参与新审核。": {
+    "en": "Experience saved. Only human-approved versions with matching scopes enter new reviews.",
+    "th": "บันทึกประสบการณ์แล้ว ใช้ตรวจใหม่เฉพาะรุ่นที่ผู้ตรวจอนุมัติและขอบเขตตรงกัน"
+  },
+  "模板新版本已保存，旧版本仍可追溯。": {
+    "en": "New template version saved. Previous versions remain traceable.",
+    "th": "บันทึกแม่แบบรุ่นใหม่แล้ว ยังตรวจย้อนกลับรุ่นเดิมได้"
+  },
+  "人工意见已独立留档，原报告与风险处置记录保持不变。": {
+    "en": "Human opinion recorded separately. Original report and risk dispositions remain unchanged.",
+    "th": "บันทึกความเห็นผู้ตรวจแยกแล้ว ไม่เปลี่ยนรายงานและการจัดการความเสี่ยงเดิม"
+  },
+  "请先填写回退原因。": {
+    "en": "Enter a rollback reason first.",
+    "th": "กรอกเหตุผลย้อนรุ่นก่อน"
+  },
+  "已从历史建立新版本；经验与模板需重新批准，人工意见需重新启用。": {
+    "en": "New version created from history. Reapprove experience/templates and re-enable human opinions.",
+    "th": "สร้างรุ่นใหม่จากประวัติแล้ว ต้องอนุมัติประสบการณ์หรือแม่แบบ และเปิดความเห็นผู้ตรวจใหม่"
+  },
+  "同步任务已启动。下方显示实际阶段和文件计数。": {
+    "en": "Sync started. Actual stages and file counts appear below.",
+    "th": "เริ่มซิงก์แล้ว ขั้นตอนจริงและจำนวนไฟล์แสดงด้านล่าง"
+  },
+  "已请求取消，正在等待当前处理安全结束。": {
+    "en": "Cancellation requested; waiting for current processing to stop safely.",
+    "th": "ขอยกเลิกแล้ว กำลังรอให้การประมวลผลหยุดอย่างปลอดภัย"
+  },
+  "创建本地备份": {
+    "en": "Create local backup",
+    "th": "สร้างสำรองในเครื่อง"
+  },
+  "检查所选备份": {
+    "en": "Inspect selected backup",
+    "th": "ตรวจสำรองที่เลือก"
+  },
+  "恢复备份": {
+    "en": "Restore backup",
+    "th": "คืนค่าสำรอง"
+  },
+  "请先检查备份并完成恢复确认。": {
+    "en": "Inspect the backup and complete restore confirmation first.",
+    "th": "ตรวจสำรองและยืนยันคืนค่าก่อน"
+  },
+  "保留副本并清理知识索引": {
+    "en": "Keep a copy and clear knowledge index",
+    "th": "เก็บสำเนาและล้างดัชนีความรู้"
+  },
+  "请先确认清理范围。": {
+    "en": "Confirm the cleanup scope first.",
+    "th": "ยืนยันขอบเขตล้างก่อน"
+  },
+  "恢复已清理索引": {
+    "en": "Restore cleared index",
+    "th": "คืนค่าดัชนีที่ล้าง"
+  },
+  "数据目录": {
+    "en": "Data directory",
+    "th": "โฟลเดอร์ข้อมูล"
+  },
+  "合同文档": {
+    "en": "Contract documents",
+    "th": "เอกสารสัญญา"
+  },
+  "审核报告": {
+    "en": "Review reports",
+    "th": "รายงานตรวจสัญญา"
+  },
+  "本地数据大小": {
+    "en": "Local data size",
+    "th": "ขนาดข้อมูลในเครื่อง"
+  },
+  "读取工作空间状态": {
+    "en": "Read workspace status",
+    "th": "อ่านสถานะพื้นที่ทำงาน"
+  },
+  "当前桌面服务尚未提供取消官方测试，请更新并重启软件。": {
+    "en": "This desktop service cannot cancel official tests yet. Update and restart.",
+    "th": "บริการเดสก์ท็อปนี้ยังยกเลิกทดสอบทางการไม่ได้ โปรดอัปเดตและเปิดใหม่"
+  },
+  "浏览器预览未联网，无法测试官方来源。请在桌面应用中执行。": {
+    "en": "Browser preview is offline. Test official sources in the desktop app.",
+    "th": "ตัวอย่างเบราว์เซอร์ออฟไลน์ โปรดทดสอบแหล่งทางการในแอปเดสก์ท็อป"
+  },
+  "请先启用官方公开来源并保存配置，再测试已保存的读取范围。": {
+    "en": "Enable official sources and save before testing the saved coverage.",
+    "th": "เปิดแหล่งทางการและบันทึกก่อนทดสอบขอบเขตที่บันทึก"
+  },
+  "请输入 1–120 个字符的目录标题关键词。": {
+    "en": "Enter catalogue title keywords of 1–120 characters.",
+    "th": "กรอกคำค้นชื่อสารบัญ 1–120 อักขระ"
+  },
+  "当前桌面服务尚未提供官方来源检索，请更新并重启软件。": {
+    "en": "This desktop service does not support official retrieval yet. Update and restart.",
+    "th": "บริการเดสก์ท็อปนี้ยังไม่รองรับค้นแหล่งทางการ โปรดอัปเดตและเปิดใหม่"
+  },
+  "本次官方来源测试已结束，保留已取得的 {v0} 项资料。取消后未完成的范围不作已检索，配置没有更改。": {
+    "en": "Official-source test ended; {v0} retrieved materials retained. Unfinished scope after cancellation is not treated as searched. Settings unchanged.",
+    "th": "สิ้นสุดทดสอบทางการ เก็บข้อมูลที่ได้ {v0} รายการ ขอบเขตที่ยังไม่เสร็จหลังยกเลิกไม่ถือว่าค้นแล้ว ไม่เปลี่ยนการตั้งค่า"
+  },
+  "本次取回 {v0} 项资料；目录覆盖有限，请查看实际读取范围。没有调用模型，无匹配结果不代表相关规定不存在。": {
+    "en": "Retrieved {v0} materials. Catalogue coverage is limited; inspect actual scope. No model call; no match does not imply absence of relevant rules.",
+    "th": "ได้ข้อมูล {v0} รายการ สารบัญครอบคลุมจำกัด โปรดดูขอบเขตจริง ไม่เรียกโมเดล ไม่พบผลไม่ได้แปลว่าไม่มีกฎเกี่ยวข้อง"
+  },
+  "官方来源测试有失败或未完成的读取。已取得的资料仍保留，请查看覆盖范围和错误记录。": {
+    "en": "Official reads failed or remain incomplete. Retrieved materials remain; check coverage and errors.",
+    "th": "อ่านแหล่งทางการบางส่วนล้มเหลวหรือไม่เสร็จ เก็บข้อมูลที่ได้ไว้ โปรดตรวจขอบเขตและข้อผิดพลาด"
+  },
+  "本次读取范围内没有取得匹配资料。请查看目录覆盖与读取记录；不代表相关规定不存在。": {
+    "en": "No matching material in the read scope. Check coverage and records; relevant rules may still exist.",
+    "th": "ไม่พบข้อมูลตรงในขอบเขตที่อ่าน โปรดดูขอบเขตและบันทึก อาจยังมีกฎเกี่ยวข้อง"
+  },
+  "官方来源测试取回 {v0} 项资料。没有调用模型；资料效力及适用性尚需核实。": {
+    "en": "Official test retrieved {v0} materials. No model call. Legal effect and applicability need verification.",
+    "th": "ทดสอบทางการได้ข้อมูล {v0} รายการ ไม่เรียกโมเดล ผลกฎหมายและการใช้บังคับยังต้องตรวจ"
+  },
+  "本次官方来源测试已停止，配置没有更改。未完整读取的范围不作已检索。": {
+    "en": "Official test stopped; settings unchanged. Incomplete scope is not treated as searched.",
+    "th": "หยุดทดสอบทางการแล้ว ไม่เปลี่ยนการตั้งค่า ขอบเขตที่อ่านไม่ครบไม่ถือว่าค้นแล้ว"
+  },
+  "本地知识库正在同步，请等待或取消任务后再保存配置。": {
+    "en": "Local knowledge is syncing. Wait or cancel before saving settings.",
+    "th": "กำลังซิงก์ความรู้ในเครื่อง รอหรือยกเลิกก่อนบันทึก"
+  },
+  "每路结果上限为 1–8，超时时间为 5–60 秒，均须填写整数。": {
+    "en": "Result limit must be an integer 1–8 and timeout an integer 5–60 seconds.",
+    "th": "ผลลัพธ์สูงสุดต้องเป็นจำนวนเต็ม 1–8 และเวลาหมดเป็นจำนวนเต็ม 5–60 วินาที"
+  },
+  "官方目录读取上限为 1–10 页，指定原文链接最多 8 个。": {
+    "en": "Official catalogue limit: 1–10 pages; up to 8 specified original links.",
+    "th": "สารบัญทางการจำกัด 1–10 หน้า ลิงก์ต้นฉบับที่ระบุสูงสุด 8 ลิงก์"
+  },
+  "配置已暂存。本次是界面预览：未联网、未读取文件，也没有取回真实材料。": {
+    "en": "Settings held temporarily. Preview made no network calls, read no files and retrieved no real materials.",
+    "th": "พักการตั้งค่าแล้ว ตัวอย่างไม่เข้าเครือข่าย อ่านไฟล์ หรือดึงข้อมูลจริง"
+  },
+  "配置已保存，本次取回 {v0} 项资料。官方目录覆盖有限，实际读取范围见下方；资料效力与适用性尚需核实。": {
+    "en": "Settings saved; {v0} materials retrieved. Catalogue coverage is limited; inspect scope below. Legal effect and applicability remain unverified.",
+    "th": "บันทึกการตั้งค่า ได้ข้อมูล {v0} รายการ ขอบเขตสารบัญจำกัด ดูขอบเขตด้านล่าง ยังไม่ยืนยันผลกฎหมายและการใช้บังคับ"
+  },
+  "配置已保存，检索存在失败或未完成的分支。请查看各路状态、错误和限制。": {
+    "en": "Settings saved with failed or incomplete retrieval routes. Check statuses, errors and limitations.",
+    "th": "บันทึกแล้ว มีช่องทางค้นล้มเหลวหรือไม่ครบ โปรดดูสถานะ ข้อผิดพลาด และข้อจำกัด"
+  },
+  "配置已保存。本次没有取回材料，请查看是否关闭检索、尚未配置或查询无结果。": {
+    "en": "Settings saved. No materials retrieved. Check disabled/unconfigured sources or empty query results.",
+    "th": "บันทึกแล้ว แต่ไม่ได้ข้อมูล ตรวจว่าแหล่งปิด ยังไม่ตั้งค่า หรือคำค้นไม่มีผล"
+  },
+  "检索测试已返回 {v0} 项材料。各路状态见下方；资料效力与法律适用尚需核验。": {
+    "en": "Test returned {v0} materials. Check route statuses below; legal effect and applicability need verification.",
+    "th": "ทดสอบได้ข้อมูล {v0} รายการ ดูสถานะช่องทางด้านล่าง ผลกฎหมายและการใช้บังคับยังต้องตรวจ"
+  },
+  "资料已保存。历史审核的事实快照保持原样；新审核采用新资料。": {
+    "en": "Facts saved. Historical review snapshots remain unchanged; new reviews use new facts.",
+    "th": "บันทึกข้อมูลแล้ว ไม่เปลี่ยนภาพรวมข้อเท็จจริงของผลตรวจเก่า การตรวจใหม่ใช้ข้อมูลใหม่"
+  },
+  "已重新核对并保存流程检查点。请查看状态，再开始审核。": {
+    "en": "Workflow checkpoint rechecked and saved. Check status, then start review.",
+    "th": "ตรวจและบันทึกจุดตรวจกระบวนการใหม่แล้ว ดูสถานะก่อนเริ่มตรวจ"
+  },
+  "已按保存的风险人工处置刷新流程状态。": {
+    "en": "Workflow refreshed from saved human risk dispositions.",
+    "th": "อัปเดตกระบวนการตามการจัดการความเสี่ยงที่บันทึกแล้ว"
+  },
+  "来源人工核验已留档；原始来源和模型意见保持冻结。": {
+    "en": "Human source verification recorded. Original sources and model opinions remain frozen.",
+    "th": "บันทึกการยืนยันแหล่งโดยผู้ตรวจแล้ว ต้นฉบับแหล่งและความเห็นโมเดลยังตรึงไว้"
+  },
+  "{v0} 可刷新记录并保留说明后重试。": {
+    "en": "{v0} Refresh records, keep notes and retry.",
+    "th": "{v0} อัปเดตบันทึก เก็บคำอธิบาย แล้วลองใหม่"
+  },
+  "浏览器只展示配置界面，尚未检查或初始化本机环境。请在桌面应用中操作。": {
+    "en": "Browser preview does not check or initialize local environment. Use the desktop app.",
+    "th": "ตัวอย่างเบราว์เซอร์ไม่ตรวจหรือเตรียมสภาพแวดล้อมในเครื่อง โปรดใช้แอปเดสก์ท็อป"
+  },
+  "本机环境已就绪。可以选择资料目录并保存知识库设置。": {
+    "en": "Local environment ready. Choose sources and save knowledge settings.",
+    "th": "สภาพแวดล้อมในเครื่องพร้อม เลือกโฟลเดอร์และบันทึกตั้งค่าความรู้ได้"
+  },
+  "环境尚未就绪。请查看检查结果，处理失败项后再次检查；也可以先保存知识库设置。": {
+    "en": "Environment not ready. Check results, fix failures and retry. Knowledge settings may still be saved first.",
+    "th": "สภาพแวดล้อมยังไม่พร้อม ดูผล แก้รายการล้มเหลว แล้วลองใหม่ บันทึกตั้งค่าความรู้ไว้ก่อนได้"
+  },
+  "请通过“选择资料目录”授权需要读取的本地文件夹。": {
+    "en": "Use “Choose source directory” to authorize the local folder.",
+    "th": "ใช้ “เลือกโฟลเดอร์ข้อมูล” เพื่ออนุญาตให้อ่านโฟลเดอร์"
+  },
+  "请先点击“检查并初始化环境”，通过后再建立知识库。": {
+    "en": "Run “Check and initialize environment” successfully before building the knowledge base.",
+    "th": "ให้ “ตรวจและเตรียมสภาพแวดล้อม” ผ่านก่อนสร้างคลังความรู้"
+  },
+  "配置已保存，建库未启动：{v0}。可处理后重试。": {
+    "en": "Settings saved; indexing did not start: {v0}. Fix and retry.",
+    "th": "บันทึกแล้ว แต่ยังไม่เริ่มดัชนี: {v0} แก้แล้วลองใหม่"
+  },
+  "配置已保存，知识库同步任务已启动。下方显示实际阶段、计数和取消入口。": {
+    "en": "Settings saved; knowledge sync started. Stages, counts and cancellation appear below.",
+    "th": "บันทึกแล้ว เริ่มซิงก์ความรู้ ขั้นตอน จำนวน และปุ่มยกเลิกอยู่ด้านล่าง"
+  },
+  "资料收集": {
+    "en": "Information collection",
+    "th": "เก็บข้อมูล"
+  },
+  "资料检索": {
+    "en": "Information retrieval",
+    "th": "ค้นข้อมูล"
+  },
+  "风险人工处置": {
+    "en": "Human risk disposition",
+    "th": "จัดการความเสี่ยงโดยผู้ตรวจ"
+  },
+  "当前操作正在进行，原文段落和草稿已保留。请先完成或取消，再选择其他审核意见。": {
+    "en": "An operation is running. Original and drafts remain. Finish or cancel before selecting another finding.",
+    "th": "มีงานกำลังทำ เก็บต้นฉบับและร่างแล้ว โปรดทำให้เสร็จหรือยกเลิกก่อนเลือกข้อสังเกตอื่น"
+  },
+  "当前有未保存编辑，原文段落和草稿已保留。请先保存或撤销编辑，再选择其他审核意见。": {
+    "en": "Unsaved edits remain. Original and drafts are kept. Save or undo before choosing another finding.",
+    "th": "มีการแก้ยังไม่บันทึก เก็บต้นฉบับและร่างแล้ว บันทึกหรือเลิกทำก่อนเลือกข้อสังเกตอื่น"
+  },
+  "请选择可编辑文字片段，保留结构不能修改。": {
+    "en": "Select an editable text segment. Preserved structures cannot be changed.",
+    "th": "เลือกส่วนข้อความที่แก้ได้ โครงสร้างที่เก็บไว้แก้ไม่ได้"
+  },
+  "已采纳这项修改，导出修改稿时会使用它。": {
+    "en": "Edit accepted and included in revision exports.",
+    "th": "ยอมรับการแก้แล้ว จะรวมในฉบับแก้ส่งออก"
+  },
+  "已拒绝这项修改，导出时不采用。": {
+    "en": "Edit rejected and excluded from exports.",
+    "th": "ปฏิเสธการแก้แล้ว ไม่รวมส่งออก"
+  },
+  "已恢复为待确认，导出时暂不采用。": {
+    "en": "Reset to pending and currently excluded from exports.",
+    "th": "คืนเป็นรอยืนยันแล้ว ยังไม่รวมส่งออก"
+  },
+  "连接读取测试完成。": {
+    "en": "Connection read test completed.",
+    "th": "ทดสอบอ่านการเชื่อมต่อเสร็จ"
+  },
+  "同步操作已完成。": {
+    "en": "Sync operation completed.",
+    "th": "ซิงก์เสร็จแล้ว"
+  },
+  "知识库目录已配置，后台索引已启动；可在知识库面板查看进度。": {
+    "en": "Knowledge directory configured and background indexing started. View progress in the knowledge panel.",
+    "th": "ตั้งโฟลเดอร์ความรู้และเริ่มดัชนีเบื้องหลังแล้ว ดูความคืบหน้าในหน้าคลังความรู้"
+  },
+  "并作为独立合同导入": {
+    "en": " and imported as a separate contract",
+    "th": " และนำเข้าเป็นสัญญาแยก"
+  },
+  "包含未识别页，请先对照 PDF 补齐。": {
+    "en": "Some pages were not recognized. Complete them against the PDF first.",
+    "th": "มีหน้าที่อ่านไม่ได้ โปรดเติมจาก PDF ก่อน"
+  },
+  "请逐页核对金额、日期、主体、表格和签章内容后使用。": {
+    "en": "Check amounts, dates, parties, tables and seals on each page before use.",
+    "th": "ตรวจจำนวนเงิน วันที่ คู่สัญญา ตาราง และตราประทับทีละหน้าก่อนใช้"
+  },
+  "备份恢复已完成。当前工作空间恢复前已自动备份，请重启软件后继续使用。": {
+    "en": "Backup restored. The previous workspace was backed up first. Restart to continue.",
+    "th": "คืนค่าสำรองแล้ว สำรองพื้นที่เดิมก่อนคืนให้แล้ว โปรดเปิดโปรแกรมใหม่เพื่อใช้ต่อ"
+  },
+  "已恢复上次清理的知识索引，请在知识库面板核对状态。": {
+    "en": "Last cleared knowledge index restored. Check status in the knowledge panel.",
+    "th": "คืนดัชนีที่ล้างล่าสุดแล้ว โปรดตรวจสถานะในหน้าคลังความรู้"
+  },
+  "资料连接配置仅保存在本次页面内存中。没有联网或读取本地文件。": {
+    "en": "Source settings stay in page memory only. No network access or local file reads.",
+    "th": "ตั้งค่าแหล่งข้อมูลอยู่ในหน่วยความจำหน้านี้เท่านั้น ไม่เข้าเครือข่ายหรืออ่านไฟล์"
+  },
+  "资料连接配置已保存，密钥输入已清空。下一次模型审核将使用此配置。": {
+    "en": "Source settings saved and key inputs cleared. The next model review uses these settings.",
+    "th": "บันทึกการเชื่อมต่อและล้างช่องคีย์แล้ว การตรวจโมเดลครั้งถัดไปจะใช้ค่านี้"
+  },
+  "配置已保存。本次未返回新的建库任务，请查看知识库状态。": {
+    "en": "Settings saved without a new indexing task. Check knowledge status.",
+    "th": "บันทึกแล้ว ไม่มีงานสร้างดัชนีใหม่ส่งกลับ โปรดดูสถานะคลังความรู้"
+  },
+  "个性化配置已保存。首次使用请建立知识库；范围变更后请更新索引。": {
+    "en": "Personal settings saved. Build the knowledge base on first use; update indexes after scope changes.",
+    "th": "บันทึกค่าส่วนตัวแล้ว ใช้ครั้งแรกให้สร้างคลัง และอัปเดตดัชนีหลังเปลี่ยนขอบเขต"
+  },
+  "尚未统计": {
+    "en": "Not counted yet",
+    "th": "ยังไม่นับ"
+  },
+  "TXT 文本": {
+    "en": "TXT text",
+    "th": "ข้อความ TXT"
+  },
+  "Word 文档": {
+    "en": "Word documents",
+    "th": "เอกสาร Word"
+  },
+  "PDF 文档": {
+    "en": "PDF documents",
+    "th": "เอกสาร PDF"
+  },
+  "最高法司法解释公开栏目": {
+    "en": "Supreme People’s Court judicial interpretation section",
+    "th": "หมวดคำตีความศาลประชาชนสูงสุดสาธารณะ"
+  },
+  "内置运行环境": {
+    "en": "Bundled runtime",
+    "th": "สภาพแวดล้อมที่รวมมา"
+  },
+  "本机数据目录": {
+    "en": "Local data directory",
+    "th": "โฟลเดอร์ข้อมูลในเครื่อง"
+  },
+  "中英泰文字处理": {
+    "en": "Chinese / English / Thai text processing",
+    "th": "ประมวลผลข้อความจีน / อังกฤษ / ไทย"
+  },
+  "本地全文索引": {
+    "en": "Local full-text index",
+    "th": "ดัชนีข้อความเต็มในเครื่อง"
+  },
+  "软件内置运行环境可用（{version}），无需另行安装。": {
+    "en": "Bundled runtime is ready ({version}); no separate installation needed.",
+    "th": "สภาพแวดล้อมที่รวมมาพร้อม ({version}) ไม่ต้องติดตั้งแยก"
+  },
+  "当前运行环境 {version} 不符合要求，请使用完整桌面版本。": {
+    "en": "Runtime {version} does not meet requirements. Use the full desktop release.",
+    "th": "สภาพแวดล้อม {version} ไม่ตรงข้อกำหนด โปรดใช้เดสก์ท็อปรุ่นเต็ม"
+  },
+  "读写检查通过，合同、报告和索引目录已准备好。": {
+    "en": "Read/write checks passed. Contract, report and index directories are ready.",
+    "th": "ผ่านตรวจอ่านเขียนแล้ว โฟลเดอร์สัญญา รายงาน และดัชนีพร้อม"
+  },
+  "本机数据目录无法读写，请检查目录权限、磁盘空间及软件安装位置。": {
+    "en": "Cannot read/write local data. Check permissions, disk space and installation location.",
+    "th": "อ่านเขียนข้อมูลในเครื่องไม่ได้ ตรวจสิทธิ์ พื้นที่ดิสก์ และที่ติดตั้ง"
+  },
+  "三种语言的本地分词数据可用，检索原文无需预先翻译。": {
+    "en": "Local tokenization supports all three languages. Originals need no prior translation for search.",
+    "th": "ตัดคำทั้งสามภาษาในเครื่องได้ ค้นต้นฉบับโดยไม่ต้องแปลก่อน"
+  },
+  "当前运行环境缺少三语分词能力，请使用完整桌面版本。": {
+    "en": "Trilingual tokenization is unavailable in this runtime. Use the full desktop release.",
+    "th": "สภาพแวดล้อมนี้ตัดคำสามภาษาไม่ได้ โปรดใช้เดสก์ท็อปรุ่นเต็ม"
+  },
+  "磁盘索引创建、检索及关闭后重新读取均通过。": {
+    "en": "On-disk index creation, search and reopening all passed.",
+    "th": "ผ่านการสร้างดัชนีดิสก์ ค้น และเปิดอ่านใหม่แล้ว"
+  },
+  "全文索引自检失败，请检查完整软件版本和本机数据目录。": {
+    "en": "Full-text index self-check failed. Check the complete release and local data directory.",
+    "th": "ตรวจดัชนีข้อความเต็มไม่ผ่าน ตรวจรุ่นโปรแกรมเต็มและโฟลเดอร์ข้อมูล"
+  },
+  "数据目录可读写，但临时检查文件无法清理，请检查目录权限。": {
+    "en": "Data is writable, but temporary check files could not be removed. Check permissions.",
+    "th": "อ่านเขียนข้อมูลได้แต่ลบไฟล์ตรวจชั่วคราวไม่ได้ โปรดตรวจสิทธิ์"
+  },
+  "数据目录不可写，未执行磁盘索引检查。": {
+    "en": "Data directory is not writable; disk index check was not run.",
+    "th": "โฟลเดอร์ข้อมูลเขียนไม่ได้ จึงยังไม่ตรวจดัชนีดิสก์"
+  },
+  "正在接收模型输出（尚未校验）": {
+    "en": "Receiving model output (unvalidated)",
+    "th": "กำลังรับเอาต์พุตโมเดล (ยังไม่ตรวจ)"
+  },
+  "正在请求模型": {
+    "en": "Requesting model",
+    "th": "กำลังเรียกโมเดล"
+  },
+  "按用户策略等待后重试": {
+    "en": "Waiting before retry under user policy",
+    "th": "กำลังรอก่อนลองใหม่ตามนโยบายผู้ใช้"
+  },
+  "未开始": {
+    "en": "Not started",
+    "th": "ยังไม่เริ่ม"
+  },
+  "执行中": {
+    "en": "Running",
+    "th": "กำลังรัน"
+  },
+  "已跳过": {
+    "en": "Skipped",
+    "th": "ข้ามแล้ว"
+  },
+  "已暂停": {
+    "en": "Paused",
+    "th": "หยุดรอ"
+  },
+  "候选": {
+    "en": "Candidate",
+    "th": "รอพิจารณา"
+  },
+  "待评审": {
+    "en": "Awaiting review",
+    "th": "รอพิจารณา"
+  },
+  "已接受": {
+    "en": "Accepted",
+    "th": "ยอมรับแล้ว"
+  },
+  "CONTRACT DRAFT": {
+    "en": "CONTRACT DRAFT",
+    "th": "ร่างสัญญา"
+  },
+  "KNOWLEDGE & WEB": {
+    "en": "KNOWLEDGE & WEB",
+    "th": "ความรู้และเว็บ"
+  },
+  "WORKSPACE SETUP": {
+    "en": "WORKSPACE SETUP",
+    "th": "ตั้งค่าพื้นที่ทำงาน"
+  },
+  "排队中": {
+    "en": "Queued",
+    "th": "รอคิว"
+  },
+  "能力探测": {
+    "en": "Capability probe",
+    "th": "ทดสอบความสามารถ"
+  }
+}

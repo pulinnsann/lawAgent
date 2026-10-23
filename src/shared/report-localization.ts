@@ -1,0 +1,36 @@
+import type { ReportLanguage } from './report-translation';
+/** Fixed report vocabulary. Narrative translations are stored and reviewed separately. */
+const vocabulary: Record<string,[string,string]> = {
+'合同审核报告':['Contract review report','รายงานการตรวจสัญญา'],
+'合同审核工作汇总':['Contract review work summary','สรุปงานตรวจสัญญา'],
+'合同风险审核报告':['Contract risk review report','รายงานตรวจความเสี่ยงของสัญญา'],
+'合同审核领导摘要':['Contract review executive summary','บทสรุปการตรวจสัญญาสำหรับผู้บริหาร'],
+'合同审核管理报告':['Contract review management report','รายงานการบริหารงานตรวจสัญญา'],
+'核心审核指标':['Key review metrics','ตัวชี้วัดหลักในการตรวจสัญญา'],
+'审核工作与处置概览':['Review and disposition overview','ภาพรวมการตรวจและการดำเนินการ'],
+'需要跟进的事项':['Items requiring follow-up','ประเด็นที่ต้องติดตาม'],
+'人工补录及修订的关注事项':['Manually added and revised concerns','ประเด็นที่เพิ่มและแก้ไขโดยผู้ตรวจ'],
+'统计口径与使用局限':['Counting methodology and limitations','หลักเกณฑ์การนับและข้อจำกัด'],
+'企业标准分组':['Enterprise standard groups','กลุ่มมาตรฐานขององค์กร'],
+'完整统计附录':['Complete metrics appendix','ภาคผนวกสถิติฉบับสมบูรณ์'],
+'文档与审核明细':['Document and review details','รายละเอียดเอกสารและการตรวจ'],
+'程序核验记录':['Programmatic check records','บันทึกการตรวจด้วยโปรแกรม'],
+'审核意见与人工处置':['Findings and human dispositions','ข้อสังเกตและการดำเนินการโดยผู้ตรวจ'],
+'独立人工补充意见':['Separate human annotations','ข้อสังเกตเพิ่มเติมแยกต่างหากของผู้ตรวจ'],
+'来源与检索依据':['Sources and retrieval evidence','แหล่งข้อมูลและหลักฐานจากการค้นคืน'],
+'报告依赖更新比较':['Report dependency update comparison','การเปรียบเทียบการเปลี่ยนแปลงข้อมูลอ้างอิงของรายงาน'],
+'结构化事实、假设与资料缺口':['Structured facts, assumptions and information gaps','ข้อเท็จจริง สมมติฐาน และข้อมูลที่ยังขาด'],
+'人工来源核验与采信记录':['Human source verification and reliance records','บันทึกการตรวจสอบและการเลือกใช้แหล่งข้อมูลโดยผู้ตรวจ'],
+'长合同分批覆盖记录':['Long-contract batch coverage records','บันทึกขอบเขตการตรวจสัญญายาวแบบแบ่งชุด'],
+'本次采用的本地经验版本':['Local experience versions used','รุ่นประสบการณ์ภายในที่ใช้ในการตรวจครั้งนี้'],
+'指标':['Metric','ตัวชี้วัด'],'数量':['Count','จำนวน'],'合同记录':['Contract records','รายการสัญญา'],'涉及文档版本':['Document versions in scope','รุ่นเอกสารในขอบเขต'],'期间导入版本':['Versions imported in period','รุ่นที่นำเข้าในช่วงเวลา'],'完成审核轮次':['Completed review rounds','รอบการตรวจที่เสร็จสมบูรณ์'],'全部轮次原始意见条数':['Original findings across all selected rounds','ข้อสังเกตเดิมจากทุกรอบที่เลือก'],'各版本范围内最后一轮原始意见条数':['Original findings in each version’s last selected round','ข้อสังเกตเดิมในรอบสุดท้ายที่เลือกของแต่ละรุ่น'],'有效人工补录及修订意见':['Active human additions and revisions','ข้อสังเกตที่เพิ่มและแก้ไขโดยผู้ตรวจซึ่งยังใช้งาน'],'原始高风险意见':['Original high-risk findings','ข้อสังเกตเดิมที่มีความเสี่ยงสูง'],'待跟进或待决策意见':['Findings awaiting follow-up or decisions','ข้อสังเกตที่รอการติดตามหรือการตัดสินใจ'],
+'标准版本':['Standard version','รุ่นมาตรฐาน'],'审核轮次':['Review rounds','รอบการตรวจ'],'版本标识':['Version identifier','รหัสรุ่น'],
+'待处理':['Unreviewed','รอดำเนินการ'],'人工确认关注':['Concern confirmed by a person','ผู้ตรวจยืนยันว่าควรให้ความสนใจ'],'待补资料':['More information needed','ต้องการข้อมูลเพิ่มเติม'],'升级决策':['Escalated for decision','ส่งต่อเพื่อการตัดสินใจ'],'业务接受':['Accepted by business','ฝ่ายธุรกิจยอมรับ'],'人工标记已整改':['Marked fixed by a person','ผู้ตรวจทำเครื่องหมายว่าแก้ไขแล้ว'],'人工标记误报':['Marked false positive by a person','ผู้ตรวจทำเครื่องหมายว่าแจ้งเตือนผิด'],
+'高风险':['High risk','ความเสี่ยงสูง'],'中风险':['Medium risk','ความเสี่ยงปานกลาง'],'低风险':['Low risk','ความเสี่ยงต่ำ'],'待判断':['Unrated','ยังไม่ประเมิน'],
+'程序核验':['Programmatic check','การตรวจด้วยโปรแกรม'],'企业规则':['Enterprise rule','กฎขององค์กร'],'模型分析':['Model analysis','การวิเคราะห์โดยโมเดล'],'本地关键词':['Local keyword rule','กฎคำสำคัญภายใน'],
+'记录类型':['Record type','ประเภทบันทึก'],'合同记录ID':['Contract record ID','รหัสรายการสัญญา'],'文档版本ID':['Document version ID','รหัสรุ่นเอกสาร'],'文档名':['Document name','ชื่อเอกสาร'],'版本号':['Version number','หมายเลขรุ่น'],'文件SHA256':['File SHA256','SHA256 ของไฟล์'],'审核ID':['Review ID','รหัสการตรวจ'],'审核时间':['Review time','เวลาตรวจ'],'标准版本ID':['Standard version ID','รหัสรุ่นมาตรฐาน'],'意见ID':['Finding ID','รหัสข้อสังเกต'],'标题':['Title','หัวข้อ'],'原风险等级':['Original risk level','ระดับความเสี่ยงเดิม'],'处置状态':['Disposition status','สถานะการดำเนินการ'],'记录人':['Recorded by','ผู้บันทึก'],'处置理由':['Disposition reason','เหตุผลในการดำเนินการ'],'处置时间':['Disposition time','เวลาดำเนินการ'],'意见来源':['Finding origin','ที่มาของข้อสังเกต'],'来源ID':['Source ID','รหัสแหล่งข้อมูล'],'报告快照SHA256':['Report snapshot SHA256','SHA256 ของสแนปช็อตรายงาน'],
+'文档无期间审核':['Document with no review in period','เอกสารที่ไม่มีการตรวจในช่วงเวลา'],'审核无已保存意见':['Review with no saved findings','การตรวจที่ไม่มีข้อสังเกตที่บันทึกไว้'],'审核意见':['Review finding','ข้อสังเกตจากการตรวจ'],
+'内部审核资料    第 ':['Internal review material    Page ','เอกสารตรวจภายใน    หน้า '],' 页':['',''],
+};
+export function reportLabel(text: string, language: ReportLanguage): string { return language==='zh'?text:vocabulary[text]?.[language==='en'?0:1]??text; }
+export function fixedReportTranslation(text:string,language:Exclude<ReportLanguage,'zh'>):string|null{return vocabulary[text]?.[language==='en'?0:1]??null;}

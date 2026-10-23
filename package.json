@@ -1,0 +1,118 @@
+{
+  "name": "law-agent-desktop",
+  "version": "0.3.0",
+  "private": true,
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "description": "Local-first contract review, drafting, and reporting workbench with multilingual support",
+  "type": "module",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "npm run typecheck && electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "smoke:desktop": "npm run build && node --import tsx scripts/smoke-desktop.mjs",
+    "smoke:retrieval": "npm run build && node --import tsx scripts/smoke-retrieval.mjs",
+    "smoke:official": "npm run build && node --import tsx scripts/smoke-official.mjs",
+    "smoke:official-ui": "npm run build && node --import tsx scripts/smoke-official-ui.mjs",
+    "smoke:codex": "npm run build && node --import tsx scripts/smoke-codex.mjs",
+    "smoke:codex-ui": "npm run build && node --import tsx scripts/smoke-codex-ui.mjs",
+    "probe:docx": "node --import tsx scripts/probe-docx-patching.mjs",
+    "smoke:changes": "npm run build && node --import tsx scripts/smoke-changes-ui.mjs",
+    "smoke:editable-copy": "npm run build && node --import tsx scripts/smoke-editable-copy-ui.mjs",
+    "probe:editable-docx": "node --import tsx scripts/probe-editable-docx.mjs",
+    "probe:complex-docx": "node --import tsx scripts/probe-complex-docx.mjs",
+    "smoke:complex-changes": "npm run build && node --import tsx scripts/smoke-complex-changes-ui.mjs",
+    "probe:tracked-docx": "node --import tsx scripts/probe-tracked-docx.mjs",
+    "probe:generated-contracts": "node --import tsx scripts/probe-generated-contracts.mjs",
+    "smoke:authoring": "npm run build && node --import tsx scripts/smoke-authoring-ui.mjs",
+    "smoke:assurance": "npm run build && node --import tsx scripts/smoke-assurance-ui.mjs",
+    "probe:knowledge": "node scripts/probe-knowledge-runtimes.mjs",
+    "smoke:knowledge": "npm run build && node --import tsx scripts/smoke-local-knowledge.mjs",
+    "smoke:setup": "npm run build && node --import tsx scripts/smoke-setup.mjs",
+    "dev:web": "vite --config vite.preview.config.ts --host 127.0.0.1",
+    "pack:win": "npm run build && electron-builder --win nsis zip --x64",
+    "pack:mac": "npm run build && electron-builder --mac dir",
+    "probe:reporting": "node --import tsx scripts/probe-reporting.mjs",
+    "probe:conversion": "node --import tsx scripts/probe-document-conversion.mjs",
+    "node:knowledge": "npm run build && node out/main/index-node.js",
+    "smoke:workspace": "npm run build && node --import tsx scripts/smoke-workspace-ui.mjs",
+    "smoke:report-conversion": "npm run build && node --import tsx scripts/smoke-report-conversion-ui.mjs",
+    "verify:release": "node scripts/verify-release-resources.mjs --runtime",
+    "prepare:public": "node scripts/prepare-public-source.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "1.0.13",
+    "fast-xml-parser": "5.11.2",
+    "jszip": "3.10.2",
+    "lucide-react": "1.61.0",
+    "pdfjs-dist": "6.4.299",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "sql.js": "1.15.1",
+    "ssh2-sftp-client": "12.1.1",
+    "tesseract.js": "7.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/sql.js": "1.4.11",
+    "@types/ssh2-sftp-client": "9.0.6",
+    "@vitejs/plugin-react": "6.1.2",
+    "electron": "45.0.0",
+    "electron-builder": "26.15.3",
+    "electron-vite": "6.0.0",
+    "playwright": "1.64.1",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.5"
+  },
+  "build": {
+    "appId": "com.lawagent.desktop",
+    "productName": "合同工作台",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/sql.js/dist/*.wasm",
+      "node_modules/@napi-rs/**/*",
+      "node_modules/tesseract.js/**/*",
+      "node_modules/tesseract.js-core/**/*",
+      "node_modules/regenerator-runtime/**/*",
+      "node_modules/is-url/**/*",
+      "node_modules/bmp-js/**/*",
+      "node_modules/wasm-feature-detect/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "signAndEditExecutable": false
+    },
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false,
+      "createDesktopShortcut": true
+    }
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pulinnsann/lawAgent.git"
+  }
+}

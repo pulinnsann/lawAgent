@@ -1,0 +1,9 @@
+.model-settings-fields { margin: 0; padding: 0; border: 0; min-width: 0; }
+.model-settings-panel .codex-quick-connect { margin: -3px 0 18px; max-width: 100%; white-space: normal; }
+.codex-connection-note { display: flex; align-items: flex-start; gap: 9px; padding: 12px; border: 1px solid #dfe9d8; border-radius: 6px; background: #f5f9f0; margin-bottom: 19px; color: #748966; font-size: 10px; line-height: 1.85; min-width: 0; }
+.codex-connection-note > svg { margin-top: 2px; }
+.codex-connection-note > div { min-width: 0; }
+.codex-connection-note strong { font-weight: 550; color: #5c7750; }
+.codex-connection-note p { margin-top: 4px; overflow-wrap: anywhere; }
+.codex-connection-note code { font-size: 10px; }
+.model-settings-panel .codex-budget-note { margin: -3px 0 18px; overflow-wrap: anywhere; }

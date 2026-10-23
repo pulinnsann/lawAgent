@@ -1,0 +1,8 @@
+import { useI18n } from './i18n';
+import type { TaskExperienceRequirement } from '../../shared/library';
+export default function TaskRequirementsEditor({value,onChange,disabled}:{value:TaskExperienceRequirement[];onChange:(next:TaskExperienceRequirement[])=>void;disabled:boolean}){
+  const { t, translateMessage, dateLocale } = useI18n();
+
+ const edit=(id:string,patch:Partial<TaskExperienceRequirement>)=>onChange(value.map(item=>item.id===id?{...item,...patch}:item));
+ return <details className="task-requirements"><summary>{t("本次任务的特别要求（可选） ·")}{value.length}{t("项")}</summary><p>{t("填写与经验配置一致的冲突键，以便解释本次要求与项目、企业和个人偏好的取舍。商业偏好不能放宽法律约束。")}</p>{value.map(item=><fieldset disabled={disabled} key={item.id}><label>{t("冲突键")}<input aria-label={t("任务要求冲突键")} maxLength={100} value={item.conflictKey} placeholder={t("例如 payment_period")} onChange={e=>edit(item.id,{conflictKey:e.target.value})}/></label><label>{t("处理方式")}<select aria-label={t("任务要求处理方式")} value={item.effect} onChange={e=>edit(item.id,{effect:e.target.value as TaskExperienceRequirement['effect']})}><option value="supplement">{t("补充要求")}</option><option value="tighten">{t("收紧商业条件")}</option><option value="relax">{t("放宽商业条件")}</option></select></label><label>{t("具体要求")}<textarea aria-label={t("任务特别要求")} rows={2} maxLength={4000} value={item.content} onChange={e=>edit(item.id,{content:e.target.value})}/></label><button type="button" className="text-button" onClick={()=>onChange(value.filter(v=>v.id!==item.id))}>{t("移除此项")}</button></fieldset>)}<button type="button" className="text-button" disabled={disabled||value.length>=30} onClick={()=>onChange([...value,{id:crypto.randomUUID(),conflictKey:'',content:'',effect:'supplement'}])}>{t("添加任务要求")}</button></details>;
+}

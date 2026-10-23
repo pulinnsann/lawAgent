@@ -1,0 +1,9 @@
+import { useI18n } from './i18n';
+import type { LibraryScope } from '../../shared/library';
+const types = {procurement:'采购',service:'服务',other:'其他'};
+const roles = {buyer:'采购方',seller:'供应方',service_provider:'服务提供方',service_recipient:'服务接受方',other:'其他'};
+export function ScopeFields({ value, update }: { value: LibraryScope; update: (value: LibraryScope) => void }) {
+  const { t, translateMessage, dateLocale } = useI18n();
+
+  return <fieldset className="library-scope"><legend>{t("适用范围")}</legend><label className="field"><span>{t("范围")}</span><select aria-label={t("经验适用范围")} value={value.level} onChange={event => update({ ...value, level: event.target.value as LibraryScope['level'], projectId: event.target.value === 'project' ? '' : null })}><option value="personal">{t("本机个人")}</option><option value="enterprise">{t("本工作空间企业")}</option><option value="project">{t("指定项目")}</option></select></label>{value.level === 'project' && <label className="field"><span>{t("项目标识（须与审核项目一致）")}</span><input value={value.projectId ?? ''} maxLength={120} onChange={event => update({ ...value, projectId: event.target.value })} /></label>}<div className="library-options">{Object.entries(types).map(([key, label]) => <label key={key}><input type="checkbox" checked={value.contractTypes.includes(key as keyof typeof types)} onChange={event => update({ ...value, contractTypes: event.target.checked ? [...value.contractTypes, key as keyof typeof types] : value.contractTypes.filter(item => item !== key) })} />{t(label)}</label>)}</div><div className="library-options">{Object.entries(roles).map(([key, label]) => <label key={key}><input type="checkbox" checked={value.partyRoles.includes(key as keyof typeof roles)} onChange={event => update({ ...value, partyRoles: event.target.checked ? [...value.partyRoles, key as keyof typeof roles] : value.partyRoles.filter(item => item !== key) })} />{t(label)}</label>)}</div></fieldset>;
+}

@@ -1,0 +1,1210 @@
+{
+  "中文": {
+    "en": "Chinese",
+    "th": "ภาษาจีน"
+  },
+  "英文": {
+    "en": "English",
+    "th": "ภาษาอังกฤษ"
+  },
+  "泰文": {
+    "en": "Thai",
+    "th": "ภาษาไทย"
+  },
+  "多语言": {
+    "en": "Multilingual",
+    "th": "หลายภาษา"
+  },
+  "待识别": {
+    "en": "Not identified",
+    "th": "ยังไม่ระบุภาษา"
+  },
+  "高风险": {
+    "en": "High risk",
+    "th": "ความเสี่ยงสูง"
+  },
+  "中风险": {
+    "en": "Medium risk",
+    "th": "ความเสี่ยงปานกลาง"
+  },
+  "低风险": {
+    "en": "Low risk",
+    "th": "ความเสี่ยงต่ำ"
+  },
+  "待判断": {
+    "en": "Unrated",
+    "th": "ยังไม่ประเมิน"
+  },
+  "法律问题": {
+    "en": "Legal issue",
+    "th": "ประเด็นทางกฎหมาย"
+  },
+  "商业风险": {
+    "en": "Commercial risk",
+    "th": "ความเสี่ยงทางธุรกิจ"
+  },
+  "履约事项": {
+    "en": "Performance issue",
+    "th": "ประเด็นการปฏิบัติตามสัญญา"
+  },
+  "采购合同": {
+    "en": "Procurement contract",
+    "th": "สัญญาจัดซื้อ"
+  },
+  "服务合同": {
+    "en": "Service contract",
+    "th": "สัญญาบริการ"
+  },
+  "其他业务合同": {
+    "en": "Other business contract",
+    "th": "สัญญาธุรกิจอื่น"
+  },
+  "采购方 / 买方": {
+    "en": "Purchaser / buyer",
+    "th": "ผู้จัดซื้อ / ผู้ซื้อ"
+  },
+  "供应方 / 卖方": {
+    "en": "Supplier / seller",
+    "th": "ผู้จัดหา / ผู้ขาย"
+  },
+  "服务提供方": {
+    "en": "Service provider",
+    "th": "ผู้ให้บริการ"
+  },
+  "服务接受方": {
+    "en": "Service recipient",
+    "th": "ผู้รับบริการ"
+  },
+  "其他立场": {
+    "en": "Other role",
+    "th": "บทบาทอื่น"
+  },
+  "审慎偏好": {
+    "en": "Cautious preference",
+    "th": "เน้นความรอบคอบ"
+  },
+  "平衡偏好": {
+    "en": "Balanced preference",
+    "th": "เน้นความสมดุล"
+  },
+  "务实偏好": {
+    "en": "Pragmatic preference",
+    "th": "เน้นการดำเนินธุรกรรม"
+  },
+  "等待处理": {
+    "en": "Waiting",
+    "th": "กำลังรอดำเนินการ"
+  },
+  "准备合同内容": {
+    "en": "Preparing contract content",
+    "th": "กำลังเตรียมเนื้อหาสัญญา"
+  },
+  "分析合同条款": {
+    "en": "Analyzing contract clauses",
+    "th": "กำลังวิเคราะห์ข้อสัญญา"
+  },
+  "核验输出与原文定位": {
+    "en": "Validating output and source locations",
+    "th": "กำลังตรวจสอบผลลัพธ์และตำแหน่งต้นฉบับ"
+  },
+  "保存审核结果": {
+    "en": "Saving review results",
+    "th": "กำลังบันทึกผลการตรวจสอบ"
+  },
+  "审核完成": {
+    "en": "Review complete",
+    "th": "ตรวจสอบเสร็จแล้ว"
+  },
+  "执行本地规则检查": {
+    "en": "Running local rule checks",
+    "th": "กำลังตรวจตามกฎในเครื่อง"
+  },
+  "等待模型响应": {
+    "en": "Waiting for model response",
+    "th": "กำลังรอคำตอบจากโมเดล"
+  },
+  "解析文档": {
+    "en": "Parsing document",
+    "th": "กำลังอ่านโครงสร้างเอกสาร"
+  },
+  "已取消": {
+    "en": "Cancelled",
+    "th": "ยกเลิกแล้ว"
+  },
+  "审核任务失败，请检查配置后重试。": {
+    "en": "Review failed. Check the configuration and retry.",
+    "th": "การตรวจสอบล้มเหลว โปรดตรวจการตั้งค่าแล้วลองใหม่"
+  },
+  "已启用": {
+    "en": "Enabled",
+    "th": "เปิดใช้งานแล้ว"
+  },
+  "待配置": {
+    "en": "Configuration needed",
+    "th": "ต้องตั้งค่า"
+  },
+  "已关闭": {
+    "en": "Disabled",
+    "th": "ปิดใช้งานแล้ว"
+  },
+  "未配置": {
+    "en": "Not configured",
+    "th": "ยังไม่ได้ตั้งค่า"
+  },
+  "官方＋搜索": {
+    "en": "Official + search",
+    "th": "แหล่งทางการ + การค้นหา"
+  },
+  "官方已启用": {
+    "en": "Official sources enabled",
+    "th": "เปิดแหล่งทางการแล้ว"
+  },
+  "已暂缓": {
+    "en": "Deferred",
+    "th": "พักการใช้งาน"
+  },
+  "样例已加载。可先查看原文，再运行本地规则检查。": {
+    "en": "Sample loaded. Read the original, then run local checks.",
+    "th": "โหลดตัวอย่างแล้ว อ่านต้นฉบับก่อนแล้วจึงตรวจตามกฎในเครื่อง"
+  },
+  "合同已导入，请确认审核背景后开始。": {
+    "en": "Contract imported. Confirm the review context before starting.",
+    "th": "นำเข้าสัญญาแล้ว โปรดยืนยันบริบทก่อนเริ่มตรวจสอบ"
+  },
+  "请先配置模型连接，再开始模型审核。": {
+    "en": "Configure a model connection before starting a model review.",
+    "th": "โปรดตั้งค่าการเชื่อมต่อโมเดลก่อนเริ่มตรวจสอบด้วยโมเดล"
+  },
+  "请先选择一份审核结果。": {
+    "en": "Select a review result first.",
+    "th": "โปรดเลือกผลการตรวจสอบก่อน"
+  },
+  "收起合同列表": {
+    "en": "Collapse contract list",
+    "th": "ย่อรายการสัญญา"
+  },
+  "合同导航": {
+    "en": "Contract navigation",
+    "th": "เมนูสัญญา"
+  },
+  "合同工作台": {
+    "en": "Contract Workbench",
+    "th": "พื้นที่ทำงานสัญญา"
+  },
+  "收起导航": {
+    "en": "Collapse navigation",
+    "th": "ย่อเมนู"
+  },
+  "个人工作空间": {
+    "en": "Personal workspace",
+    "th": "พื้นที่ทำงานส่วนบุคคล"
+  },
+  "本地": {
+    "en": "Local",
+    "th": "ในเครื่อง"
+  },
+  "正在导入…": {
+    "en": "Importing…",
+    "th": "กำลังนำเข้า…"
+  },
+  "导入合同": {
+    "en": "Import contract",
+    "th": "นำเข้าสัญญา"
+  },
+  "描述生成合同": {
+    "en": "Draft from a description",
+    "th": "ร่างสัญญาจากคำอธิบาย"
+  },
+  "企业审核标准": {
+    "en": "Enterprise review standards",
+    "th": "มาตรฐานการตรวจสอบขององค์กร"
+  },
+  "功能中心": {
+    "en": "Feature center",
+    "th": "ศูนย์ฟังก์ชัน"
+  },
+  "合同文件": {
+    "en": "Contract files",
+    "th": "ไฟล์สัญญา"
+  },
+  "已导入的合同": {
+    "en": "Imported contracts",
+    "th": "สัญญาที่นำเข้าแล้ว"
+  },
+  "正在读取工作空间": {
+    "en": "Loading workspace",
+    "th": "กำลังโหลดพื้นที่ทำงาน"
+  },
+  "已有检查结果": {
+    "en": "Review available",
+    "th": "มีผลการตรวจสอบแล้ว"
+  },
+  "待审核": {
+    "en": "Awaiting review",
+    "th": "รอการตรวจสอบ"
+  },
+  "还没有合同文件": {
+    "en": "No contract files yet",
+    "th": "ยังไม่มีไฟล์สัญญา"
+  },
+  "导入后，文件和审核记录": {
+    "en": "Imported files and review records",
+    "th": "ไฟล์และผลการตรวจสอบที่นำเข้า"
+  },
+  "会保存在当前工作空间": {
+    "en": "are saved in this workspace",
+    "th": "จะบันทึกในพื้นที่ทำงานนี้"
+  },
+  "加载演示样例": {
+    "en": "Load demonstration sample",
+    "th": "โหลดตัวอย่างสาธิต"
+  },
+  "资料连接": {
+    "en": "Data connections",
+    "th": "การเชื่อมต่อข้อมูล"
+  },
+  "资料连接设置": {
+    "en": "Data connection settings",
+    "th": "ตั้งค่าการเชื่อมต่อข้อมูล"
+  },
+  "设置": {
+    "en": "Settings",
+    "th": "การตั้งค่า"
+  },
+  "企业知识库": {
+    "en": "Enterprise knowledge base",
+    "th": "ฐานความรู้ขององค์กร"
+  },
+  "互联网检索": {
+    "en": "Internet retrieval",
+    "th": "การค้นหาบนอินเทอร์เน็ต"
+  },
+  "预览数据仅保留在本次页面": {
+    "en": "Preview data lasts only for this page session",
+    "th": "ข้อมูลตัวอย่างเก็บเฉพาะเซสชันหน้านี้"
+  },
+  "合同与审核记录保存在本机": {
+    "en": "Contracts and review records are stored locally",
+    "th": "สัญญาและผลการตรวจสอบเก็บในเครื่อง"
+  },
+  "模型设置": {
+    "en": "Model settings",
+    "th": "ตั้งค่าโมเดล"
+  },
+  "展开合同列表": {
+    "en": "Expand contract list",
+    "th": "ขยายรายการสัญญา"
+  },
+  "工作空间": {
+    "en": "Workspace",
+    "th": "พื้นที่ทำงาน"
+  },
+  "合同审核": {
+    "en": "Contract review",
+    "th": "การตรวจสอบสัญญา"
+  },
+  "界面语言": {
+    "en": "Interface language",
+    "th": "ภาษาของส่วนติดต่อ"
+  },
+  "简体中文": {
+    "en": "Simplified Chinese",
+    "th": "简体中文"
+  },
+  "浏览器界面预览": {
+    "en": "Browser preview",
+    "th": "ตัวอย่างในเบราว์เซอร์"
+  },
+  "本地工作台": {
+    "en": "Local workbench",
+    "th": "พื้นที่ทำงานในเครื่อง"
+  },
+  "读取配置…": {
+    "en": "Reading configuration…",
+    "th": "กำลังอ่านการตั้งค่า…"
+  },
+  "环境与知识库配置": {
+    "en": "Environment and knowledge setup",
+    "th": "ตั้งค่าสภาพแวดล้อมและฐานความรู้"
+  },
+  "让每一次审核，有据可循。": {
+    "en": "Keep every review traceable.",
+    "th": "ให้ทุกการตรวจสอบมีหลักฐานที่ตรวจสอบย้อนกลับได้"
+  },
+  "阅读原文，梳理风险，把判断留给充分的信息。": {
+    "en": "Read the source, identify risks, and make informed decisions.",
+    "th": "อ่านต้นฉบับ ระบุความเสี่ยง และตัดสินใจบนข้อมูลที่เพียงพอ"
+  },
+  "中国大陆法律": {
+    "en": "Mainland China law",
+    "th": "กฎหมายจีนแผ่นดินใหญ่"
+  },
+  "中 · 英 · 泰文档": {
+    "en": "Chinese · English · Thai documents",
+    "th": "เอกสารจีน · อังกฤษ · ไทย"
+  },
+  "此页面不调用模型、不读取本机合同。可加载样例体验界面与本地文本检查。": {
+    "en": "This preview makes no model calls and reads no local contracts. Load a sample to explore the interface and local text checks.",
+    "th": "ตัวอย่างนี้ไม่เรียกโมเดลหรืออ่านสัญญาในเครื่อง โหลดตัวอย่างเพื่อทดลองส่วนติดต่อและการตรวจข้อความ"
+  },
+  "关闭提示": {
+    "en": "Dismiss notice",
+    "th": "ปิดข้อความแจ้ง"
+  },
+  "第一次使用，从本机配置开始": {
+    "en": "Start by configuring your computer",
+    "th": "เริ่มต้นด้วยการตั้งค่าบนเครื่อง"
+  },
+  "桌面版自带运行环境。点击即可检查环境、选择资料并建立自己的本地知识库。": {
+    "en": "The desktop app includes its runtime. Check the environment, choose documents, and build your own local knowledge base.",
+    "th": "แอปเดสก์ท็อปมีสภาพแวดล้อมการทำงานในตัว ตรวจสภาพแวดล้อม เลือกเอกสาร และสร้างฐานความรู้ในเครื่องได้"
+  },
+  "开始配置": {
+    "en": "Start setup",
+    "th": "เริ่มตั้งค่า"
+  },
+  "确认审核背景": {
+    "en": "Confirm review context",
+    "th": "ยืนยันบริบทการตรวจสอบ"
+  },
+  "背景越明确，分析越有针对性": {
+    "en": "Clear context makes the analysis more relevant",
+    "th": "บริบทที่ชัดเจนช่วยให้วิเคราะห์ได้ตรงประเด็น"
+  },
+  "合同类型": {
+    "en": "Contract type",
+    "th": "ประเภทสัญญา"
+  },
+  "我方立场": {
+    "en": "Our role",
+    "th": "บทบาทของเรา"
+  },
+  "商业审核偏好": {
+    "en": "Commercial review preference",
+    "th": "แนวทางการตรวจด้านธุรกิจ"
+  },
+  "仅调整商业关注与建议，不代表改变法律判断": {
+    "en": "Adjusts commercial attention and suggestions, without changing legal assessments",
+    "th": "ปรับประเด็นธุรกิจและข้อเสนอแนะ โดยไม่เปลี่ยนการประเมินทางกฎหมาย"
+  },
+  "平衡 · 关注主要风险": {
+    "en": "Balanced · focus on major risks",
+    "th": "สมดุล · เน้นความเสี่ยงหลัก"
+  },
+  "审慎 · 提供更多提示": {
+    "en": "Cautious · provide more observations",
+    "th": "รอบคอบ · เพิ่มข้อสังเกต"
+  },
+  "务实 · 聚焦交易推进": {
+    "en": "Pragmatic · focus on transaction progress",
+    "th": "เชิงปฏิบัติ · เน้นความคืบหน้าธุรกรรม"
+  },
+  "提交中…": {
+    "en": "Submitting…",
+    "th": "กำลังส่ง…"
+  },
+  "开始模型审核": {
+    "en": "Start model review",
+    "th": "เริ่มตรวจสอบด้วยโมเดล"
+  },
+  "本地规则检查": {
+    "en": "Local rule checks",
+    "th": "ตรวจตามกฎในเครื่อง"
+  },
+  "本次审核标准": {
+    "en": "Standards for this review",
+    "th": "มาตรฐานสำหรับการตรวจครั้งนี้"
+  },
+  "基础审核标准": {
+    "en": "Basic review standards",
+    "th": "มาตรฐานการตรวจสอบพื้นฐาน"
+  },
+  "· 已发布 v": {
+    "en": "· Published v",
+    "th": "· เผยแพร่ v"
+  },
+  "项目标识（可选）": {
+    "en": "Project ID (optional)",
+    "th": "รหัสโครงการ (ไม่บังคับ)"
+  },
+  "审核项目标识": {
+    "en": "Review project ID",
+    "th": "รหัสโครงการที่ตรวจสอบ"
+  },
+  "与项目经验的标识一致": {
+    "en": "Match the ID used by project experience",
+    "th": "ใช้รหัสเดียวกับประสบการณ์ของโครงการ"
+  },
+  "超长合同自动分批并尝试跨批综合": {
+    "en": "Batch long contracts and attempt cross-batch synthesis",
+    "th": "แบ่งสัญญายาวเป็นชุดและลองสังเคราะห์ข้ามชุด"
+  },
+  "补充交易背景": {
+    "en": "Add transaction context",
+    "th": "เพิ่มบริบทธุรกรรม"
+  },
+  "业务目的、付款安排或特别关注事项": {
+    "en": "Business purpose, payment terms, or special concerns",
+    "th": "วัตถุประสงค์ธุรกิจ เงื่อนไขชำระเงิน หรือข้อกังวลเฉพาะ"
+  },
+  "交易背景": {
+    "en": "Transaction context",
+    "th": "บริบทธุรกรรม"
+  },
+  "例如：我方采购年度系统维护服务，重点关注验收条件、服务中断责任及数据保密。": {
+    "en": "For example: annual system maintenance procurement; focus on acceptance, service interruptions, and data confidentiality.",
+    "th": "เช่น จัดซื้อบริการบำรุงรักษาระบบรายปี เน้นการตรวจรับ ความรับผิดเมื่อบริการหยุด และการรักษาความลับข้อมูล"
+  },
+  "这是本次审核的事实背景。商业偏好不会替代法律适用判断。": {
+    "en": "These are the facts for this review. Commercial preferences do not replace legal applicability assessments.",
+    "th": "ข้อมูลนี้เป็นข้อเท็จจริงสำหรับการตรวจครั้งนี้ แนวทางธุรกิจไม่แทนการพิจารณาการใช้กฎหมาย"
+  },
+  "审核资料、流程与来源核验": {
+    "en": "Review information, workflow, and source verification",
+    "th": "ข้อมูล ขั้นตอน และการตรวจแหล่งอ้างอิง"
+  },
+  "检查结果已保存": {
+    "en": "Check results saved",
+    "th": "บันทึกผลการตรวจแล้ว"
+  },
+  "任务已取消": {
+    "en": "Task cancelled",
+    "th": "ยกเลิกงานแล้ว"
+  },
+  "任务未完成": {
+    "en": "Task incomplete",
+    "th": "งานยังไม่เสร็จ"
+  },
+  "可继续阅读原文，结果会在完成后自动更新。": {
+    "en": "You can keep reading; results update when the review finishes.",
+    "th": "อ่านต้นฉบับต่อได้ ผลลัพธ์จะอัปเดตเมื่อตรวจสอบเสร็จ"
+  },
+  "开始于 {v0}": {
+    "en": "Started at {v0}",
+    "th": "เริ่มเมื่อ {v0}"
+  },
+  "取消中…": {
+    "en": "Cancelling…",
+    "th": "กำลังยกเลิก…"
+  },
+  "取消任务": {
+    "en": "Cancel task",
+    "th": "ยกเลิกงาน"
+  },
+  "模型输出进度 · 已收到": {
+    "en": "Model output progress · received",
+    "th": "ความคืบหน้าผลโมเดล · ได้รับแล้ว"
+  },
+  "字符": {
+    "en": "characters",
+    "th": "อักขระ"
+  },
+  "未校验的有限预览，完整审核保存后再使用。": {
+    "en": "Limited, unvalidated preview. Use the completed, saved review.",
+    "th": "ตัวอย่างบางส่วนยังไม่ตรวจสอบ โปรดใช้ผลที่เสร็จและบันทึกแล้ว"
+  },
+  "等待模型输出…": {
+    "en": "Waiting for model output…",
+    "th": "กำลังรอผลจากโมเดล…"
+  },
+  "合同原文": {
+    "en": "Original contract",
+    "th": "ต้นฉบับสัญญา"
+  },
+  "个原文块": {
+    "en": "source blocks",
+    "th": "บล็อกต้นฉบับ"
+  },
+  "查找合同原文": {
+    "en": "Find in original contract",
+    "th": "ค้นหาในต้นฉบับสัญญา"
+  },
+  "查找原文内容…": {
+    "en": "Search original text…",
+    "th": "ค้นหาข้อความต้นฉบับ…"
+  },
+  "清空搜索": {
+    "en": "Clear search",
+    "th": "ล้างการค้นหา"
+  },
+  "{v0} 处": {
+    "en": "{v0} matches",
+    "th": "พบ {v0} แห่ง"
+  },
+  "原文只读": {
+    "en": "Read-only original",
+    "th": "ต้นฉบับอ่านอย่างเดียว"
+  },
+  "文档解析不完整，请核对覆盖范围": {
+    "en": "Document parsing is incomplete; check coverage",
+    "th": "อ่านเอกสารได้ไม่ครบ โปรดตรวจขอบเขตที่ครอบคลุม"
+  },
+  "{v0} 项文档提示": {
+    "en": "{v0} document notices",
+    "th": "ข้อสังเกตเอกสาร {v0} รายการ"
+  },
+  "第 {v0} 页": {
+    "en": "Page {v0}",
+    "th": "หน้า {v0}"
+  },
+  "段落 {v0}": {
+    "en": "Paragraph {v0}",
+    "th": "ย่อหน้า {v0}"
+  },
+  "Word自动编号": {
+    "en": "Word automatic numbering",
+    "th": "เลขลำดับอัตโนมัติของ Word"
+  },
+  "没有找到对应内容": {
+    "en": "No matching content",
+    "th": "ไม่พบเนื้อหาที่ตรงกัน"
+  },
+  "显示全部原文": {
+    "en": "Show all original text",
+    "th": "แสดงต้นฉบับทั้งหมด"
+  },
+  "原始文件保留，审核意见与原文位置关联": {
+    "en": "Original files are preserved; opinions link to source locations",
+    "th": "เก็บไฟล์ต้นฉบับและเชื่อมข้อสังเกตกับตำแหน่งต้นฉบับ"
+  },
+  "从一份合同开始": {
+    "en": "Start with a contract",
+    "th": "เริ่มจากสัญญาหนึ่งฉบับ"
+  },
+  "导入 Word 或 PDF 文件，": {
+    "en": "Import a Word or PDF file,",
+    "th": "นำเข้าไฟล์ Word หรือ PDF"
+  },
+  "在这里阅读条款、定位审核意见。": {
+    "en": "then read clauses and locate review findings here.",
+    "th": "แล้วอ่านข้อสัญญาและดูตำแหน่งข้อสังเกตได้ที่นี่"
+  },
+  "选择合同文件": {
+    "en": "Choose contract file",
+    "th": "เลือกไฟล์สัญญา"
+  },
+  "先加载一份演示样例": {
+    "en": "Load a demonstration sample first",
+    "th": "โหลดตัวอย่างสาธิตก่อน"
+  },
+  "审核结果": {
+    "en": "Review results",
+    "th": "ผลการตรวจสอบ"
+  },
+  "导出中…": {
+    "en": "Exporting…",
+    "th": "กำลังส่งออก…"
+  },
+  "导出报告": {
+    "en": "Export report",
+    "th": "ส่งออกรายงาน"
+  },
+  "模型分析": {
+    "en": "Model analysis",
+    "th": "การวิเคราะห์ด้วยโมเดล"
+  },
+  "选择历史检查结果": {
+    "en": "Select a previous review result",
+    "th": "เลือกผลการตรวจสอบก่อนหน้า"
+  },
+  "历史检查结果": {
+    "en": "Review history",
+    "th": "ประวัติการตรวจสอบ"
+  },
+  "模型审核": {
+    "en": "Model review",
+    "th": "การตรวจสอบด้วยโมเดล"
+  },
+  "本地检查": {
+    "en": "Local check",
+    "th": "การตรวจในเครื่อง"
+  },
+  "全部事项": {
+    "en": "All findings",
+    "th": "ข้อสังเกตทั้งหมด"
+  },
+  "原文覆盖": {
+    "en": "Source coverage",
+    "th": "ขอบเขตต้นฉบับที่ตรวจแล้ว"
+  },
+  "风险等级筛选": {
+    "en": "Filter risk level",
+    "th": "กรองระดับความเสี่ยง"
+  },
+  "全部": {
+    "en": "All",
+    "th": "ทั้งหมด"
+  },
+  "当前筛选下没有事项": {
+    "en": "No findings under this filter",
+    "th": "ไม่มีข้อสังเกตตามตัวกรองนี้"
+  },
+  "本次检查未返回风险事项": {
+    "en": "This check returned no risk findings",
+    "th": "การตรวจครั้งนี้ไม่พบข้อสังเกตความเสี่ยง"
+  },
+  "可以切换其他等级查看。": {
+    "en": "Choose another level to view more.",
+    "th": "เลือกระดับอื่นเพื่อดูเพิ่มเติม"
+  },
+  "请结合检查范围和限制判断，本结果不代表合同不存在风险。": {
+    "en": "Consider the scope and limitations. This result does not establish that the contract is risk-free.",
+    "th": "โปรดพิจารณาขอบเขตและข้อจำกัด ผลนี้ไม่ได้ยืนยันว่าสัญญาปราศจากความเสี่ยง"
+  },
+  "检查范围与限制": {
+    "en": "Coverage and limitations",
+    "th": "ขอบเขตและข้อจำกัด"
+  },
+  "知识库": {
+    "en": "Knowledge base",
+    "th": "ฐานความรู้"
+  },
+  "互联网": {
+    "en": "Internet",
+    "th": "อินเทอร์เน็ต"
+  },
+  "使用模型：": {
+    "en": "Model: ",
+    "th": "โมเดล: "
+  },
+  "耗时": {
+    "en": "Duration",
+    "th": "เวลาที่ใช้"
+  },
+  "秒": {
+    "en": "seconds",
+    "th": "วินาที"
+  },
+  " · 输入 {v0} tokens": {
+    "en": " · Input {v0} tokens",
+    "th": " · อินพุต {v0} โทเคน"
+  },
+  " · 输出 {v0} tokens": {
+    "en": " · Output {v0} tokens",
+    "th": " · เอาต์พุต {v0} โทเคน"
+  },
+  "审核意见将在这里呈现": {
+    "en": "Review findings appear here",
+    "th": "ข้อสังเกตจากการตรวจสอบจะแสดงที่นี่"
+  },
+  "确认我方立场和交易背景后，开始审核。": {
+    "en": "Confirm our role and transaction context, then start the review.",
+    "th": "ยืนยันบทบาทของเราและบริบทธุรกรรม แล้วเริ่มตรวจสอบ"
+  },
+  "导入合同并确认背景，开始第一次审核。": {
+    "en": "Import a contract and confirm context to start the first review.",
+    "th": "นำเข้าสัญญาและยืนยันบริบทเพื่อเริ่มตรวจครั้งแรก"
+  },
+  "定位到原文的风险事项": {
+    "en": "Risk findings linked to source text",
+    "th": "ข้อสังเกตความเสี่ยงที่เชื่อมกับต้นฉบับ"
+  },
+  "问题分析与修改建议": {
+    "en": "Issue analysis and suggested changes",
+    "th": "การวิเคราะห์ประเด็นและข้อเสนอแก้ไข"
+  },
+  "范围明确、可导出的审核报告": {
+    "en": "Exportable reports with a clear scope",
+    "th": "รายงานที่ส่งออกได้พร้อมขอบเขตชัดเจน"
+  },
+  "模型审核需要先配置 API。": {
+    "en": "Configure an API before model review.",
+    "th": "ตั้งค่า API ก่อนตรวจสอบด้วยโมเดล"
+  },
+  "本地规则检查独立运行，不调用模型。": {
+    "en": "Local rule checks run independently without a model.",
+    "th": "การตรวจตามกฎในเครื่องทำงานแยกโดยไม่เรียกโมเดล"
+  },
+  "长合同审核：": {
+    "en": "Long-contract review: ",
+    "th": "การตรวจสัญญายาว: "
+  },
+  "批": {
+    "en": "batches",
+    "th": "ชุด"
+  },
+  "已执行跨批综合，仍需人工核对关联问题。": {
+    "en": "Cross-batch synthesis ran; manually verify related issues.",
+    "th": "สังเคราะห์ข้ามชุดแล้ว โปรดตรวจประเด็นที่เกี่ยวข้องด้วยตนเอง"
+  },
+  "跨批综合受预算限制，相关问题需人工补核。": {
+    "en": "Cross-batch synthesis was budget-limited; related issues need manual review.",
+    "th": "การสังเคราะห์ข้ามชุดมีข้อจำกัดงบประมาณ ต้องตรวจประเด็นที่เกี่ยวข้องเพิ่มด้วยตนเอง"
+  },
+  "本次冻结": {
+    "en": "Frozen for this review: ",
+    "th": "ข้อมูลที่ตรึงสำหรับการตรวจครั้งนี้: "
+  },
+  "项已确认经验": {
+    "en": "approved experience entries",
+    "th": "รายการประสบการณ์ที่ยืนยันแล้ว"
+  },
+  "仅在对应适用范围复用；后续停用或修改不改变本次记录。": {
+    "en": "Reused only within scope; later disabling or edits do not change this record.",
+    "th": "ใช้ซ้ำเฉพาะขอบเขตที่กำหนด การปิดหรือแก้ไขภายหลังไม่เปลี่ยนบันทึกนี้"
+  },
+  "本次审核标准快照": {
+    "en": "Review standards snapshot",
+    "th": "ภาพบันทึกมาตรฐานการตรวจสอบ"
+  },
+  "审核时内容摘要：": {
+    "en": "Content digest at review time: ",
+    "th": "ค่าแฮชเนื้อหาเมื่อเริ่มตรวจ: "
+  },
+  "高风险处理建议：": {
+    "en": "Suggested high-risk handling: ",
+    "th": "แนวทางจัดการความเสี่ยงสูง: "
+  },
+  "升级处理": {
+    "en": "Escalate",
+    "th": "เสนอให้ตัดสินใจระดับสูงขึ้น"
+  },
+  "人工复核": {
+    "en": "Human review",
+    "th": "การตรวจสอบโดยบุคคล"
+  },
+  "，由人工决定，未自动改变状态。历史审核按当时版本保留；上方当前选择不改变这份报告。": {
+    "en": "; a person decides. No state was changed automatically. Historical reviews retain their original version; the selection above does not change this report.",
+    "th": "; ให้บุคคลเป็นผู้ตัดสินใจ ไม่มีการเปลี่ยนสถานะอัตโนมัติ ประวัติใช้เวอร์ชันเดิมและตัวเลือกด้านบนไม่เปลี่ยนรายงานนี้"
+  },
+  "本次未保存企业标准版本（基础审核或旧记录）。当前标准选择不会补写此历史报告。": {
+    "en": "No enterprise standard version was saved for this review (basic or legacy record). Current selections do not rewrite history.",
+    "th": "การตรวจนี้ไม่มีเวอร์ชันมาตรฐานองค์กรที่บันทึกไว้ (พื้นฐานหรือบันทึกเก่า) ตัวเลือกปัจจุบันไม่เขียนทับประวัติ"
+  },
+  "辅助分析 · 人工复核 · 保留依据": {
+    "en": "Assisted analysis · Human review · Traceable evidence",
+    "th": "การวิเคราะห์ช่วยเหลือ · บุคคลตรวจสอบ · หลักฐานตรวจย้อนกลับได้"
+  },
+  "生成的合同已导出并加入工作台，可继续审核。": {
+    "en": "Generated contract exported and added to the workbench for review.",
+    "th": "ส่งออกสัญญาที่สร้างและเพิ่มในพื้นที่ทำงานเพื่อให้ตรวจสอบแล้ว"
+  },
+  "关闭功能中心": {
+    "en": "Close feature center",
+    "th": "ปิดศูนย์ฟังก์ชัน"
+  },
+  "合同版本、审核资料、报告、经验与本地数据管理。": {
+    "en": "Contract versions, review information, reports, experience, and local data.",
+    "th": "เวอร์ชันสัญญา ข้อมูลการตรวจ รายงาน ประสบการณ์ และข้อมูลในเครื่อง"
+  },
+  "合同、项目与参考译文": {
+    "en": "Contracts, projects, and reference translations",
+    "th": "สัญญา โครงการ และคำแปลอ้างอิง"
+  },
+  "版本关联、归档、回收站和译文复核历史": {
+    "en": "Version links, archive, trash, and translation review history",
+    "th": "ความเชื่อมโยงเวอร์ชัน เก็บถาวร ถังขยะ และประวัติทบทวนคำแปล"
+  },
+  "审核资料与核验": {
+    "en": "Review information and verification",
+    "th": "ข้อมูลและการตรวจสอบประกอบการตรวจสัญญา"
+  },
+  "事实、假设、待确认问题、流程和来源人工核验": {
+    "en": "Facts, assumptions, pending questions, workflow, and human source verification",
+    "th": "ข้อเท็จจริง สมมติฐาน คำถามค้าง ขั้นตอน และการตรวจแหล่งอ้างอิงโดยบุคคล"
+  },
+  "双／三语条款对齐": {
+    "en": "Bilingual / trilingual clause alignment",
+    "th": "การจับคู่ข้อสัญญาสอง / สามภาษา"
+  },
+  "对应片段、优先文本约定和不一致待复核项": {
+    "en": "Corresponding passages, priority text, and discrepancies for review",
+    "th": "ข้อความคู่กัน ข้อตกลงภาษาที่มีผลเหนือกว่า และความแตกต่างที่ต้องทบทวน"
+  },
+  "模型运行与用量": {
+    "en": "Model runtime and usage",
+    "th": "การทำงานและการใช้งานโมเดล"
+  },
+  "能力、流式输出、预算、重试和调用台账": {
+    "en": "Capabilities, streaming, budgets, retries, and call ledger",
+    "th": "ความสามารถ สตรีม งบประมาณ การลองซ้ำ และบันทึกการเรียก"
+  },
+  "报告与工作汇总": {
+    "en": "Reports and work summaries",
+    "th": "รายงานและสรุปผลงาน"
+  },
+  "领导摘要、正式报告与跨合同统计": {
+    "en": "Executive summaries, formal reports, and cross-contract statistics",
+    "th": "สรุปผู้บริหาร รายงานทางการ และสถิติข้ามสัญญา"
+  },
+  "经验、模板与人工意见": {
+    "en": "Experience, templates, and human opinions",
+    "th": "ประสบการณ์ แม่แบบ และความเห็นของบุคคล"
+  },
+  "人工确认经验、模板起草和补充审核意见": {
+    "en": "Human-approved experience, template drafting, and supplemental opinions",
+    "th": "ประสบการณ์ที่บุคคลอนุมัติ การร่างจากแม่แบบ และความเห็นเพิ่มเติม"
+  },
+  "专业检索与远端知识库": {
+    "en": "Professional retrieval and remote knowledge",
+    "th": "การค้นหาเฉพาะทางและฐานความรู้ระยะไกล"
+  },
+  "MCP、SFTP、共享盘和远端索引节点": {
+    "en": "MCP, SFTP, shared drives, and remote index nodes",
+    "th": "MCP, SFTP, ไดรฟ์ร่วม และโหนดดัชนีระยะไกล"
+  },
+  "扫描件与 PDF 转换": {
+    "en": "Scans and PDF conversion",
+    "th": "เอกสารสแกนและการแปลง PDF"
+  },
+  "本机中英泰 OCR 与可修改 DOCX 副本": {
+    "en": "Local Chinese / English / Thai OCR and editable DOCX copies",
+    "th": "OCR จีน / อังกฤษ / ไทยในเครื่องและสำเนา DOCX ที่แก้ไขได้"
+  },
+  "数据备份与恢复": {
+    "en": "Data backup and restore",
+    "th": "สำรองและกู้คืนข้อมูล"
+  },
+  "备份、还原与可撤销的知识库清理": {
+    "en": "Backups, restoration, and reversible knowledge index cleanup",
+    "th": "สำรอง กู้คืน และล้างดัชนีความรู้แบบย้อนกลับได้"
+  },
+  "审核资料与核验窗口": {
+    "en": "Review information and verification window",
+    "th": "หน้าต่างข้อมูลและการตรวจสอบประกอบ"
+  },
+  "模型运行配置窗口": {
+    "en": "Model runtime settings window",
+    "th": "หน้าต่างตั้งค่าการทำงานโมเดล"
+  },
+  "报告与工作汇总窗口": {
+    "en": "Reports and work summaries window",
+    "th": "หน้าต่างรายงานและสรุปผลงาน"
+  },
+  "PDF 转换窗口": {
+    "en": "PDF conversion window",
+    "th": "หน้าต่างแปลง PDF"
+  },
+  "基础关键词提示": {
+    "en": "Basic keyword notice",
+    "th": "ข้อสังเกตจากคำสำคัญพื้นฐาน"
+  },
+  "企业标准命中": {
+    "en": "Enterprise standard match",
+    "th": "พบเงื่อนไขมาตรฐานองค์กร"
+  },
+  "程序核验": {
+    "en": "Programmatic check",
+    "th": "การตรวจด้วยโปรแกรม"
+  },
+  "定位原文": {
+    "en": "Locate source text",
+    "th": "ไปยังต้นฉบับ"
+  },
+  "查看候选原文": {
+    "en": "View candidate source",
+    "th": "ดูต้นฉบับที่คาดว่าเกี่ยวข้อง"
+  },
+  "定位对应原文": {
+    "en": "Locate matching original text",
+    "th": "ไปยังต้นฉบับที่ตรงกัน"
+  },
+  "查看候选原文；引文与原文未核验匹配": {
+    "en": "View candidate source; quote not verified against original",
+    "th": "ดูต้นฉบับที่คาดว่าเกี่ยวข้อง ยังไม่ยืนยันคำอ้างกับต้นฉบับ"
+  },
+  "未匹配到原文位置": {
+    "en": "No source location matched",
+    "th": "ไม่พบตำแหน่งต้นฉบับที่ตรงกัน"
+  },
+  "原文": {
+    "en": "Original text",
+    "th": "ข้อความต้นฉบับ"
+  },
+  "候选引文": {
+    "en": "Candidate quote",
+    "th": "คำอ้างที่รอตรวจ"
+  },
+  "引文与原文未核验匹配": {
+    "en": "Quote not verified against original",
+    "th": "ยังไม่ยืนยันคำอ้างกับต้นฉบับ"
+  },
+  "计算或核对式：": {
+    "en": "Calculation or check: ",
+    "th": "สูตรคำนวณหรือตรวจสอบ: "
+  },
+  "修改建议": {
+    "en": "Suggested change",
+    "th": "ข้อเสนอแก้ไข"
+  },
+  "法律依据 · 待核验": {
+    "en": "Legal basis · unverified",
+    "th": "ฐานกฎหมาย · ยังไม่ตรวจยืนยัน"
+  },
+  "引用资料": {
+    "en": "Referenced sources",
+    "th": "แหล่งอ้างอิง"
+  },
+  "项": {
+    "en": "items",
+    "th": "รายการ"
+  },
+  "条引用未能关联到本次取回的真实资料，请人工核对。": {
+    "en": "citations could not be linked to retrieved sources. Verify manually.",
+    "th": "คำอ้างอิงไม่เชื่อมกับแหล่งที่ค้นคืน โปรดตรวจด้วยตนเอง"
+  },
+  "拟定修改": {
+    "en": "Propose a change",
+    "th": "ร่างข้อเสนอแก้ไข"
+  },
+  "· 请结合原文复核": {
+    "en": "· Verify against the original",
+    "th": "· โปรดตรวจเทียบต้นฉบับ"
+  },
+  "原文位置未匹配": {
+    "en": "Source location unmatched",
+    "th": "ตำแหน่งต้นฉบับยังไม่ตรงกัน"
+  },
+  "我的模型连接": {
+    "en": "My model connection",
+    "th": "การเชื่อมต่อโมเดลของฉัน"
+  },
+  "本机 Codex": {
+    "en": "Local Codex",
+    "th": "Codex ในเครื่อง"
+  },
+  "请填写连接名称和模型名称；使用默认模型时填写 default。": {
+    "en": "Enter a connection name and model. Use default for the default model.",
+    "th": "ระบุชื่อการเชื่อมต่อและโมเดล ใช้ default สำหรับโมเดลเริ่มต้น"
+  },
+  "请填写连接名称、API 地址和模型名称。": {
+    "en": "Enter a connection name, API address, and model name.",
+    "th": "ระบุชื่อการเชื่อมต่อ ที่อยู่ API และชื่อโมเดล"
+  },
+  "最大输出 Tokens 需要是 256–32768 之间的整数。": {
+    "en": "Maximum output tokens must be an integer from 256 to 32768.",
+    "th": "โทเคนเอาต์พุตสูงสุดต้องเป็นจำนวนเต็มตั้งแต่ 256 ถึง 32768"
+  },
+  "上下文窗口 Tokens 需要是 4096–2000000 之间的整数。": {
+    "en": "Context window tokens must be an integer from 4096 to 2000000.",
+    "th": "โทเคนหน้าต่างบริบทต้องเป็นจำนวนเต็มตั้งแต่ 4096 ถึง 2000000"
+  },
+  "请求超时需要是 5–600 秒之间的整数。": {
+    "en": "Request timeout must be an integer from 5 to 600 seconds.",
+    "th": "เวลารอคำขอต้องเป็นจำนวนเต็มตั้งแต่ 5 ถึง 600 วินาที"
+  },
+  "配置仅暂存在界面预览中。没有检测本机 Codex、执行命令或发送模型请求；真实连接请在桌面应用中测试。": {
+    "en": "This configuration exists only in the preview. Codex was not inspected or executed and no model request was sent. Test real connections in the desktop app.",
+    "th": "การตั้งค่านี้มีเฉพาะตัวอย่าง ไม่ได้ตรวจหรือเรียก Codex และไม่ได้ส่งคำขอโมเดล ให้ทดสอบจริงในแอปเดสก์ท็อป"
+  },
+  "配置仅保存在本次界面预览中，没有发送模型请求。": {
+    "en": "Configuration saved only for this preview session. No model request was sent.",
+    "th": "บันทึกการตั้งค่าเฉพาะเซสชันตัวอย่าง ไม่มีการส่งคำขอโมเดล"
+  },
+  "Codex 配置已保存。连接将使用本机 Codex CLI 的登录状态，可先测试连接再开始审核。": {
+    "en": "Codex configuration saved. The connection uses your local Codex CLI login. Test it before reviewing.",
+    "th": "บันทึกการตั้งค่า Codex แล้ว จะใช้สถานะเข้าสู่ระบบ Codex CLI ในเครื่อง โปรดทดสอบก่อนตรวจสัญญา"
+  },
+  "模型配置已保存。密钥不会在界面回显。": {
+    "en": "Model configuration saved. The key is not displayed again.",
+    "th": "บันทึกการตั้งค่าโมเดลแล้ว จะไม่แสดงคีย์กลับ"
+  },
+  "关闭模型设置": {
+    "en": "Close model settings",
+    "th": "ปิดการตั้งค่าโมเดล"
+  },
+  "模型连接设置": {
+    "en": "Model connection settings",
+    "th": "ตั้งค่าการเชื่อมต่อโมเดล"
+  },
+  "使用本机已登录的 Codex": {
+    "en": "Use locally signed-in Codex",
+    "th": "ใช้ Codex ที่เข้าสู่ระบบแล้วในเครื่อง"
+  },
+  "使用你自己的模型连接": {
+    "en": "Use your own model connection",
+    "th": "ใช้การเชื่อมต่อโมเดลของคุณ"
+  },
+  "复用本机 Codex CLI 登录状态，合同及取回的资料片段将发送到该账户对应的模型服务。": {
+    "en": "Uses your local Codex CLI login. Contract and retrieved passages are sent to that account's model service.",
+    "th": "ใช้สถานะเข้าสู่ระบบ Codex CLI ในเครื่อง สัญญาและข้อความที่ค้นคืนจะส่งไปยังบริการโมเดลของบัญชีนั้น"
+  },
+  "连接云端 API、本机模型端点，或切换到本机 Codex。模型审核会发送合同和取回的资料片段。": {
+    "en": "Connect to a cloud API, local model endpoint, or local Codex. Model reviews send contract text and retrieved passages.",
+    "th": "เชื่อม API คลาวด์ โมเดลในเครื่อง หรือ Codex ในเครื่อง การตรวจด้วยโมเดลจะส่งข้อความสัญญาและข้อมูลที่ค้นคืน"
+  },
+  "当前是浏览器界面预览。不会检测或执行 Codex，也不会发送真实模型请求。": {
+    "en": "This is a browser preview. It does not inspect or execute Codex or send real model requests.",
+    "th": "นี่คือตัวอย่างในเบราว์เซอร์ ไม่ตรวจหรือเรียก Codex และไม่ส่งคำขอโมเดลจริง"
+  },
+  "连接方式": {
+    "en": "Connection method",
+    "th": "วิธีเชื่อมต่อ"
+  },
+  "模型连接方式": {
+    "en": "Model connection method",
+    "th": "วิธีเชื่อมต่อโมเดล"
+  },
+  "模型 API（云端 / 本机）": {
+    "en": "Model API (cloud / local)",
+    "th": "API โมเดล (คลาวด์ / ในเครื่อง)"
+  },
+  "本机 Codex（复用登录）": {
+    "en": "Local Codex (reuse login)",
+    "th": "Codex ในเครื่อง (ใช้การเข้าสู่ระบบเดิม)"
+  },
+  "使用本机 Codex": {
+    "en": "Use local Codex",
+    "th": "ใช้ Codex ในเครื่อง"
+  },
+  "需要本机已安装并登录 Codex CLI": {
+    "en": "Codex CLI must be installed and signed in locally",
+    "th": "ต้องติดตั้ง Codex CLI และเข้าสู่ระบบในเครื่อง"
+  },
+  "不需要在这里填写 API 密钥。首次使用请先测试连接；未登录时，按提示在终端运行": {
+    "en": "No API key is needed here. Test the connection first. If signed out, run",
+    "th": "ไม่ต้องกรอกคีย์ API ที่นี่ โปรดทดสอบก่อน หากยังไม่เข้าสู่ระบบ ให้เรียก"
+  },
+  "完成登录。本机接入仍会访问账户的模型服务。": {
+    "en": "to sign in. Local integration still accesses the account's model service.",
+    "th": "เพื่อเข้าสู่ระบบ การเชื่อมต่อในเครื่องยังเข้าถึงบริการโมเดลของบัญชี"
+  },
+  "连接名称": {
+    "en": "Connection name",
+    "th": "ชื่อการเชื่อมต่อ"
+  },
+  "例如：本机 Codex": {
+    "en": "For example: local Codex",
+    "th": "เช่น Codex ในเครื่อง"
+  },
+  "例如：公司模型服务": {
+    "en": "For example: company model service",
+    "th": "เช่น บริการโมเดลของบริษัท"
+  },
+  "API 地址": {
+    "en": "API address",
+    "th": "ที่อยู่ API"
+  },
+  "远端及内网服务须使用 HTTPS；本机 localhost 服务允许使用 HTTP。": {
+    "en": "Remote and intranet services require HTTPS; localhost may use HTTP.",
+    "th": "บริการระยะไกลและอินทราเน็ตต้องใช้ HTTPS ส่วน localhost ใช้ HTTP ได้"
+  },
+  "模型名称": {
+    "en": "Model name",
+    "th": "ชื่อโมเดล"
+  },
+  "default 或可用的 Codex 模型 ID": {
+    "en": "default or an available Codex model ID",
+    "th": "default หรือรหัสโมเดล Codex ที่มีสิทธิใช้งาน"
+  },
+  "填写 API 中的模型 ID": {
+    "en": "Enter the model ID from the API",
+    "th": "กรอกรหัสโมเดลจาก API"
+  },
+  "default 使用 Codex CLI 的默认模型；也可填写当前登录账户有权限使用的模型 ID。": {
+    "en": "default uses the Codex CLI default model. You may also enter a model ID available to your account.",
+    "th": "default ใช้โมเดลเริ่มต้นของ Codex CLI หรือระบุรหัสโมเดลที่บัญชีมีสิทธิใช้งานได้"
+  },
+  "API 密钥": {
+    "en": "API key",
+    "th": "คีย์ API"
+  },
+  "已有密钥": {
+    "en": "Key already saved",
+    "th": "บันทึกคีย์แล้ว"
+  },
+  "留空保留已保存的密钥": {
+    "en": "Leave blank to keep the saved key",
+    "th": "เว้นว่างเพื่อเก็บคีย์เดิม"
+  },
+  "本地服务无密钥时可留空": {
+    "en": "Leave blank for a local service without authentication",
+    "th": "เว้นว่างสำหรับบริการในเครื่องที่ไม่ต้องยืนยันตัวตน"
+  },
+  "密钥保存后不回显；留空表示保持原有密钥。": {
+    "en": "Saved keys are not displayed. Blank input keeps the existing key.",
+    "th": "คีย์ที่บันทึกแล้วจะไม่แสดงกลับ เว้นว่างเพื่อเก็บคีย์เดิม"
+  },
+  "保存时移除已有密钥": {
+    "en": "Remove existing key on save",
+    "th": "ลบคีย์เดิมเมื่อบันทึก"
+  },
+  "审核预算与等待时间": {
+    "en": "Review budget and wait time",
+    "th": "งบประมาณการตรวจและเวลารอ"
+  },
+  "请求参数": {
+    "en": "Request parameters",
+    "th": "พารามิเตอร์คำขอ"
+  },
+  "应用侧限制": {
+    "en": "Application limits",
+    "th": "ขีดจำกัดของแอป"
+  },
+  "需与服务商支持能力一致": {
+    "en": "Must match the service capabilities",
+    "th": "ต้องตรงกับความสามารถของบริการ"
+  },
+  "响应格式": {
+    "en": "Response format",
+    "th": "รูปแบบคำตอบ"
+  },
+  "JSON 对象（json_object）": {
+    "en": "JSON object (json_object)",
+    "th": "ออบเจ็กต์ JSON (json_object)"
+  },
+  "文本（text）": {
+    "en": "Text (text)",
+    "th": "ข้อความ (text)"
+  },
+  "输出 Token 参数": {
+    "en": "Output token parameter",
+    "th": "พารามิเตอร์โทเคนเอาต์พุต"
+  },
+  "输出预留 Tokens": {
+    "en": "Reserved output tokens",
+    "th": "โทเคนเอาต์พุตที่สำรอง"
+  },
+  "最大输出 Tokens": {
+    "en": "Maximum output tokens",
+    "th": "โทเคนเอาต์พุตสูงสุด"
+  },
+  "上下文窗口 Tokens": {
+    "en": "Context window tokens",
+    "th": "โทเคนหน้าต่างบริบท"
+  },
+  "输出预留用于计算应用的上下文预算；Codex CLI 无法按此值保证单次输出上限。过大的输入会在发送前被拒绝，返回内容还会经过大小、结构及引用校验。": {
+    "en": "Output reservation is used for the context budget; Codex CLI cannot enforce that per-response output limit. Oversized inputs are rejected before sending, and returned content is checked for size, structure, and citations.",
+    "th": "โทเคนสำรองใช้คำนวณงบประมาณบริบท Codex CLI ไม่รับประกันขีดจำกัดเอาต์พุตต่อครั้ง ข้อมูลขนาดเกินจะถูกปฏิเสธก่อนส่ง และตรวจขนาด โครงสร้าง และคำอ้างของผลลัพธ์"
+  },
+  "请求超时（秒）": {
+    "en": "Request timeout (seconds)",
+    "th": "เวลารอคำขอ (วินาที)"
+  },
+  "预览配置仅存于页面内存，刷新后清空。": {
+    "en": "Preview configuration stays in memory and resets on reload.",
+    "th": "การตั้งค่าตัวอย่างอยู่ในหน่วยความจำและล้างเมื่อโหลดใหม่"
+  },
+  "登录凭据由 Codex 维护，本应用不读取或保存 Codex 登录令牌。切换连接方式不会删除原有 API 配置或密钥。": {
+    "en": "Codex manages its login credentials. This app does not read or store Codex login tokens. Switching connections does not delete existing API settings or keys.",
+    "th": "Codex จัดการข้อมูลเข้าสู่ระบบ แอปนี้ไม่อ่านหรือเก็บโทเคนเข้าสู่ระบบ Codex การสลับวิธีเชื่อมต่อไม่ลบการตั้งค่าหรือคีย์ API เดิม"
+  },
+  "当前环境仅支持会话内保存密钥，应用关闭后需重新填写。": {
+    "en": "This environment supports session-only keys. Enter the key again after closing the app.",
+    "th": "สภาพแวดล้อมนี้เก็บคีย์ได้เฉพาะเซสชัน ต้องกรอกใหม่หลังปิดแอป"
+  },
+  "桌面端使用系统凭据保护能力。日志与导出报告不应包含 API 密钥。": {
+    "en": "The desktop app uses system credential protection. Logs and exported reports must not contain API keys.",
+    "th": "แอปเดสก์ท็อปใช้การปกป้องข้อมูลรับรองของระบบ บันทึกและรายงานที่ส่งออกต้องไม่มีคีย์ API"
+  },
+  "正在测试…": {
+    "en": "Testing…",
+    "th": "กำลังทดสอบ…"
+  },
+  "保存并测试连接": {
+    "en": "Save and test connection",
+    "th": "บันทึกและทดสอบการเชื่อมต่อ"
+  },
+  "保存中…": {
+    "en": "Saving…",
+    "th": "กำลังบันทึก…"
+  },
+  "保存配置": {
+    "en": "Save configuration",
+    "th": "บันทึกการตั้งค่า"
+  },
+  "模型连接": {
+    "en": "Model connection",
+    "th": "การเชื่อมต่อโมเดล"
+  }
+}

@@ -1,0 +1,1 @@
+export const CURRENT_WORKSPACE_SCHEMA_VERSION = 7;

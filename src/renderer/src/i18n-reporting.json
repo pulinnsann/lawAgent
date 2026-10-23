@@ -1,0 +1,466 @@
+{
+  "CSV 明细索引": {
+    "en": "CSV detail index",
+    "th": "ดัชนีรายละเอียด CSV"
+  },
+  "CSV 用于筛选和回溯索引，完整引文、处置历史和说明请导出 Word、PDF 或 HTML。": {
+    "en": "CSV supports filtering and traceability. Export Word, PDF or HTML for full quotations, disposition history and notes.",
+    "th": "CSV ใช้กรองและติดตามที่มา หากต้องการข้อความอ้างอิง ประวัติการดำเนินการ และคำอธิบายครบถ้วน ให้ส่งออกเป็น Word, PDF หรือ HTML"
+  },
+  "HTML 完整报告": {
+    "en": "Complete HTML report",
+    "th": "รายงาน HTML ฉบับสมบูรณ์"
+  },
+  "Markdown 完整报告": {
+    "en": "Complete Markdown report",
+    "th": "รายงาน Markdown ฉบับสมบูรณ์"
+  },
+  "PDF 报告": {
+    "en": "PDF report",
+    "th": "รายงาน PDF"
+  },
+  "Word 文档 DOCX": {
+    "en": "Word document DOCX",
+    "th": "เอกสาร Word DOCX"
+  },
+  "{count} 轮": {
+    "en": "{count} rounds",
+    "th": "{count} รอบ"
+  },
+  "{count} 项意见": {
+    "en": "{count} findings",
+    "th": "ข้อสังเกต {count} รายการ"
+  },
+  "业务接受": {
+    "en": "Accepted by business",
+    "th": "ฝ่ายธุรกิจยอมรับ"
+  },
+  "中风险": {
+    "en": "Medium risk",
+    "th": "ความเสี่ยงปานกลาง"
+  },
+  "人工意见": {
+    "en": "Human annotation",
+    "th": "ข้อสังเกตของผู้ตรวจ"
+  },
+  "人工标记已整改": {
+    "en": "Marked fixed by a person",
+    "th": "ผู้ตรวจทำเครื่องหมายว่าแก้ไขแล้ว"
+  },
+  "人工标记误报": {
+    "en": "Marked false positive by a person",
+    "th": "ผู้ตรวจทำเครื่องหมายว่าแจ้งเตือนผิด"
+  },
+  "人工确认关注": {
+    "en": "Concern confirmed by a person",
+    "th": "ผู้ตรวจยืนยันว่าควรให้ความสนใจ"
+  },
+  "人工补录修订": {
+    "en": "Human additions and revisions",
+    "th": "ข้อสังเกตที่เพิ่มและแก้ไขโดยผู้ตรวจ"
+  },
+  "低风险": {
+    "en": "Low risk",
+    "th": "ความเสี่ยงต่ำ"
+  },
+  "保存报告配置": {
+    "en": "Save report settings",
+    "th": "บันทึกการตั้งค่ารายงาน"
+  },
+  "保存本项译文": {
+    "en": "Save this translation",
+    "th": "บันทึกคำแปลรายการนี้"
+  },
+  "保护标记与原文对应": {
+    "en": "Protected placeholders and original text",
+    "th": "เครื่องหมายที่ป้องกันไว้และข้อความต้นฉบับที่ตรงกัน"
+  },
+  "候选": {
+    "en": "Draft",
+    "th": "ฉบับร่าง"
+  },
+  "允许使用当前配置的模型生成本次报告译文候选": {
+    "en": "Allow the configured model to generate draft translations for this report",
+    "th": "อนุญาตให้โมเดลที่ตั้งค่าไว้สร้างร่างคำแปลของรายงานนี้"
+  },
+  "先准备可信原报告，再生成或手工填写候选。保护标记对应原文、金额日期和标识，必须保留；保存编辑会撤销先前确认。": {
+    "en": "Prepare the trusted source report first, then generate or manually enter drafts. Preserve placeholders for original text, amounts, dates and identifiers. Saving edits revokes prior approval.",
+    "th": "เตรียมรายงานต้นฉบับที่เชื่อถือได้ก่อน แล้วสร้างหรือกรอกร่างคำแปลด้วยตนเอง ต้องเก็บเครื่องหมายที่แทนต้นฉบับ จำนวนเงิน วันที่ และรหัสไว้ การบันทึกการแก้ไขจะยกเลิกการยืนยันก่อนหน้า"
+  },
+  "关闭": {
+    "en": "Close",
+    "th": "ปิด"
+  },
+  "内部管理报告": {
+    "en": "Internal management report",
+    "th": "รายงานการบริหารภายใน"
+  },
+  "冻结的报告原文": {
+    "en": "Frozen report source text",
+    "th": "ข้อความต้นฉบับรายงานที่ตรึงไว้"
+  },
+  "冻结资料 r{frozen} · 当前资料 r{current} · 已保存来源人工核验 {count} 条": {
+    "en": "Frozen information r{frozen} · Current information r{current} · {count} saved human source checks",
+    "th": "ข้อมูลที่ตรึงไว้ r{frozen} · ข้อมูลปัจจุบัน r{current} · บันทึกตรวจสอบแหล่งข้อมูลโดยผู้ตรวจ {count} รายการ"
+  },
+  "准备报告译文": {
+    "en": "Prepare report translation",
+    "th": "เตรียมคำแปลรายงาน"
+  },
+  "刷新预览": {
+    "en": "Refresh preview",
+    "th": "รีเฟรชตัวอย่าง"
+  },
+  "包含保护标记的待译文本": {
+    "en": "Text to translate with protected placeholders",
+    "th": "ข้อความที่จะแปลพร้อมเครื่องหมายที่ป้องกันไว้"
+  },
+  "包含全部风险处置历史": {
+    "en": "Include complete risk disposition history",
+    "th": "รวมประวัติการดำเนินการกับความเสี่ยงทั้งหมด"
+  },
+  "包含合同直接引文": {
+    "en": "Include direct contract quotations",
+    "th": "รวมข้อความอ้างอิงโดยตรงจากสัญญา"
+  },
+  "升级决策": {
+    "en": "Escalated for decision",
+    "th": "ส่งต่อเพื่อการตัดสินใจ"
+  },
+  "单位名称": {
+    "en": "Organization name",
+    "th": "ชื่อองค์กร"
+  },
+  "原始意见": {
+    "en": "Original findings",
+    "th": "ข้อสังเกตเดิม"
+  },
+  "原记录预览生成于 {time}。修改范围或配置后请刷新；目标语言译文在上方单独核对。": {
+    "en": "Source-record preview generated at {time}. Refresh after changing scope or settings. Review target-language translations separately above.",
+    "th": "ตัวอย่างบันทึกต้นฉบับสร้างเมื่อ {time} หลังเปลี่ยนขอบเขตหรือการตั้งค่าให้รีเฟรช ตรวจคำแปลภาษาเป้าหมายแยกต่างหากด้านบน"
+  },
+  "原风险等级": {
+    "en": "Original risk level",
+    "th": "ระดับความเสี่ยงเดิม"
+  },
+  "合同记录": {
+    "en": "Contract records",
+    "th": "รายการสัญญา"
+  },
+  "复制保护标记文本到编辑框": {
+    "en": "Copy placeholder text into editor",
+    "th": "คัดลอกข้อความพร้อมเครื่องหมายไปยังช่องแก้ไข"
+  },
+  "完成 {done} / {total} 项": {
+    "en": "Completed {done} / {total} items",
+    "th": "เสร็จแล้ว {done} / {total} รายการ"
+  },
+  "完成审核": {
+    "en": "Completed reviews",
+    "th": "การตรวจที่เสร็จสมบูรณ์"
+  },
+  "审核": {
+    "en": "Review",
+    "th": "การตรวจ"
+  },
+  "审核与来源明细": {
+    "en": "Review and source details",
+    "th": "รายละเอียดการตรวจและแหล่งข้อมูล"
+  },
+  "导出报告": {
+    "en": "Export report",
+    "th": "ส่งออกรายงาน"
+  },
+  "导出时的人工处置": {
+    "en": "Human dispositions at export",
+    "th": "การดำเนินการโดยผู้ตรวจ ณ เวลาส่งออก"
+  },
+  "导出格式": {
+    "en": "Export format",
+    "th": "รูปแบบการส่งออก"
+  },
+  "将已保存的审核、引用依据和人工处置整理为内部报告。英泰报告使用独立译文，人工确认后导出；原合同和来源引文保持原文。": {
+    "en": "Compile saved reviews, citations and human dispositions into internal reports. English and Thai reports use separate translations approved by a person before export. Contract and source quotations retain their original text.",
+    "th": "รวบรวมการตรวจ หลักฐานอ้างอิง และการดำเนินการโดยผู้ตรวจที่บันทึกไว้เป็นรายงานภายใน รายงานภาษาอังกฤษและไทยใช้คำแปลแยกต่างหากและส่งออกหลังผู้ตรวจยืนยัน ข้อความอ้างอิงจากสัญญาและแหล่งข้อมูลยังคงเป็นต้นฉบับ"
+  },
+  "已人工确认": {
+    "en": "Approved by a person",
+    "th": "ผู้ตรวจยืนยันแล้ว"
+  },
+  "已保存报告译文": {
+    "en": "Saved report translations",
+    "th": "คำแปลรายงานที่บันทึกไว้"
+  },
+  "已取消导出。": {
+    "en": "Export cancelled.",
+    "th": "ยกเลิกการส่งออกแล้ว"
+  },
+  "开始日期": {
+    "en": "Start date",
+    "th": "วันที่เริ่มต้น"
+  },
+  "当前审核 {id}。需要其他历史审核时，请返回合同页面选择后重新打开。": {
+    "en": "Current review: {id}. To use another saved review, select it on the contract page and reopen this panel.",
+    "th": "การตรวจปัจจุบัน {id} หากต้องการใช้การตรวจย้อนหลังอื่น ให้เลือกที่หน้าสัญญาแล้วเปิดแผงนี้อีกครั้ง"
+  },
+  "当前审核汇报预览": {
+    "en": "Current review report preview",
+    "th": "ตัวอย่างรายงานการตรวจปัจจุบัน"
+  },
+  "当前审核记录": {
+    "en": "Current review record",
+    "th": "บันทึกการตรวจปัจจุบัน"
+  },
+  "待判断": {
+    "en": "Unrated",
+    "th": "ยังไม่ประเมิน"
+  },
+  "待处理": {
+    "en": "Unreviewed",
+    "th": "รอดำเนินการ"
+  },
+  "待补资料": {
+    "en": "More information needed",
+    "th": "ต้องการข้อมูลเพิ่มเติม"
+  },
+  "待跟进意见": {
+    "en": "Findings awaiting follow-up",
+    "th": "ข้อสังเกตที่รอติดตาม"
+  },
+  "我已核对全部译文和保留原文，确认本次目标语言报告": {
+    "en": "I have reviewed all translations and preserved source text, and approve this target-language report",
+    "th": "ฉันตรวจคำแปลทั้งหมดและข้อความต้นฉบับที่คงไว้แล้ว และยืนยันรายงานภาษาเป้าหมายนี้"
+  },
+  "报告与工作汇总": {
+    "en": "Reports and work summaries",
+    "th": "รายงานและสรุปงาน"
+  },
+  "报告个性化配置已保存在本地，历史修订保留。": {
+    "en": "Report preferences were saved locally. Revision history is retained.",
+    "th": "บันทึกการตั้งค่ารายงานในเครื่องแล้ว และเก็บประวัติการแก้ไขไว้"
+  },
+  "报告单位名称": {
+    "en": "Report organization name",
+    "th": "ชื่อองค์กรในรายงาน"
+  },
+  "报告导出格式": {
+    "en": "Report export format",
+    "th": "รูปแบบส่งออกรายงาน"
+  },
+  "报告已导出至 {path}。导出未调用模型。": {
+    "en": "Report exported to {path}. Export did not call the model.",
+    "th": "ส่งออกรายงานไปยัง {path} แล้ว การส่งออกไม่ได้เรียกใช้โมเดล"
+  },
+  "报告开始日期": {
+    "en": "Report start date",
+    "th": "วันที่เริ่มต้นรายงาน"
+  },
+  "报告快照 SHA256": {
+    "en": "Report snapshot SHA256",
+    "th": "SHA256 ของสแนปช็อตรายงาน"
+  },
+  "报告接收人": {
+    "en": "Report recipient",
+    "th": "ผู้รับรายงาน"
+  },
+  "报告样式": {
+    "en": "Report style",
+    "th": "รูปแบบรายงาน"
+  },
+  "报告结束日期": {
+    "en": "Report end date",
+    "th": "วันที่สิ้นสุดรายงาน"
+  },
+  "报告编制人": {
+    "en": "Report prepared by",
+    "th": "ผู้จัดทำรายงาน"
+  },
+  "报告范围": {
+    "en": "Report scope",
+    "th": "ขอบเขตรายงาน"
+  },
+  "报告译文工作区": {
+    "en": "Report translation workspace",
+    "th": "พื้นที่ทำงานแปลรายงาน"
+  },
+  "报告译文已保存在本地。请逐项核对，确认后再导出。": {
+    "en": "Report translation saved locally. Review each item and approve before export.",
+    "th": "บันทึกคำแปลรายงานในเครื่องแล้ว โปรดตรวจแต่ละรายการและยืนยันก่อนส่งออก"
+  },
+  "报告语言": {
+    "en": "Report language",
+    "th": "ภาษารายงาน"
+  },
+  "报告配置或译文有未保存的修改；再次点击关闭将放弃本次输入。": {
+    "en": "Report settings or translations have unsaved changes. Click Close again to discard them.",
+    "th": "การตั้งค่ารายงานหรือคำแปลมีการแก้ไขที่ยังไม่บันทึก คลิกปิดอีกครั้งเพื่อทิ้งข้อมูลที่กรอกครั้งนี้"
+  },
+  "接收人或汇报对象": {
+    "en": "Recipient or audience",
+    "th": "ผู้รับหรือผู้ที่ต้องรายงาน"
+  },
+  "文档版本": {
+    "en": "Document versions",
+    "th": "รุ่นเอกสาร"
+  },
+  "未保存标准快照": {
+    "en": "No saved standard snapshot",
+    "th": "ไม่มีสแนปช็อตมาตรฐานที่บันทึกไว้"
+  },
+  "未选择": {
+    "en": "Not selected",
+    "th": "ยังไม่เลือก"
+  },
+  "本范围没有完成的审核报告。": {
+    "en": "No completed review reports in this scope.",
+    "th": "ไม่มีรายงานการตรวจที่เสร็จสมบูรณ์ในขอบเขตนี้"
+  },
+  "来源": {
+    "en": "Source",
+    "th": "แหล่งข้อมูล"
+  },
+  "来源 {count} 条 · 处置修订 {revision}": {
+    "en": "{count} sources · Disposition revision {revision}",
+    "th": "แหล่งข้อมูล {count} รายการ · รุ่นการดำเนินการ {revision}"
+  },
+  "标准分组": {
+    "en": "Standard groups",
+    "th": "กลุ่มมาตรฐาน"
+  },
+  "正在读取本地记录": {
+    "en": "Reading local records",
+    "th": "กำลังอ่านบันทึกในเครื่อง"
+  },
+  "法务": {
+    "en": "Legal",
+    "th": "ฝ่ายกฎหมาย"
+  },
+  "源记录已更新，当前译文已过期，请重新准备。": {
+    "en": "Source records have changed. This translation is stale; prepare a new translation.",
+    "th": "บันทึกต้นฉบับเปลี่ยนแล้ว คำแปลนี้ล้าสมัย โปรดเตรียมคำแปลใหม่"
+  },
+  "生成缺失译文候选": {
+    "en": "Generate missing translation drafts",
+    "th": "สร้างร่างคำแปลที่ยังขาด"
+  },
+  "留空表示不限制，按北京时间自然日，包含起止日期。": {
+    "en": "Leave blank for no limit. Dates use Beijing calendar days, including both endpoints.",
+    "th": "เว้นว่างเพื่อไม่จำกัด ใช้วันปฏิทินตามเวลาปักกิ่งและรวมวันเริ่มต้นกับวันสิ้นสุด"
+  },
+  "目标语言报告需完成译文、人工确认且未过期，才能导出。": {
+    "en": "Target-language export requires a complete, approved translation that is still current.",
+    "th": "ต้องมีคำแปลครบถ้วน ผู้ตรวจยืนยัน และยังไม่ล้าสมัย จึงส่งออกรายงานภาษาเป้าหมายได้"
+  },
+  "目标语言译文": {
+    "en": "Target-language translation",
+    "th": "คำแปลภาษาเป้าหมาย"
+  },
+  "确认目标语言译文": {
+    "en": "Approve target-language translation",
+    "th": "ยืนยันคำแปลภาษาเป้าหมาย"
+  },
+  "结束日期": {
+    "en": "End date",
+    "th": "วันที่สิ้นสุด"
+  },
+  "统计口径与局限": {
+    "en": "Counting methodology and limitations",
+    "th": "หลักเกณฑ์การนับและข้อจำกัด"
+  },
+  "编制人标签": {
+    "en": "Prepared-by label",
+    "th": "ป้ายชื่อผู้จัดทำ"
+  },
+  "翻译单元": {
+    "en": "Translation unit",
+    "th": "หน่วยคำแปล"
+  },
+  "译文候选尚未人工确认。": {
+    "en": "Draft translation has not been approved by a person.",
+    "th": "ผู้ตรวจยังไม่ยืนยันร่างคำแปล"
+  },
+  "译文历史与生成说明": {
+    "en": "Translation history and generation notes",
+    "th": "ประวัติคำแปลและคำอธิบายการสร้าง"
+  },
+  "译文复核说明": {
+    "en": "Translation review notes",
+    "th": "คำอธิบายการตรวจคำแปล"
+  },
+  "译文已人工确认；源记录变化后将阻止导出。": {
+    "en": "Translation approved by a person. Changes to source records will block export.",
+    "th": "ผู้ตรวจยืนยันคำแปลแล้ว หากบันทึกต้นฉบับเปลี่ยน ระบบจะป้องกันการส่งออก"
+  },
+  "详细风险报告": {
+    "en": "Detailed risk report",
+    "th": "รายงานความเสี่ยงโดยละเอียด"
+  },
+  "请核对当前审核和日期范围。": {
+    "en": "Check the current review and date range.",
+    "th": "โปรดตรวจการตรวจปัจจุบันและช่วงวันที่"
+  },
+  "请选择范围并刷新预览。": {
+    "en": "Choose a scope and refresh the preview.",
+    "th": "เลือกขอบเขตแล้วรีเฟรชตัวอย่าง"
+  },
+  "读取已保存译文": {
+    "en": "Load saved translations",
+    "th": "อ่านคำแปลที่บันทึกไว้"
+  },
+  "跨合同工作汇总": {
+    "en": "Cross-contract work summary",
+    "th": "สรุปงานข้ามสัญญา"
+  },
+  "跨合同工作汇总预览": {
+    "en": "Cross-contract work summary preview",
+    "th": "ตัวอย่างสรุปงานข้ามสัญญา"
+  },
+  "预览已按当前范围和最新人工记录刷新。": {
+    "en": "Preview refreshed with the current scope and latest human records.",
+    "th": "รีเฟรชตัวอย่างตามขอบเขตปัจจุบันและบันทึกล่าสุดของผู้ตรวจแล้ว"
+  },
+  "领导摘要与依据附录": {
+    "en": "Executive summary with evidence appendix",
+    "th": "บทสรุปผู้บริหารพร้อมภาคผนวกหลักฐาน"
+  },
+  "高风险": {
+    "en": "High risk",
+    "th": "ความเสี่ยงสูง"
+  },
+  "请选择": {
+    "en": "Please select",
+    "th": "โปรดเลือก"
+  },
+  "已过期": {
+    "en": "Stale",
+    "th": "ล้าสมัย"
+  },
+  "待人工确认": {
+    "en": "Awaiting human approval",
+    "th": "รอผู้ตรวจยืนยัน"
+  },
+  "未完成 {count} 项": {
+    "en": "{count} incomplete items",
+    "th": "ยังไม่เสร็จ {count} รายการ"
+  },
+  "只显示尚未填写的译文": {
+    "en": "Show only translations not yet entered",
+    "th": "แสดงเฉพาะคำแปลที่ยังไม่กรอก"
+  },
+  "没有待填写项目": {
+    "en": "No remaining items to enter",
+    "th": "ไม่มีรายการที่ต้องกรอกเหลืออยู่"
+  },
+  "正在生成候选": {
+    "en": "Generating drafts",
+    "th": "กำลังสร้างฉบับร่าง"
+  },
+  "取消生成候选": {
+    "en": "Cancel draft generation",
+    "th": "ยกเลิกการสร้างฉบับร่าง"
+  },
+  "生成进度：{phase}；调用 {call}；已接收 {count} 字符": {
+    "en": "Generation: {phase}; call {call}; {count} characters received",
+    "th": "ความคืบหน้า: {phase}; การเรียกครั้งที่ {call}; ได้รับ {count} อักขระ"
+  }
+}

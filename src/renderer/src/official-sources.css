@@ -1,0 +1,29 @@
+.official-source-settings { min-width: 0; }
+.official-source-settings .retrieval-group-heading > div { flex-wrap: wrap; min-width: 0; gap: 7px; }
+.official-free-label { border: 1px solid #dce7d2; border-radius: 3px; padding: 2px 5px; font-size: 8px; line-height: 1.5; color: #74905c; background: #f2f7eb; white-space: nowrap; }
+.official-source-intro { margin: 0 0 16px; color: #829371; font-size: 10px; line-height: 1.85; overflow-wrap: anywhere; }
+.official-source-settings .field input[type="number"] { max-width: 130px; }
+.official-url-field textarea { min-height: 105px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; line-height: 1.8; overflow-wrap: anywhere; resize: vertical; }
+.official-source-test { padding: 14px; border: 1px solid #e1e9d9; border-radius: 6px; background: #f8fbf4; min-width: 0; }
+.official-source-test .field { margin-bottom: 12px; }
+.official-test-actions { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.official-test-actions > .button { max-width: 100%; min-width: 0; height: auto; min-height: 38px; padding-top: 9px; padding-bottom: 9px; white-space: normal; line-height: 1.5; }
+.official-test-note { margin-top: 10px; margin-bottom: 0; }
+.official-test-result .source-evidence-grid { grid-template-columns: minmax(0, 1fr); }
+.official-test-result .source-excerpt { max-height: 250px; }
+.official-coverage { margin-top: 12px; padding: 12px; border: 1px solid #e2ead9; border-radius: 5px; background: #f7faf2; min-width: 0; }
+.official-coverage > strong { display: block; color: #6e8759; font-size: 10px; font-weight: 550; }
+.official-coverage > .source-metadata { margin-top: 8px; }
+.official-coverage > p { color: #a28f63; font-size: 9px; line-height: 1.8; margin: 9px 0 0; overflow-wrap: anywhere; }
+.retrieval-settings-panel .official-source-test input,
+.retrieval-settings-panel .official-source-settings textarea { width: 100%; min-width: 0; box-sizing: border-box; }
+@media (max-width: 480px) {
+  .official-source-settings .retrieval-group-heading { align-items: flex-start; gap: 8px; }
+  .official-source-settings .retrieval-group-heading > div { gap: 5px; }
+  .official-free-label { font-size: 7px; }
+  .official-source-intro { font-size: 9px; }
+  .official-source-test { padding: 12px; }
+  .official-test-actions > .button { width: 100%; font-size: 10px; }
+  .official-coverage { padding: 10px; }
+  .official-coverage .source-metadata dt { width: 46px; }
+}

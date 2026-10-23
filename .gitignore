@@ -147,3 +147,33 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Contract Workbench: local business data and generated artifacts
+release/
+.local/
+.playwright-cli/
+output/
+credentials/
+remote-cache/
+local-knowledge/
+backups/
+recovery/
+contract-purge/
+*.sqlite
+*.sqlite-*
+*.sqlite.*
+*.db
+*.db-*
+*.db.*
+*.traineddata
+*.traineddata.gz
+*.p12
+*.pfx
+*.key
+*.pem
+.DS_Store
+Thumbs.db
+
+# Historical local planning notes; the public documentation set is English.
+/docs/*
+!/docs/en/

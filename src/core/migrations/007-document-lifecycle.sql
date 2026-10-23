@@ -1,0 +1,10 @@
+ALTER TABLE projects ADD COLUMN lifecycle_status TEXT NOT NULL DEFAULT 'active' CHECK(lifecycle_status IN ('active','archived','trashed'));
+ALTER TABLE projects ADD COLUMN revision INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE projects ADD COLUMN previous_status TEXT NOT NULL DEFAULT 'active';
+ALTER TABLE projects ADD COLUMN deleted_at TEXT;
+ALTER TABLE contracts ADD COLUMN lifecycle_status TEXT NOT NULL DEFAULT 'active' CHECK(lifecycle_status IN ('active','archived','trashed'));
+ALTER TABLE contracts ADD COLUMN revision INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE contracts ADD COLUMN previous_status TEXT NOT NULL DEFAULT 'active';
+ALTER TABLE contracts ADD COLUMN deleted_at TEXT;
+ALTER TABLE document_versions ADD COLUMN source_name TEXT;
+CREATE INDEX idx_contracts_lifecycle ON contracts(workspace_id,lifecycle_status,project_id);

@@ -1,0 +1,15 @@
+# Adapting LawAgent to another jurisdiction
+
+LawAgent currently assumes mainland China law. It reads Chinese, English, and Thai documents, but reading a language is not an implementation of that language's domestic law.
+
+The file map in the root README identifies the relevant code. This guide describes the order of work for a fork; it does not represent implemented foreign-law support.
+
+1. **Define the scope with a practitioner.** Identify jurisdiction, applicable-law conflicts, contract classes, intended users, authoritative sources, language requirements, and matters that must be referred for human review. Keep contract language and governing law as separate fields.
+2. **Introduce a versioned jurisdiction profile.** Carry an explicit profile identifier and revision through review context, immutable standards, source metadata, advisor / experience scopes, generated drafts, and report manifests. Reject incompatible combinations instead of inheriting mainland-China defaults. Migrate historical records with their original scope intact.
+3. **Adapt every model operation.** Review `review.ts`, `batched-review.ts`, `contract-generation.ts`, `change-drafting.ts`, `workspace-clause-alignment.ts`, and `reference-translation.ts`. Update scope instructions, terminology, limitations, and protected facts; version prompt fingerprints. Do not weaken the untrusted-input or citation boundaries.
+4. **Replace sources and rules.** Implement authorized official-site adapters and scoped professional connections. Preserve real URLs, quotations, versions, effective dates, and coverage failures. Update default issue queries and allowed domains. Have practitioners replace or approve enterprise guardrails, templates, clauses, experience, advisor packages, and expected sample findings.
+5. **Revisit deterministic checks.** `program-checks.ts` contains CNY, Chinese financial numerals, finite tax / amount patterns, and particular date / reference grammars. Test local currency formats, decimal rules, calendar conventions, numbering, tax bases, and party identifiers explicitly. Mark unsupported grammars as unverified; do not treat parsing failure as a successful check.
+6. **Update all scope disclosures.** Change renderer labels, report text / localization, comparison notes, source-verification forms, samples, and public documentation. Keep UI language, report language, contract language, and jurisdiction independent. Original quotations and amounts must remain traceable after translation.
+7. **Validate before making claims.** Use synthetic engineering fixtures for parser, cancellation, export, versioning, and security behavior. Add practitioner-labelled cases for missing / false findings, legal applicability, source conflicts, translation negations, dates / amounts, priority-text clauses, and drafting quality. Test on target Windows / macOS and Word environments.
+
+A source match means a quotation can be traced to retrieved text. It does not by itself establish authenticity, current effect, legal applicability, precedential weight, or semantic equivalence. Preserve these distinctions when adapting the software.
