@@ -1,7 +1,7 @@
 import { useI18n } from './i18n';
 import { useEffect, useRef, useState } from 'react';
 import { LoaderCircle, Plus, RefreshCw, Save, X } from 'lucide-react';
-import type { ContractAssistantBridge, ContractDetail, ReviewResult } from '../../shared/contracts';
+import type { ContractAssistantBridge, ContractDetail, ReviewResult, DocumentBlockPage, BlockPageCursor } from '../../shared/contracts';
 import type { EnterpriseStandardSnapshot } from '../../shared/assurance';
 import { workflowNodeLabels, type ReviewCompletionWorkspace, type ReviewInformationItem, type SourceVerificationBody } from '../../shared/review-completion';
 import ReviewFreshnessNotice from './ReviewFreshnessNotice';
@@ -27,6 +27,21 @@ export default function ReviewCompletionPanel({ bridge, document, review, standa
   const [sourceId, setSourceId] = useState(''); const [verification, setVerification] = useState(emptyVerification);
   const [busy, setBusy] = useState(false); const [notice, setNotice] = useState(''); const [error, setError] = useState('');
   const [discardWarning, setDiscardWarning] = useState(false);
+  const [blockPage, setBlockPage] = useState<DocumentBlockPage | null>(null);
+  const [blockCursor, setBlockCursor] = useState<BlockPageCursor | undefined>();
+  const [blockHistory, setBlockHistory] = useState<Array<BlockPageCursor | undefined>>([]);
+  const [blocksBusy, setBlocksBusy] = useState(false);
+  const blockOptions = [...new Map((blockPage?.items ?? document.blocks).map(block => [block.id, block])).values()];
+  useEffect(() => { let active = true; setBlockPage(null); setBlockCursor(undefined); setBlockHistory([]); bridge.getDocumentBlocks({ documentId: document.id, limit: 100 }).then(page => { if (active) setBlockPage(page); }).catch(error => active && setError(messageOf(error))); return () => { active = false; }; }, [bridge, document.id]);
+  const pageBlocks = async (direction: 'next' | 'previous') => {
+    const ticket = generation.current;
+    const cursor = direction === 'next' ? blockPage?.nextCursor ?? undefined : blockHistory.at(-1);
+    if (blocksBusy || direction === 'next' && !cursor || direction === 'previous' && !blockHistory.length) return;
+    setBlocksBusy(true);
+    try { const page = await bridge.getDocumentBlocks({ documentId: document.id, cursor, limit: 100 }); if (alive.current && ticket === generation.current) { setBlockPage(page); setBlockHistory(value => direction === 'next' ? [...value, blockCursor] : value.slice(0,-1)); setBlockCursor(cursor); } }
+    catch (error) { if (alive.current && ticket === generation.current) setError(messageOf(error)); } finally { if (alive.current && ticket === generation.current) setBlocksBusy(false); }
+  };
+
   const alive = useRef(true); const generation = useRef(0);
   const evidence = review?.retrieval?.evidence ?? [];
   const selectedSource = evidence.find(item => item.id === sourceId);
@@ -58,13 +73,14 @@ export default function ReviewCompletionPanel({ bridge, document, review, standa
     {workspace?.freshness && <ReviewFreshnessNotice value={workspace.freshness} />}
     <label className="field"><span>{t("人工记录标签")}</span><input aria-label={t("审核补全记录人")} value={actorLabel} maxLength={80} onChange={event => setActorLabel(event.target.value)} disabled={busy} /><small>{t("本机留档标签，不代表已认证身份。")}</small></label>
     <fieldset disabled={busy || !workspace}><legend>{t("结构化审核资料")}</legend>
+      <div className="page-controls"><button disabled={blocksBusy || !blockHistory.length} onClick={() => void pageBlocks('previous')}>{t("上一页原文")}</button><span>{t("关联段落选项按页读取，已关联的段落保持不变。")}</span><button disabled={blocksBusy || !blockPage?.hasMore} onClick={() => void pageBlocks('next')}>{t("下一页原文")}</button></div>
       <div className="completion-actions">{Object.entries(informationLabels).map(([kind, label]) => <button key={kind} className="button secondary small" onClick={() => setItems(previous => [...previous, { id: crypto.randomUUID(), kind: kind as ReviewInformationItem['kind'], label: '', detail: '', status: 'pending', required: false, scopes: [], blockIds: [], quote: '', reason: '' }])} disabled={items.length >= 200}><Plus size={14} />{t("增加")}{t(label)}</button>)}</div>
       {items.map((item, index) => <article className="completion-item" key={item.id}><div className="completion-row"><strong>{t(informationLabels[item.kind])} {index + 1}</strong><button className="text-button" onClick={() => setItems(previous => previous.filter(value => value.id !== item.id))}>{t("移除此条（保存后留历史）")}</button></div>
         <label className="field"><span>{t("事项")}</span><input aria-label={t("资料{v0}事项", { v0: index + 1 })} maxLength={160} value={item.label} onChange={event => update(index, { label: event.target.value })} /></label>
         <label className="field"><span>{t("事实内容、分析前提或待补问题")}</span><textarea maxLength={4000} value={item.detail} onChange={event => update(index, { detail: event.target.value })} /></label>
         <div className="completion-grid"><label className="field"><span>{t("确认状态")}</span><select value={item.status} aria-label={t("资料{v0}状态", { v0: index + 1 })} onChange={event => update(index, { status: event.target.value as ReviewInformationItem['status'] })}>{Object.entries(statusLabels).map(([key, label]) => <option key={key} value={key}>{t(label)}</option>)}</select></label><label><input type="checkbox" checked={item.required} onChange={event => update(index, { required: event.target.checked })} />{t("本轮必需资料")}</label></div>
         <label className="field"><span>{t("影响的审核范围（每行一项，如付款条件、主体资格）")}</span><textarea maxLength={1450} value={item.scopes.join('\n')} onChange={event => update(index, { scopes: event.target.value.split('\n').map(value => value.trim()).filter(Boolean) })} /></label>
-        <label className="field"><span>{t("关联原文段落（可选）")}</span><select value={item.blockIds[0] ?? ''} aria-label={t("资料{v0}关联段落", { v0: index + 1 })} onChange={event => update(index, { blockIds: event.target.value ? [event.target.value] : [], quote: '' })}><option value="">{t("业务资料／未关联段落")}</option>{document.blocks.map(block => <option key={block.id} value={block.id}>#{block.ordinal + 1} {block.text.slice(0, 100)}</option>)}</select></label>
+        <label className="field"><span>{t("关联原文段落（可选）")}</span><select value={item.blockIds[0] ?? ''} aria-label={t("资料{v0}关联段落", { v0: index + 1 })} onChange={event => update(index, { blockIds: event.target.value ? [event.target.value] : [], quote: '' })}><option value="">{t("业务资料／未关联段落")}</option>{item.blockIds[0] && !blockOptions.some(block => block.id === item.blockIds[0]) && <option value={item.blockIds[0]}>{t("已关联段落：{v0}", { v0: item.blockIds[0] })}</option>}{blockOptions.map(block => <option key={block.id} value={block.id}>#{block.ordinal + 1} {block.text.slice(0, 100)}</option>)}</select></label>
         <label className="field"><span>{t("原文直接引文（选填，保存时精确核对）")}</span><textarea value={item.quote} maxLength={2000} onChange={event => update(index, { quote: event.target.value })} /></label>
         <label className="field"><span>{t("确认／不适用理由及补充材料说明")}</span><textarea value={item.reason} maxLength={2000} onChange={event => update(index, { reason: event.target.value })} /></label>
       </article>)}

@@ -1,0 +1,11 @@
+import { spawn } from 'node:child_process';
+import { access } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
+const root=resolve(import.meta.dirname,'..');
+const runtime=join(root,'.local/tauri-runtime/bin',process.platform==='win32'?'node.exe':'node');
+await access(runtime);
+const script=process.argv[2];
+if(!script)throw new Error('Select a developer verification script.');
+const child=spawn(runtime,[resolve(root,script),...process.argv.slice(3)],{cwd:root,env:process.env,stdio:'inherit',shell:false});
+child.on('error',error=>{console.error(`Bundled runtime failed: ${error.message}`);process.exitCode=1;});
+child.on('exit',(code,signal)=>{process.exitCode=code??(signal?1:0);});

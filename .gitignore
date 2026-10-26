@@ -177,3 +177,10 @@ Thumbs.db
 # Historical local planning notes; the public documentation set is English.
 /docs/*
 !/docs/en/
+
+# Rust build artifacts (Cargo.lock remains versioned).
+/target/
+
+# Generated Tauri icons and capability schemas; reproducible from assets/desktop-icon.svg.
+/native/law-desktop/icons/
+/native/law-desktop/gen/

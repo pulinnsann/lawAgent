@@ -52,7 +52,10 @@ test('事实清单真实持久化、CAS并发与原文绑定，确认理由和�
     await assert.rejects(facts(f, doc, [{ ...value, blockIds: [randomUUID()] }], 1), /不属于/);
     await facts(f, doc, [{ ...value, status: 'confirmed', reason: '业务已提供书面授权' }], 1);
     await assert.rejects(facts(f, doc, [], 1), /已更新/);
-    const reopened = await AppStore.open(f.dir); const workspace = getReviewCompletionWorkspace({ store: reopened, assets: new WorkspaceAssets(reopened) }, doc.id); assert.equal(workspace.factsHistory.length, 2); assert.equal(workspace.facts?.body.items[0].status, 'confirmed'); assert.equal(workspace.factsHistory[0].body.items[0].status, 'pending');
+    await f.store.close();
+    const reopened = await AppStore.open(f.dir);
+    try { const workspace = getReviewCompletionWorkspace({ store: reopened, assets: new WorkspaceAssets(reopened) }, doc.id); assert.equal(workspace.factsHistory.length, 2); assert.equal(workspace.facts?.body.items[0].status, 'confirmed'); assert.equal(workspace.factsHistory[0].body.items[0].status, 'pending'); }
+    finally { await reopened.close(); }
   } finally { await f.close(); }
 });
 

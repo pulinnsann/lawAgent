@@ -8,7 +8,7 @@ import {
   Square, Upload, X,
 } from 'lucide-react';
 import type {
-  AppState, ContractAssistantBridge, ContractDetail, ModelConfigInput, PublicModelConfig,
+  AppState, ContractAssistantBridge, ContractDetail, ContractView, BlockPageCursor, DocumentListCursor, ModelConfigInput, PublicModelConfig,
   ReviewContext, ReviewFinding, ReviewResult, ReviewTask, Severity, SourceEvidence,
 } from '../../shared/contracts';
 import { defaultRetrievalConfig } from '../../shared/contracts';
@@ -50,7 +50,6 @@ const emptyState: AppState = { documents: [], modelConfig: null, tasks: [], isPr
 
 function messageOf(error: unknown): string { return error instanceof Error ? error.message : String(error); }
 function formatBytes(bytes: number) { return bytes < 1024 ? `${bytes} B` : bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / 1024 / 1024).toFixed(1)} MB`; }
-function newestReview(document: ContractDetail | null): ReviewResult | null { return document ? [...document.reviews].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0] ?? null : null; }
 function taskIsActive(task?: ReviewTask | null) { return task?.status === 'queued' || task?.status === 'running'; }
 function stageLabel(stage: string) {
   const labels: Record<string, string> = { queued: '等待处理', preparing: '准备合同内容', analyzing: '分析合同条款', validating: '核验输出与原文定位', saving: '保存审核结果', completed: '审核完成', local_rules: '执行本地规则检查', model_request: '等待模型响应', parsing: '解析文档', cancelled: '已取消' };
@@ -67,10 +66,20 @@ export default function App() {
   const bridge = bridgeRef.current;
   useEffect(()=>{void bridge.runWorkspaceCommand({action:'workspace.interfaceLocale',payload:{locale}}).catch(()=>{});},[bridge,locale]);
   const [appState, setAppState] = useState<AppState>(emptyState);
-  const [document, setDocument] = useState<ContractDetail | null>(null);
+  const [document, setDocument] = useState<ContractView | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedIdRef = useRef<string | null>(null);
+  const selectionRequest = useRef(0);
   const [reviewId, setReviewId] = useState<string | null>(null);
+  const [blockHistory, setBlockHistory] = useState<Array<BlockPageCursor | undefined>>([]);
+  const [blockCursor, setBlockCursor] = useState<BlockPageCursor | undefined>();
+  const [reviewHistory, setReviewHistory] = useState<Array<DocumentListCursor | undefined>>([]);
+  const [reviewCursor, setReviewCursor] = useState<DocumentListCursor | undefined>();
+  const [documentHistory, setDocumentHistory] = useState<Array<DocumentListCursor | undefined>>([]);
+  const [documentCursor, setDocumentCursor] = useState<DocumentListCursor | undefined>();
+  const [pageBusy, setPageBusy] = useState(false);
+  const skipSearchReload = useRef(false);
+  const blockRequest = useRef(0);
   const [context, setContext] = useState<ReviewContext>(initialContext);
   const [loading, setLoading] = useState(true);
   const [busyAction, setBusyAction] = useState<string | null>(null);
@@ -98,30 +107,31 @@ export default function App() {
 
   useEffect(() => {
     let alive = true;
+    const initialSelectionRequest = selectionRequest.current;
     bridge.getState().then(async (state) => {
-      if (!alive) return;
-      setAppState(state);
+      if (!alive || initialSelectionRequest !== selectionRequest.current) return;
+      setAppState(state); setDocumentHistory([]); setDocumentCursor(undefined);
       if (state.documents[0]) {
-        const first = await bridge.getDocument(state.documents[0].id);
-        if (!alive) return;
+        const first = await bridge.getDocumentView(state.documents[0].id);
+        if (!alive || initialSelectionRequest !== selectionRequest.current) return;
         selectedIdRef.current = first.id; setSelectedId(first.id); setDocument(first); setContext(value=>({...value,projectId:first.projectId??undefined}));
-        setReviewId(newestReview(first)?.id ?? null);
+        setReviewId(first.reviewPage.items[0]?.id ?? null);
       }
-    }).catch((error) => alive && setNotice({ kind: 'error', text: messageOf(error) })).finally(() => alive && setLoading(false));
+    }).catch((error) => alive && initialSelectionRequest === selectionRequest.current && setNotice({ kind: 'error', text: messageOf(error) })).finally(() => alive && setLoading(false));
     const unsubscribe = bridge.onTaskUpdate((task) => {
       if (!alive) return;
       setAppState((state) => ({ ...state, tasks: [task, ...state.tasks.filter((item) => item.id !== task.id)] }));
       if (task.status === 'completed') {
-        bridge.getState().then((state) => { if (alive) setAppState(state); }).catch(() => {});
+        bridge.getState().then((state) => { if (alive) { setAppState(state); setDocumentHistory([]); setDocumentCursor(undefined); } }).catch(() => {});
         if (task.documentId === selectedIdRef.current) {
-          bridge.getDocument(task.documentId).then((detail) => {
-            if (alive && detail.id === selectedIdRef.current) { setDocument(detail); setReviewId(task.resultId ?? newestReview(detail)?.id ?? null); }
+          bridge.getDocumentView(task.documentId).then((detail) => {
+            if (alive && detail.id === selectedIdRef.current) { setDocument(detail); setReviewId(task.resultId ?? detail.reviewPage.items[0]?.id ?? null); }
           }).catch((error) => alive && setNotice({ kind: 'error', text: messageOf(error) }));
         }
       }
       if (task.status === 'failed') setNotice({ kind: 'error', text: task.error ?? '审核任务失败，请检查配置后重试。' });
     });
-    return () => { alive = false; unsubscribe(); };
+    return () => { alive = false; ++selectionRequest.current; unsubscribe(); };
   }, [bridge]);
 
   useEffect(() => {
@@ -130,7 +140,23 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [notice]);
 
-  const review = document?.reviews.find((item) => item.id === reviewId) ?? newestReview(document);
+  const review = document?.reviews.find((item) => item.id === reviewId) ?? null;
+  useEffect(() => {
+    let alive = true;
+    if (!reviewId || !selectedId || document?.reviews.some(value => value.id === reviewId)) return;
+    setDocument(value => value?.id === selectedId ? { ...value, reviews: [] } : value);
+    bridge.getReview(reviewId).then(result => { if (alive && result.documentId === selectedIdRef.current) setDocument(value => value?.id === result.documentId ? { ...value, reviews: [result] } : value); }).catch(error => alive && setNotice({ kind: 'error', text: messageOf(error) }));
+    return () => { alive = false; };
+  }, [bridge, reviewId, selectedId]);
+  useEffect(() => {
+    let alive = true; if (!selectedId) return;
+    if (skipSearchReload.current) { skipSearchReload.current = false; return; }
+    const ticket = ++blockRequest.current;
+    const timer = setTimeout(() => {
+      bridge.getDocumentBlocks({ documentId: selectedId, query: search }).then(page => { if (alive && ticket === blockRequest.current && selectedIdRef.current === selectedId) { setDocument(value => value?.id === selectedId ? { ...value, blocks: page.items, blockPage: page } : value); setBlockHistory([]); setBlockCursor(undefined); } }).catch(error => alive && setNotice({ kind: 'error', text: messageOf(error) }));
+    }, 200);
+    return () => { alive = false; clearTimeout(timer); };
+  }, [bridge, search, selectedId]);
   useEffect(()=>{let alive=true;setWorkflowStandard(null);const profile=standards.find(s=>s.versions.some(v=>v.id===standardVersionId));if(profile)bridge.getEnterpriseStandard(profile.id).then(p=>{if(alive)setWorkflowStandard(p.versions.find(v=>v.id===standardVersionId)??null);}).catch(e=>alive&&setNotice({kind:'error',text:messageOf(e)}));return()=>{alive=false;};},[bridge,standardVersionId,standards]);
   useEffect(()=>{let alive=true;setFreshness(null);if(review)bridge.runWorkspaceCommand({action:'reviewCompletion.freshness',payload:{reviewId:review.id}}).then(value=>{if(alive)setFreshness(value);}).catch(()=>{});return()=>{alive=false;};},[bridge,review?.id,appState.documents,standards,workspaceTool]);
   useEffect(() => { setChangeRequest(null); }, [document?.id, review?.id]);
@@ -138,7 +164,7 @@ export default function App() {
   const running = taskIsActive(currentTask);
   const allFindings = review?.findings ?? [];
   const filteredFindings = allFindings.filter((finding) => severityFilter === 'all' || finding.severity === severityFilter);
-  const shownBlocks = document?.blocks.filter((block) => !search || `${block.numberingLabel ?? ''} ${block.text}`.toLocaleLowerCase().includes(search.toLocaleLowerCase())) ?? [];
+  const shownBlocks = document?.blockPage.items ?? [];
   const retrievalConfig = appState.retrievalConfig ?? defaultRetrievalConfig();
   const knowledgeConfigured = Boolean(retrievalConfig.knowledge.folderPath || retrievalConfig.knowledge.api.baseUrl);
   const knowledgeLabel = retrievalConfig.knowledge.enabled ? (knowledgeConfigured ? '已启用' : '待配置') : knowledgeConfigured ? '已关闭' : '未配置';
@@ -151,22 +177,57 @@ export default function App() {
 
   const openSetup = async () => {
     setBusyAction('setup');
-    try { setAppState(await bridge.getState()); setSidebarOpen(false); setSetupOpen(true); }
+    try { setAppState(await bridge.getState()); setDocumentHistory([]); setDocumentCursor(undefined); setSidebarOpen(false); setSetupOpen(true); }
     catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); }
     finally { setBusyAction(null); }
   };
 
-  const useDocument = async (detail: ContractDetail) => {
-    selectedIdRef.current = detail.id; setSelectedId(detail.id); setDocument(detail);
-    setContext(value=>({...value,projectId:detail.projectId??undefined}));
-    setReviewId(newestReview(detail)?.id ?? null); setSearch(''); setSelectedFinding(null); setActiveBlockIds([]); setSeverityFilter('all'); setSidebarOpen(false);
-    const state = await bridge.getState(); setAppState(state);
+  const useDocument = async (detail: Pick<ContractDetail, 'id'>) => {
+    const request = ++selectionRequest.current;
+    try {
+      const view = await bridge.getDocumentView(detail.id);
+      // A slow initial load or earlier click cannot replace a newer selection.
+      if (request !== selectionRequest.current) return;
+      selectedIdRef.current = view.id; setSelectedId(view.id); setDocument(value => ({ ...view, reviews: value?.id === view.id ? value.reviews : [] }));
+      setContext(value=>({...value,projectId:view.projectId??undefined}));
+      setReviewId(view.reviewPage.items[0]?.id ?? null); setSearch(''); setSelectedFinding(null); setActiveBlockIds([]); setSeverityFilter('all'); setSidebarOpen(false);
+      setBlockHistory([]); setBlockCursor(undefined); setReviewHistory([]); setReviewCursor(undefined); setDocumentHistory([]); setDocumentCursor(undefined);
+      const state = await bridge.getState();
+      if (request !== selectionRequest.current) return;
+      setAppState(state); setDocumentHistory([]); setDocumentCursor(undefined);
+    } catch (error) {
+      if (request === selectionRequest.current) throw error;
+    }
+  };
+  const pageBlocks = async (direction: 'next' | 'previous') => {
+    if (!document || pageBusy) return; const documentId = document.id;
+    const ticket = ++blockRequest.current;
+    const cursor = direction === 'next' ? document.blockPage.nextCursor ?? undefined : blockHistory.at(-1);
+    if (direction === 'next' && !cursor || direction === 'previous' && !blockHistory.length) return;
+    setPageBusy(true);
+    try { const page = await bridge.getDocumentBlocks({ documentId, query: search, cursor }); if (ticket !== blockRequest.current || selectedIdRef.current !== documentId) return; setDocument(value => value?.id === documentId ? { ...value, blocks: page.items, blockPage: page } : value); setBlockHistory(value => direction === 'next' ? [...value, blockCursor] : value.slice(0, -1)); setBlockCursor(cursor); }
+    catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); } finally { setPageBusy(false); }
+  };
+  const pageReviews = async (direction: 'next' | 'previous') => {
+    if (!document || pageBusy) return; const documentId = document.id;
+    const cursor = direction === 'next' ? document.reviewPage.nextCursor ?? undefined : reviewHistory.at(-1);
+    if (direction === 'next' && !cursor || direction === 'previous' && !reviewHistory.length) return;
+    setPageBusy(true);
+    try { const page = await bridge.getDocumentReviews({ documentId, cursor }); if (selectedIdRef.current !== documentId) return; setDocument(value => value?.id === documentId ? { ...value, reviewPage: page } : value); setReviewHistory(value => direction === 'next' ? [...value, reviewCursor] : value.slice(0, -1)); setReviewCursor(cursor); }
+    catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); } finally { setPageBusy(false); }
+  };
+  const pageDocuments = async (direction: 'next' | 'previous') => {
+    const cursor = direction === 'next' ? appState.documentsPage?.nextCursor ?? undefined : documentHistory.at(-1);
+    if (pageBusy || direction === 'next' && !cursor || direction === 'previous' && !documentHistory.length) return;
+    setPageBusy(true);
+    try { const { items, ...documentsPage } = await bridge.listDocumentsPage({ cursor }); setAppState(value => ({ ...value, documents: items, documentsPage })); setDocumentHistory(value => direction === 'next' ? [...value, documentCursor] : value.slice(0, -1)); setDocumentCursor(cursor); }
+    catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); } finally { setPageBusy(false); }
   };
 
   const selectDocument = async (id: string) => {
     if (id === selectedId) { setSidebarOpen(false); return; }
     setBusyAction('select');
-    try { await useDocument(await bridge.getDocument(id)); } catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); }
+    try { await useDocument({ id }); } catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); }
     finally { setBusyAction(null); }
   };
 
@@ -183,7 +244,7 @@ export default function App() {
     if (!document) return;
     if (mode === 'model' && !appState.modelConfig) { setSettingsOpen(true); setNotice({ kind: 'info', text: '请先配置模型连接，再开始模型审核。' }); return; }
     setBusyAction('start'); setNotice(null); setSelectedFinding(null); setActiveBlockIds([]);
-    try { await bridge.startReview({ documentId: document.id, context, mode, ...(standardVersionId ? { standardVersionId } : {}) }); setAppState(await bridge.getState()); }
+    try { await bridge.startReview({ documentId: document.id, context, mode, ...(standardVersionId ? { standardVersionId } : {}) }); setAppState(await bridge.getState()); setDocumentHistory([]); setDocumentCursor(undefined); }
     catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); }
     finally { setBusyAction(null); }
   };
@@ -191,7 +252,7 @@ export default function App() {
   const cancelReview = async () => {
     if (!currentTask) return;
     setBusyAction('cancel');
-    try { await bridge.cancelReview(currentTask.id); setAppState(await bridge.getState()); }
+    try { await bridge.cancelReview(currentTask.id); setAppState(await bridge.getState()); setDocumentHistory([]); setDocumentCursor(undefined); }
     catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); }
     finally { setBusyAction(null); }
   };
@@ -211,14 +272,18 @@ export default function App() {
     await bridge.openEvidenceSource(review.id, evidenceId);
   };
 
-  const locateFinding = (finding: ReviewFinding) => {
-    setSelectedFinding(finding.id); setActiveBlockIds(finding.blockIds); setSearch('');
-    const firstId = finding.blockIds[0];
-    if (firstId) setTimeout(() => {
-      const element = window.document.getElementById(`block-${firstId}`);
-      element?.scrollIntoView({ behavior: 'smooth', block: 'center' }); element?.focus({ preventScroll: true });
-    }, 50);
+  const locateFinding = async (finding: ReviewFinding) => {
+    setSelectedFinding(finding.id); setActiveBlockIds(finding.blockIds); if (search) skipSearchReload.current = true; const ticket = ++blockRequest.current; setSearch('');
+    const firstId = finding.blockIds[0]; const documentId = document?.id;
+    if (!firstId || !documentId) return;
+    try {
+      const page = await bridge.getDocumentBlocks({ documentId, aroundBlockId: firstId });
+      if (ticket !== blockRequest.current || selectedIdRef.current !== documentId) return;
+      setDocument(value => value?.id === documentId ? { ...value, blocks: page.items, blockPage: page } : value); setBlockHistory([]); setBlockCursor({ ordinal: page.items[0]?.ordinal ?? 0, textOffset: 0 });
+      setTimeout(() => { const element = window.document.getElementById(`block-${firstId}`); element?.scrollIntoView({ behavior: 'smooth', block: 'center' }); element?.focus({ preventScroll: true }); }, 50);
+    } catch (error) { setNotice({ kind: 'error', text: messageOf(error) }); }
   };
+
   const proposeChange = (finding: ReviewFinding) => {
     setChangeRequest(current => ({ findingId: finding.id, sequence: (current?.sequence ?? 0) + 1 }));
   };
@@ -233,7 +298,7 @@ export default function App() {
         <button className="generation-launch-button" onClick={() => { setGenerationOpen(true); setSidebarOpen(false); }}><FilePlus2 size={15} />{t("描述生成合同")}</button>
         <button className="enterprise-launch-button" onClick={() => { setStandardsOpen(true); setSidebarOpen(false); }}><ShieldCheck size={15} />{t("企业审核标准")}</button>
         <button className="enterprise-launch-button" onClick={() => { setWorkspaceTool('menu'); setSidebarOpen(false); }}><Layers3 size={15} />{t("功能中心")}</button>
-        <div className="nav-section-title"><span>{t("合同文件")}</span><span>{appState.documents.length.toString().padStart(2, '0')}</span></div>
+        <div className="nav-section-title"><span>{t("合同文件")}</span><span>{(appState.documentsPage?.totalCount ?? appState.documents.length).toString().padStart(2, '0')}</span></div>
         <nav className="document-list" aria-label={t("已导入的合同")}>
           {loading ? <div className="sidebar-hint"><LoaderCircle size={15} className="spin" />{t("正在读取工作空间")}</div> : appState.documents.length ? appState.documents.map((item) => (
             <button key={item.id} className={`document-item ${selectedId === item.id ? 'active' : ''}`} onClick={() => selectDocument(item.id)} disabled={busyAction === 'select'} aria-current={selectedId === item.id ? 'page' : undefined}>
@@ -243,6 +308,7 @@ export default function App() {
             </button>
           )) : <div className="sidebar-empty"><FolderClosed size={24} strokeWidth={1.4} /><p>{t("还没有合同文件")}</p><span>{t("导入后，文件和审核记录")}<br />{t("会保存在当前工作空间")}</span></div>}
         </nav>
+        {(appState.documentsPage?.hasMore || documentHistory.length > 0) && <div className="page-controls"><button disabled={pageBusy || !documentHistory.length} onClick={() => void pageDocuments('previous')}>{t("上一页合同")}</button><button disabled={pageBusy || !appState.documentsPage?.hasMore} onClick={() => void pageDocuments('next')}>{t("下一页合同")}</button></div>}
         <button className="sample-button" onClick={() => importDocument(true)} disabled={!!busyAction}><FlaskConical size={16} /><span>{t("加载演示样例")}</span><ArrowUpRight size={14} /></button>
         <div className="sidebar-bottom">
           <div className="connection-heading"><span>{t("资料连接")}</span><button type="button" onClick={() => setRetrievalSettingsOpen(true)} aria-label={t("资料连接设置")}><Settings2 size={12} />{t("设置")}</button></div>
@@ -260,6 +326,7 @@ export default function App() {
           <section className="page-heading"><div><div className="eyebrow">{t("合同审核")}</div><h1>{t("让每一次审核，有据可循。")}</h1><p>{t("阅读原文，梳理风险，把判断留给充分的信息。")}</p></div><div className="jurisdiction"><ShieldCheck size={17} /><div><strong>{t("中国大陆法律")}</strong><span>{t("中 · 英 · 泰文档")}</span></div></div></section>
 
           {appState.isPreview && <div className="preview-banner"><FlaskConical size={17} /><p><strong>{t("浏览器界面预览")}</strong><span>{t("此页面不调用模型、不读取本机合同。可加载样例体验界面与本地文本检查。")}</span></p></div>}
+          {Boolean(appState.credentialMigration?.legacyCredentialFiles) && <div className="notice info credential-migration" role="status"><LockKeyhole size={17} /><span>{t("已保留旧版加密凭据文件。请在模型或资料连接设置中重新输入密钥；合同、审核记录和连接地址保持不变。")}</span><button className="text-button" onClick={() => setSettingsOpen(true)}>{t("模型设置")}</button></div>}
           {notice && <div className={`notice ${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'} aria-live="polite">{notice.kind === 'error' ? <CircleAlert size={17} /> : notice.kind === 'success' ? <CircleCheck size={17} /> : <Info size={17} />}<span>{translateMessage(notice.text)}</span><button className="icon-button" aria-label={t("关闭提示")} onClick={() => setNotice(null)}><X size={15} /></button></div>}
 
           {!loading && appState.documents.length === 0 && !knowledgeConfigured && <section className="setup-welcome card"><div className="setup-welcome-icon"><MonitorCheck size={20} /></div><div><h2>{t("第一次使用，从本机配置开始")}</h2><p>{t("桌面版自带运行环境。点击即可检查环境、选择资料并建立自己的本地知识库。")}</p></div><button className="button secondary small" type="button" onClick={() => void openSetup()} disabled={busyAction === 'setup'}>{t("开始配置")}<ArrowRight size={13} /></button></section>}
@@ -283,17 +350,17 @@ export default function App() {
           {currentTask?.runtimeProgress && running && <details className="model-stream-preview"><summary>{t("模型输出进度 · 已收到")}{currentTask.runtimeProgress.characters}{t("字符")}</summary><p>{t("未校验的有限预览，完整审核保存后再使用。")}</p><pre>{currentTask.runtimeProgress.preview || t("等待模型输出…")}</pre></details>}
           <div className="review-workspace">
             <section className="document-pane card" aria-labelledby="document-title"><div className="pane-heading"><div className="section-heading-left"><FileText size={18} /><h2 id="document-title">{t("合同原文")}</h2></div>{document && <span className="pill neutral">{document.format.toUpperCase()}</span>}</div>
-              {document ? <><div className="document-meta"><strong title={document.name}>{document.name}</strong><span>{t(languages[document.language])}<i />{document.blockCount}{t("个原文块")}<i />{formatBytes(document.byteSize)}</span></div><div className="document-search"><Search size={15} /><input aria-label={t("查找合同原文")} placeholder={t("查找原文内容…")} value={search} onChange={(event) => setSearch(event.target.value)} />{search && <button className="icon-button" aria-label={t("清空搜索")} onClick={() => setSearch('')}><X size={13} /></button>}<span>{search ? t("{v0} 处", { v0: shownBlocks.length }) : t("原文只读")}</span></div>{(document.partial || document.warnings.length > 0) && <details className="document-warning"><summary><CircleAlert size={14} />{document.partial ? t("文档解析不完整，请核对覆盖范围") : t("{v0} 项文档提示", { v0: document.warnings.length })}<ChevronDown size={13} /></summary><ul>{document.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></details>}<div className="document-scroll">{shownBlocks.length ? shownBlocks.map((block) => <div key={block.id} id={`block-${block.id}`} tabIndex={-1} className={`contract-block ${activeBlockIds.includes(block.id) ? 'highlighted' : ''}`}><span className="block-number">{(block.ordinal + 1).toString().padStart(2, '0')}</span><div className="block-body"><span className="block-locator">{block.locator.kind === 'pdf' ? t("第 {v0} 页", { v0: block.locator.pageIndex + 1 }) : t("段落 {v0}", { v0: block.ordinal + 1 })}</span><p>{block.numberingLabel && <span className="original-numbering" aria-label={t("Word自动编号")}>{block.numberingLabel} </span>}{block.text}</p></div>{activeBlockIds.includes(block.id) && <span className="block-marker" />}</div>) : <div className="empty-search"><Search size={24} /><p>{t("没有找到对应内容")}</p><button className="text-button" onClick={() => setSearch('')}>{t("显示全部原文")}</button></div>}</div><div className="pane-footer"><LockKeyhole size={12} /><span>{t("原始文件保留，审核意见与原文位置关联")}</span></div></> : <div className="document-empty"><div className="empty-document-illustration"><div className="paper-corner" /><FileText size={33} strokeWidth={1.2} /><span /><span /><span /></div><h3>{t("从一份合同开始")}</h3><p>{t("导入 Word 或 PDF 文件，")}<br />{t("在这里阅读条款、定位审核意见。")}</p><button className="button secondary" onClick={() => importDocument()} disabled={!!busyAction}><FilePlus2 size={15} />{t("选择合同文件")}</button><button className="text-button" onClick={() => importDocument(true)} disabled={!!busyAction}>{t("先加载一份演示样例")}<ArrowRight size={13} /></button><div className="supported-languages">{t("中文")}<span />English<span />ภาษาไทย</div></div>}
+              {document ? <><div className="document-meta"><strong title={document.name}>{document.name}</strong><span>{t(languages[document.language])}<i />{document.blockCount}{t("个原文块")}<i />{formatBytes(document.byteSize)}</span></div><div className="document-search"><Search size={15} /><input aria-label={t("查找合同原文")} placeholder={t("查找原文内容…")} maxLength={1000} value={search} onChange={(event) => setSearch(event.target.value)} />{search && <button className="icon-button" aria-label={t("清空搜索")} onClick={() => setSearch('')}><X size={13} /></button>}<span>{search ? t("{v0} 处", { v0: document.blockPage.matchedCount }) : t("原文只读")}</span></div>{(document.partial || document.warnings.length > 0) && <details className="document-warning"><summary><CircleAlert size={14} />{document.partial ? t("文档解析不完整，请核对覆盖范围") : t("{v0} 项文档提示", { v0: document.warnings.length })}<ChevronDown size={13} /></summary><ul>{document.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></details>}<div className="document-scroll">{shownBlocks.length ? shownBlocks.map((block) => <div key={`${block.id}-${block.textWindow?.offset ?? 0}`}  id={`block-${block.id}${block.textWindow?.offset ? `-${block.textWindow.offset}` : ''}`} tabIndex={-1} className={`contract-block ${activeBlockIds.includes(block.id) ? 'highlighted' : ''}`}><span className="block-number">{(block.ordinal + 1).toString().padStart(2, '0')}</span><div className="block-body"><span className="block-locator">{block.locator.kind === 'pdf' ? t("第 {v0} 页", { v0: block.locator.pageIndex + 1 }) : t("段落 {v0}", { v0: block.ordinal + 1 })}</span><p>{block.numberingLabel && <span className="original-numbering" aria-label={t("Word自动编号")}>{block.numberingLabel} </span>}{block.text}</p>{block.textWindow && <small className="text-window-note">{t("长段落分段显示：第 {v0}–{v1} 字符，共 {v2} 字符", { v0: block.textWindow.offset + 1, v1: block.textWindow.offset + block.textWindow.length, v2: block.textWindow.totalLength })}</small>}</div>{activeBlockIds.includes(block.id) && <span className="block-marker" />}</div>) : <div className="empty-search"><Search size={24} /><p>{t("没有找到对应内容")}</p><button className="text-button" onClick={() => setSearch('')}>{t("显示全部原文")}</button></div>}</div><div className="page-controls"><button disabled={pageBusy || !blockHistory.length} onClick={() => void pageBlocks('previous')}>{t("上一页原文")}</button><span>{t("本页 {v0} 个片段，共匹配 {v1} 个原文块", { v0: shownBlocks.length, v1: document.blockPage.matchedCount })}</span><button disabled={pageBusy || !document.blockPage.hasMore} onClick={() => void pageBlocks('next')}>{t("下一页原文")}</button></div><div className="pane-footer"><LockKeyhole size={12} /><span>{t("原始文件保留，审核意见与原文位置关联")}</span></div></> : <div className="document-empty"><div className="empty-document-illustration"><div className="paper-corner" /><FileText size={33} strokeWidth={1.2} /><span /><span /><span /></div><h3>{t("从一份合同开始")}</h3><p>{t("导入 Word 或 PDF 文件，")}<br />{t("在这里阅读条款、定位审核意见。")}</p><button className="button secondary" onClick={() => importDocument()} disabled={!!busyAction}><FilePlus2 size={15} />{t("选择合同文件")}</button><button className="text-button" onClick={() => importDocument(true)} disabled={!!busyAction}>{t("先加载一份演示样例")}<ArrowRight size={13} /></button><div className="supported-languages">{t("中文")}<span />English<span />ภาษาไทย</div></div>}
             </section>
 
             <section className="results-pane card" aria-labelledby="results-title"><div className="pane-heading"><div className="section-heading-left"><FileSearch size={18} /><h2 id="results-title">{t("审核结果")}</h2>{review && <span className="count-badge">{allFindings.length}</span>}</div><button className="button ghost small export-button" onClick={exportReport} disabled={!review || busyAction === 'export'}><ArrowDownToLine size={14} />{busyAction === 'export' ? t("导出中…") : t("导出报告")}</button></div>
-              {review ? <>{freshness && <ReviewFreshnessNotice value={freshness}/>}<div className="review-result-meta"><span className={`pill ${review.mode === 'model' ? 'green' : 'neutral'}`}>{review.mode === 'model' ? <Sparkles size={11} /> : <CheckCheck size={11} />}{review.mode === 'model' ? t("模型分析") : t("本地规则检查")}</span>{document && document.reviews.length > 1 ? <label className="history-select"><span className="sr-only">{t("选择历史检查结果")}</span><select value={review.id} onChange={(event) => { setReviewId(event.target.value); setSelectedFinding(null); setActiveBlockIds([]); }} aria-label={t("历史检查结果")}>{[...document.reviews].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).map((item) => <option key={item.id} value={item.id}>{formatDate(item.createdAt)} · {item.mode === 'model' ? t("模型审核") : t("本地检查")}</option>)}</select><ChevronDown size={12} /></label> : <span className="result-time">{formatDate(review.createdAt)}</span>}</div><div className="review-summary">{review.summary}</div><div className="result-context-note"><span>{t(contractTypes[review.context.contractType])}</span><span>{t(partyRoles[review.context.ourPartyRole])}</span><span>{t(strictnessLabels[review.context.strictness])}</span></div><div className="risk-overview"><div><strong>{allFindings.length.toString().padStart(2, '0')}</strong><span>{t("全部事项")}</span></div><div className="high"><strong>{highCount.toString().padStart(2, '0')}</strong><span><i />{t("高风险")}</span></div><div className="medium"><strong>{mediumCount.toString().padStart(2, '0')}</strong><span><i />{t("中风险")}</span></div><div><strong>{review.coverage.reviewedBlockIds.length}<small>/{review.coverage.totalBlockCount}</small></strong><span>{t("原文覆盖")}</span></div></div><div className="result-tabs" aria-label={t("风险等级筛选")}>{(['all', 'high', 'medium', 'low', 'unrated'] as const).map((severity) => <button key={severity} className={severityFilter === severity ? 'active' : ''} onClick={() => setSeverityFilter(severity)} aria-pressed={severityFilter === severity}>{severity === 'all' ? t("全部") : t(severities[severity])}</button>)}</div><div className="findings-scroll">{filteredFindings.length ? filteredFindings.map((finding, index) => <FindingCard key={finding.id} finding={finding} index={index} selected={selectedFinding === finding.id} onLocate={() => locateFinding(finding)} onPropose={() => proposeChange(finding)} evidence={review.retrieval?.evidence ?? []} onOpenEvidence={openEvidence} />) : <div className="no-findings"><CircleCheck size={29} strokeWidth={1.4} /><h3>{allFindings.length ? t("当前筛选下没有事项") : t("本次检查未返回风险事项")}</h3><p>{allFindings.length ? t("可以切换其他等级查看。") : t("请结合检查范围和限制判断，本结果不代表合同不存在风险。")}</p></div>}<details className="coverage-details" open={review.coverage.limitations.length > 0}><summary><Info size={14} />{t("检查范围与限制")}<ChevronDown size={13} /></summary><div className="coverage-connections"><span><BookOpen size={12} />{t("知识库")}<RetrievalStatusBadge status={review.coverage.knowledgeStatus} /></span><span><Globe2 size={12} />{t("互联网")}<RetrievalStatusBadge status={review.coverage.webStatus} /></span></div><ul>{review.coverage.limitations.map((limitation, index) => <li key={index}>{limitation}</li>)}</ul>{review.modelId && <p className="model-used">{t("使用模型：")}{review.modelId}</p>}<p className="model-used">{t("耗时")}{(review.elapsedMs / 1000).toFixed(1)}{t("秒")}{review.inputTokens !== null ? t(" · 输入 {v0} tokens", { v0: review.inputTokens.toLocaleString() }) : ''}{review.outputTokens !== null ? t(" · 输出 {v0} tokens", { v0: review.outputTokens.toLocaleString() }) : ''}</p></details></div></> : <div className="results-empty"><div className="result-illustration"><div className="illustration-line" /><FileCheck2 size={36} strokeWidth={1.3} /><div className="illustration-dot"><Check size={10} /></div></div><h3>{t("审核意见将在这里呈现")}</h3><p>{document ? t("确认我方立场和交易背景后，开始审核。") : t("导入合同并确认背景，开始第一次审核。")}</p><div className="empty-result-steps"><div><span>1</span><p>{t("定位到原文的风险事项")}</p></div><div><span>2</span><p>{t("问题分析与修改建议")}</p></div><div><span>3</span><p>{t("范围明确、可导出的审核报告")}</p></div></div><div className="result-empty-footnote"><Info size={13} /><span>{t("模型审核需要先配置 API。")}<br />{t("本地规则检查独立运行，不调用模型。")}</span></div></div>}
+              {review ? <>{freshness && <ReviewFreshnessNotice value={freshness}/>}<div className="review-result-meta"><span className={`pill ${review.mode === 'model' ? 'green' : 'neutral'}`}>{review.mode === 'model' ? <Sparkles size={11} /> : <CheckCheck size={11} />}{review.mode === 'model' ? t("模型分析") : t("本地规则检查")}</span>{document && document.reviewPage.totalCount > 1 ? <label className="history-select"><span className="sr-only">{t("选择历史检查结果")}</span><select value={review.id} onChange={(event) => { setReviewId(event.target.value); setSelectedFinding(null); setActiveBlockIds([]); }} aria-label={t("历史检查结果")}>{!document.reviewPage.items.some(item => item.id === review.id) && <option value={review.id}>{formatDate(review.createdAt)}</option>}{document.reviewPage.items.map((item) => <option key={item.id} value={item.id}>{formatDate(item.createdAt)} · {item.mode === 'model' ? t("模型审核") : t("本地检查")}</option>)}</select><ChevronDown size={12} /></label> : <span className="result-time">{formatDate(review.createdAt)}</span>}</div><div className="page-controls"><button disabled={pageBusy || !reviewHistory.length} onClick={() => void pageReviews('previous')}>{t("上一页审核记录")}</button><span>{document?.reviewPage.totalCount ?? 0}{t("份审核记录")}</span><button disabled={pageBusy || !document?.reviewPage.hasMore} onClick={() => void pageReviews('next')}>{t("下一页审核记录")}</button></div><div className="review-summary">{review.summary}</div><div className="result-context-note"><span>{t(contractTypes[review.context.contractType])}</span><span>{t(partyRoles[review.context.ourPartyRole])}</span><span>{t(strictnessLabels[review.context.strictness])}</span></div><div className="risk-overview"><div><strong>{allFindings.length.toString().padStart(2, '0')}</strong><span>{t("全部事项")}</span></div><div className="high"><strong>{highCount.toString().padStart(2, '0')}</strong><span><i />{t("高风险")}</span></div><div className="medium"><strong>{mediumCount.toString().padStart(2, '0')}</strong><span><i />{t("中风险")}</span></div><div><strong>{review.coverage.reviewedBlockIds.length}<small>/{review.coverage.totalBlockCount}</small></strong><span>{t("原文覆盖")}</span></div></div><div className="result-tabs" aria-label={t("风险等级筛选")}>{(['all', 'high', 'medium', 'low', 'unrated'] as const).map((severity) => <button key={severity} className={severityFilter === severity ? 'active' : ''} onClick={() => setSeverityFilter(severity)} aria-pressed={severityFilter === severity}>{severity === 'all' ? t("全部") : t(severities[severity])}</button>)}</div><div className="findings-scroll">{filteredFindings.length ? filteredFindings.map((finding, index) => <FindingCard key={finding.id} finding={finding} index={index} selected={selectedFinding === finding.id} onLocate={() => locateFinding(finding)} onPropose={() => proposeChange(finding)} evidence={review.retrieval?.evidence ?? []} onOpenEvidence={openEvidence} />) : <div className="no-findings"><CircleCheck size={29} strokeWidth={1.4} /><h3>{allFindings.length ? t("当前筛选下没有事项") : t("本次检查未返回风险事项")}</h3><p>{allFindings.length ? t("可以切换其他等级查看。") : t("请结合检查范围和限制判断，本结果不代表合同不存在风险。")}</p></div>}<details className="coverage-details" open={review.coverage.limitations.length > 0}><summary><Info size={14} />{t("检查范围与限制")}<ChevronDown size={13} /></summary><div className="coverage-connections"><span><BookOpen size={12} />{t("知识库")}<RetrievalStatusBadge status={review.coverage.knowledgeStatus} /></span><span><Globe2 size={12} />{t("互联网")}<RetrievalStatusBadge status={review.coverage.webStatus} /></span></div><ul>{review.coverage.limitations.map((limitation, index) => <li key={index}>{limitation}</li>)}</ul>{review.modelId && <p className="model-used">{t("使用模型：")}{review.modelId}</p>}<p className="model-used">{t("耗时")}{(review.elapsedMs / 1000).toFixed(1)}{t("秒")}{review.inputTokens !== null ? t(" · 输入 {v0} tokens", { v0: review.inputTokens.toLocaleString() }) : ''}{review.outputTokens !== null ? t(" · 输出 {v0} tokens", { v0: review.outputTokens.toLocaleString() }) : ''}</p></details></div></> : <div className="results-empty"><div className="result-illustration"><div className="illustration-line" /><FileCheck2 size={36} strokeWidth={1.3} /><div className="illustration-dot"><Check size={10} /></div></div><h3>{t("审核意见将在这里呈现")}</h3><p>{document ? t("确认我方立场和交易背景后，开始审核。") : t("导入合同并确认背景，开始第一次审核。")}</p><div className="empty-result-steps"><div><span>1</span><p>{t("定位到原文的风险事项")}</p></div><div><span>2</span><p>{t("问题分析与修改建议")}</p></div><div><span>3</span><p>{t("范围明确、可导出的审核报告")}</p></div></div><div className="result-empty-footnote"><Info size={13} /><span>{t("模型审核需要先配置 API。")}<br />{t("本地规则检查独立运行，不调用模型。")}</span></div></div>}
             </section>
           </div>
           {review?.batchCoverage && <section className="review-standard-snapshot"><strong>{t("长合同审核：")}{review.batchCoverage.batchCount}{t("批")}</strong><p>{review.batchCoverage.crossBatchSynthesis ? t("已执行跨批综合，仍需人工核对关联问题。") : t("跨批综合受预算限制，相关问题需人工补核。")}</p>{review.batchCoverage.limitations.map((note,index) => <p key={index}>{note}</p>)}</section>}
           {review?.experienceSnapshot?.length ? <section className="review-standard-snapshot"><strong>{t("本次冻结")}{review.experienceSnapshot.length}{t("项已确认经验")}</strong><p>{t("仅在对应适用范围复用；后续停用或修改不改变本次记录。")}</p></section> : null}
           {review && <><section className="review-standard-snapshot" aria-label={t("本次审核标准快照")}>{review.standardSnapshot ? <><strong>{review.standardSnapshot.content.name} · v{review.standardSnapshot.versionNo}</strong><span>{t("审核时内容摘要：")}{review.standardSnapshot.contentSha256}</span><p>{t("高风险处理建议：")}{review.standardSnapshot.content.workflow.highRiskHandling === 'escalate' ? t("升级处理") : t("人工复核")}{t("，由人工决定，未自动改变状态。历史审核按当时版本保留；上方当前选择不改变这份报告。")}</p></> : <p>{t("本次未保存企业标准版本（基础审核或旧记录）。当前标准选择不会补写此历史报告。")}</p>}</section><ProgramChecksPanel key={`program-${review.id}`} review={review} onLocate={locateFinding} /><RiskDispositionPanel key={`dispositions-${review.id}`} bridge={bridge} review={review} isPreview={appState.isPreview} onLocate={locateFinding} /></>}
-          {review && document && <ChangesPanel key={review.id} bridge={bridge} document={document} review={review} isPreview={appState.isPreview} selectedFindingId={changeRequest?.findingId ?? null} requestSequence={changeRequest?.sequence ?? 0} onExport={async () => { setAppState(await bridge.getState()); }} />}
+          {review && document && <ChangesPanel key={review.id} bridge={bridge} document={document} review={review} isPreview={appState.isPreview} selectedFindingId={changeRequest?.findingId ?? null} requestSequence={changeRequest?.sequence ?? 0} onExport={async () => { setAppState(await bridge.getState()); setDocumentHistory([]); setDocumentCursor(undefined); }} />}
           {review && <ReviewSources review={review} onOpen={openEvidence} />}
           <footer className="workspace-footer"><span><ShieldCheck size={12} />{t("辅助分析 · 人工复核 · 保留依据")}</span><span>{t("合同工作台")}<span className="version-label">v{appState.appVersion}</span></span></footer>
         </div>
@@ -303,7 +370,7 @@ export default function App() {
       <ContractGenerationPanel bridge={bridge} open={generationOpen} modelConfig={appState.modelConfig} isPreview={appState.isPreview} onClose={() => setGenerationOpen(false)} onModelSettings={() => setSettingsOpen(true)} onImported={async detail => { await useDocument(detail); setGenerationOpen(false); setNotice({ kind: 'success', text: '生成的合同已导出并加入工作台，可继续审核。' }); }} />
       <EnterpriseStandardsPanel bridge={bridge} open={standardsOpen} isPreview={appState.isPreview} onClose={() => setStandardsOpen(false)} onChanged={refreshStandards} />
       {workspaceTool === 'menu' && <div className="workspace-tools-overlay"><section role="dialog" aria-label={t("功能中心")} className="workspace-tools-menu"><header><h2>{t("功能中心")}</h2><button className="icon-button" aria-label={t("关闭功能中心")} onClick={() => setWorkspaceTool(null)}><X size={18} /></button></header><p>{t("合同版本、审核资料、报告、经验与本地数据管理。")}</p><div>{([['documents',t("合同、项目与参考译文"),t("版本关联、归档、回收站和译文复核历史")],['completion',t("审核资料与核验"),t("事实、假设、待确认问题、流程和来源人工核验")],['alignment',t("双／三语条款对齐"),t("对应片段、优先文本约定和不一致待复核项")],['runtime',t("模型运行与用量"),t("能力、流式输出、预算、重试和调用台账")],['reports',t("报告与工作汇总"),t("领导摘要、正式报告与跨合同统计")],['library',t("经验、模板与人工意见"),t("人工确认经验、模板起草和补充审核意见")],['connections',t("专业检索与远端知识库"),t("MCP、SFTP、共享盘和远端索引节点")],['conversion',t("扫描件与 PDF 转换"),t("本机中英泰 OCR 与可修改 DOCX 副本")],['maintenance',t("数据备份与恢复"),t("备份、还原与可撤销的知识库清理")]] as const).map(([key,title,description]) => <button key={key} disabled={(key==='completion'||key==='alignment')&&!document} onClick={() => setWorkspaceTool(key)}><strong>{title}</strong><span>{description}</span><ArrowRight size={16} /></button>)}</div></section></div>}
-      {workspaceTool === 'documents' && <DocumentWorkspacePanel bridge={bridge} document={document} onClose={()=>{setWorkspaceTool(null);void bridge.getState().then(async state=>{setAppState(state);if(document&&!state.documents.some(d=>d.id===document.id)){setDocument(null);setSelectedId(null);selectedIdRef.current=null;setReviewId(null);}else if(document){const current=await bridge.getDocument(document.id);setDocument(current);setContext(value=>({...value,projectId:current.projectId??undefined}));}}).catch(error=>setNotice({kind:'error',text:messageOf(error)}));}} onSelect={async detail=>{await useDocument(detail);setWorkspaceTool(null);}} />}
+      {workspaceTool === 'documents' && <DocumentWorkspacePanel bridge={bridge} document={document} onClose={()=>{setWorkspaceTool(null);void bridge.getState().then(async state=>{setAppState(state); setDocumentHistory([]); setDocumentCursor(undefined);if(document){try{const current=await bridge.getDocumentView(document.id);if(current.lifecycleStatus&&current.lifecycleStatus!=='active')throw new Error();setDocument(value=>({...current,reviews:value?.id===current.id?value.reviews:[]}));setContext(value=>({...value,projectId:current.projectId??undefined}));setReviewId(current.reviewPage.items[0]?.id??null);}catch{setDocument(null);setSelectedId(null);selectedIdRef.current=null;setReviewId(null);}}}).catch(error=>setNotice({kind:'error',text:messageOf(error)}));}} onSelect={async detail=>{await useDocument(detail);setWorkspaceTool(null);}} />}
       {workspaceTool === 'completion' && document && <div className="workspace-module-overlay" role="dialog" aria-modal="true" aria-label={t("审核资料与核验窗口")}><ReviewCompletionPanel bridge={bridge} document={document} review={review} standard={workflowStandard} onClose={()=>setWorkspaceTool(null)} /></div>}
       {workspaceTool === 'alignment' && document?.contractId && <ClauseAlignmentPanel bridge={bridge} contractId={document.contractId} onClose={()=>setWorkspaceTool(null)} />}
       {workspaceTool === 'runtime' && <div className="workspace-module-overlay" role="dialog" aria-modal="true" aria-label={t("模型运行配置窗口")}><ModelRuntimePanel bridge={bridge} onClose={()=>setWorkspaceTool(null)} /></div>}
@@ -311,7 +378,7 @@ export default function App() {
       {workspaceTool === 'library' && <LibraryPanel bridge={bridge} review={review} document={document} onClose={() => setWorkspaceTool(null)} onImported={async detail => { await useDocument(detail); setWorkspaceTool(null); }} />}
       {workspaceTool === 'connections' && <ConnectionsPanel bridge={bridge} onClose={() => setWorkspaceTool(null)} />}
       {workspaceTool === 'conversion' && <div className="workspace-module-overlay" role="dialog" aria-modal="true" aria-label={t("PDF 转换窗口")}><DocumentConversionPanel bridge={bridge} document={document} onClose={() => setWorkspaceTool(null)} onImported={async detail => { await useDocument(detail); setWorkspaceTool(null); }} /></div>}
-      {workspaceTool === 'maintenance' && <MaintenancePanel bridge={bridge} onClose={() => { setWorkspaceTool(null); void bridge.getState().then(async state => { setAppState(state); if (state.documents[0]) await useDocument(await bridge.getDocument(state.documents[0].id)); else { setDocument(null); setSelectedId(null); setReviewId(null); } }).catch(error => setNotice({kind:'error',text:messageOf(error)})); }} />}
+      {workspaceTool === 'maintenance' && <MaintenancePanel bridge={bridge} onClose={() => { setWorkspaceTool(null); void bridge.getState().then(async state => { setAppState(state); setDocumentHistory([]); setDocumentCursor(undefined); if (state.documents[0]) await useDocument(await bridge.getDocumentView(state.documents[0].id)); else { setDocument(null); setSelectedId(null); setReviewId(null); } }).catch(error => setNotice({kind:'error',text:messageOf(error)})); }} />}
       {settingsOpen && <ModelSettings bridge={bridge} config={appState.modelConfig} isPreview={appState.isPreview} onClose={() => setSettingsOpen(false)} onSaved={(modelConfig) => setAppState((state) => ({ ...state, modelConfig }))} />}
     </div>
   );

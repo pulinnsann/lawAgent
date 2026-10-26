@@ -1,5 +1,6 @@
-import initSqlJs, { type Database, type SqlValue } from 'sql.js';
-import { createRequire } from 'node:module';
+import type { SqlValue } from 'sql.js';
+import { acquireWorkspaceLease, openLegacyDatabase, type StorageDatabase, type StorageBackend } from './storage-backend';
+import { BusinessDatabaseOpening } from './storage-migration';
 import { readFile, mkdir, writeFile, rename, rm } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
@@ -56,32 +57,40 @@ function dateOnly(value: string | null): string | null {
 
 function normalizeQuote(value: string): string { return value.normalize('NFC').replace(/\s+/gu, ' ').trim(); }
 
-/** SQLite/WASM avoids native ABI dependencies in the first Windows build. One Core worker owns the database. */
+/** One Core worker owns the native SQLite connection. Legacy WASM is an explicit regression reference only. */
 export class AppStore {
   private closed = false;
-  private constructor(private db: Database, private path: string, readonly workspaceId: string) {}
+  private transactionQueue: Promise<unknown> = Promise.resolve();
+  private closingPromise: Promise<void> | null = null;
+  private constructor(private db: StorageDatabase, private path: string, readonly workspaceId: string, private releaseLease: () => Promise<void>) {}
+  get storageBackend(): StorageBackend { return this.db.backend; }
 
   static async open(dataDir: string): Promise<AppStore> {
-    await mkdir(dataDir, { recursive: true });
-    const require = createRequire(import.meta.url);
-    const SQL = await initSqlJs({ wasmBinary: new Uint8Array(await readFile(require.resolve('sql.js/dist/sql-wasm.wasm'))).buffer });
-    const path = join(dataDir, 'workspace.sqlite');
-    let bytes: Buffer | undefined;
-    try { bytes = await readFile(path); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
-    const db = new SQL.Database(bytes);
+    const release = await acquireWorkspaceLease(dataDir);
+    let opening: BusinessDatabaseOpening | undefined;
+    try {
+      opening = await BusinessDatabaseOpening.prepare(dataDir);
+      return await AppStore.finishOpen(dataDir, opening, release);
+    } catch (error) {
+      try { await opening?.abort(); } finally { await release(); }
+      throw error;
+    }
+  }
+
+  private static async finishOpen(dataDir: string, opening: BusinessDatabaseOpening, release: () => Promise<void>): Promise<AppStore> {
+    let db = opening.db;
+    const path = opening.path;
     db.run('PRAGMA foreign_keys=ON');
-    if (!bytes) {
+    if (!opening.existed) {
       const schema = await readFile(new URL('./migrations/001-initial.sql', import.meta.url), 'utf8');
       db.run(schema);
       db.run('UPDATE schema_version SET applied_at=?', [now()]);
     }
     const version = Number(db.exec('SELECT MAX(version) FROM schema_version')[0]?.values[0]?.[0] ?? 0);
+    opening.setInitialVersion(version);
     if(!Number.isInteger(version)||version>CURRENT_WORKSPACE_SCHEMA_VERSION){db.close();throw new Error('业务数据库来自更新的软件版本，当前版本不能打开。');}
     if (version < 2) {
-      if (bytes) {
-        try { await writeFile(`${path}.v1-backup`, bytes, { mode: 0o600, flag: 'wx' }); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') { db.close(); throw error; } }
-      }
+      await opening.retainVersion(1);
       db.run('PRAGMA foreign_keys=OFF'); db.run('BEGIN');
       try {
         db.run(await readFile(new URL('./migrations/002-official-sources.sql', import.meta.url), 'utf8'));
@@ -91,14 +100,7 @@ export class AppStore {
       db.run('PRAGMA foreign_keys=ON');
     }
     if (version < 3) {
-      if (bytes) {
-        // A direct v1 -> v3 upgrade also retains the intermediate, validated v2
-        // image. Existing v2 databases are backed up byte-for-byte.
-        const backup = version < 2 ? Buffer.from(db.export()) : bytes;
-        db.run('PRAGMA foreign_keys=ON');
-        try { await writeFile(`${path}.v2-backup`, backup, { mode: 0o600, flag: 'wx' }); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') { db.close(); throw error; } }
-      }
+      await opening.retainVersion(2);
       db.run('BEGIN');
       try {
         db.run(await readFile(new URL('./migrations/003-document-changes.sql', import.meta.url), 'utf8'));
@@ -108,14 +110,7 @@ export class AppStore {
       db.run('PRAGMA foreign_keys=ON');
     }
     if (version < 4) {
-      if (bytes) {
-        // Direct v1/v2 upgrades retain every validated intermediate image;
-        // an existing v3 image is backed up byte-for-byte.
-        const backup = version < 3 ? Buffer.from(db.export()) : bytes;
-        db.run('PRAGMA foreign_keys=ON');
-        try { await writeFile(`${path}.v3-backup`, backup, { mode: 0o600, flag: 'wx' }); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') { db.close(); throw error; } }
-      }
+      await opening.retainVersion(3);
       db.run('BEGIN');
       try {
         db.run(await readFile(new URL('./migrations/004-editable-copy.sql', import.meta.url), 'utf8'));
@@ -125,12 +120,7 @@ export class AppStore {
       db.run('PRAGMA foreign_keys=ON');
     }
     if (version < 5) {
-      if (bytes) {
-        const backup = version < 4 ? Buffer.from(db.export()) : bytes;
-        db.run('PRAGMA foreign_keys=ON');
-        try { await writeFile(`${path}.v4-backup`, backup, { mode: 0o600, flag: 'wx' }); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') { db.close(); throw error; } }
-      }
+      await opening.retainVersion(4);
       db.run('BEGIN');
       try {
         db.run(await readFile(new URL('./migrations/005-contract-generation.sql', import.meta.url), 'utf8'));
@@ -140,12 +130,7 @@ export class AppStore {
       db.run('PRAGMA foreign_keys=ON');
     }
     if (version < 6) {
-      if (bytes) {
-        const backup = version < 5 ? Buffer.from(db.export()) : bytes;
-        db.run('PRAGMA foreign_keys=ON');
-        try { await writeFile(`${path}.v5-backup`, backup, { mode: 0o600, flag: 'wx' }); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') { db.close(); throw error; } }
-      }
+      await opening.retainVersion(5);
       db.run('BEGIN');
       try {
         db.run(await readFile(new URL('./migrations/006-enterprise-assurance.sql', import.meta.url), 'utf8'));
@@ -155,10 +140,7 @@ export class AppStore {
       db.run('PRAGMA foreign_keys=ON');
     }
     if (version < 7) {
-      if (bytes) {
-        try { await writeFile(`${path}.v6-backup`, version < 6 ? Buffer.from(db.export()) : bytes, { mode: 0o600, flag: 'wx' }); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') { db.close(); throw error; } }
-      }
+      await opening.retainVersion(6);
       db.run('BEGIN');
       try {
         db.run(await readFile(new URL('./migrations/007-document-lifecycle.sql', import.meta.url), 'utf8'));
@@ -167,15 +149,21 @@ export class AppStore {
       } catch (error) { db.run('ROLLBACK'); db.close(); throw error; }
       db.run('PRAGMA foreign_keys=ON');
     }
+    db = await opening.publish();
     const existing = db.exec('SELECT id FROM workspaces ORDER BY created_at,id LIMIT 1')[0]?.values[0]?.[0];
-    const store = new AppStore(db, path, existing ? String(existing) : randomUUID());
-    if (!existing) {
-      store.insert('workspaces', { id: store.workspaceId, name: '我的工作空间', company_name: null, created_at: now(), updated_at: now() });
-    }
-    store.ensureSeed();
-    // Interrupted runs are recoverable records, never silently marked as completed.
-    db.run("UPDATE tasks SET status='failed', error_code='INTERRUPTED', error_message='应用上次关闭时任务尚未完成，请重新审核。', updated_at=? WHERE status IN ('queued','running','waiting')", [now()]);
-    db.run("UPDATE analysis_runs SET status='partial', finished_at=? WHERE status IN ('queued','running')", [now()]);
+    const store = new AppStore(db, path, existing ? String(existing) : randomUUID(), release);
+    // WASM previously published startup mutations together in one file image.
+    // Native autocommit must not leave a seed rule without its version when an
+    // insert fails or the process stops between statements.
+    if (db.backend === 'rust') db.run('BEGIN IMMEDIATE');
+    try {
+      if (!existing) store.insert('workspaces', { id: store.workspaceId, name: '我的工作空间', company_name: null, created_at: now(), updated_at: now() });
+      store.ensureSeed();
+      // Interrupted runs stay recoverable, never silently marked completed.
+      db.run("UPDATE tasks SET status='failed', error_code='INTERRUPTED', error_message='应用上次关闭时任务尚未完成，请重新审核。', updated_at=? WHERE status IN ('queued','running','waiting')", [now()]);
+      db.run("UPDATE analysis_runs SET status='partial', finished_at=? WHERE status IN ('queued','running')", [now()]);
+      if (db.backend === 'rust') db.run('COMMIT');
+    } catch (error) { if (db.backend === 'rust') { try { db.run('ROLLBACK'); } catch { /* SQLite may have recovered an I/O failure. */ } } throw error; }
     await store.flush();
     const { recoverContractPurges } = await import('./document-purge');
     await recoverContractPurges(store,dataDir);
@@ -183,13 +171,7 @@ export class AppStore {
   }
 
   rows(sql: string, values: SqlValue[] = []): Row[] {
-    const statement = this.db.prepare(sql);
-    try {
-      statement.bind(values);
-      const result: Row[] = [];
-      while (statement.step()) result.push(statement.getAsObject() as Row);
-      return result;
-    } finally { statement.free(); }
+    return this.db.all(sql, values);
   }
 
   private insert(table: string, row: Row): void {
@@ -209,6 +191,7 @@ export class AppStore {
   }
 
   async flush(): Promise<void> {
+    if (this.db.backend === 'rust') return; // SQLite commits synchronously; no whole-file export.
     await mkdir(dirname(this.path), { recursive: true });
     const temporary = `${this.path}.${randomUUID()}.tmp`;
     try { const bytes = this.db.export(); this.db.run('PRAGMA foreign_keys=ON'); await writeFile(temporary, bytes, { mode: 0o600 }); await rename(temporary, this.path); }
@@ -216,10 +199,30 @@ export class AppStore {
   }
 
   async transaction<T>(fn: () => T): Promise<T> {
+    if (this.closed || this.closingPromise) throw new Error('业务数据库已关闭或正在关闭。');
+    const work = this.transactionQueue.then(() => this.runTransaction(fn));
+    this.transactionQueue = work.catch(() => {});
+    return work;
+  }
+
+  private async runTransaction<T>(fn: () => T): Promise<T> {
+    if (this.closed) throw new Error('业务数据库已关闭。');
+    if (this.db.backend === 'rust') {
+      this.db.run('BEGIN IMMEDIATE');
+      try {
+        const result = fn();
+        if (result && typeof (result as { then?: unknown }).then === 'function') throw new Error('数据库事务回调必须同步执行。');
+        // Preserve the pre-commit failure boundary used by artifact operations and
+        // tests. Native flush allocates no image; durable COMMIT is the last step.
+        await this.flush();
+        this.db.run('COMMIT');
+        return result;
+      } catch (error) { try { this.db.run('ROLLBACK'); } catch { /* SQLite may have already rolled back an I/O failure. */ } throw error; }
+    }
     const before = this.db.export(); this.db.run('PRAGMA foreign_keys=ON');
     this.db.run('BEGIN');
     try { const result = fn(); this.db.run('COMMIT'); await this.flush(); return result; }
-    catch (error) { try { this.db.run('ROLLBACK'); } catch { /* already committed in memory */ } this.db.close(); const SQL = await initSqlJs({ wasmBinary: new Uint8Array(await readFile(createRequire(import.meta.url).resolve('sql.js/dist/sql-wasm.wasm'))).buffer }); this.db = new SQL.Database(before); this.db.run('PRAGMA foreign_keys=ON'); throw error; }
+    catch (error) { try { this.db.run('ROLLBACK'); } catch { /* already committed in memory */ } this.db.close(); this.db = await openLegacyDatabase(before); this.db.run('PRAGMA foreign_keys=ON'); throw error; }
   }
 
   listEnterpriseStandards(): EnterpriseStandardSummary[] {
@@ -453,6 +456,14 @@ export class AppStore {
     const blocks = this.rows('SELECT * FROM document_blocks WHERE document_version_id=? ORDER BY ordinal', [id]).map(storedBlock);
     const reviews = this.rows("SELECT r.id FROM reports r JOIN analysis_runs a ON a.id=json_extract(r.input_manifest_json,'$.analysisRunIds[0]') WHERE a.document_version_id=? AND r.workspace_id=? AND r.kind='risk' ORDER BY r.created_at DESC", [id, this.workspaceId]).map(r => this.getReview(String(r.id)));
     return { ...this.summary(row), blocks, reviews };
+  }
+
+  /** Review/edit operations need the source once, never every historical report. */
+  getDocumentForReview(id: string): ContractDetail {
+    const row = this.rows('SELECT d.*,c.title FROM document_versions d JOIN contracts c ON c.id=d.contract_id WHERE d.id=? AND c.workspace_id=?', [id, this.workspaceId])[0];
+    if (!row) throw new Error('合同不存在或不属于当前工作空间。');
+    const blocks = this.rows('SELECT * FROM document_blocks WHERE document_version_id=? ORDER BY ordinal', [id]).map(storedBlock);
+    return { ...this.summary(row), blocks, reviews: [] };
   }
 
   getDocumentArtifact(documentId: string): { artifactUri: string; sha256: string; byteSize: number; format: 'docx' | 'pdf' } {
@@ -764,5 +775,13 @@ export class AppStore {
     return retrieval ? { ...review, retrieval: { ...review.retrieval, ...retrieval } } : review;
   }
 
-  async close(): Promise<void> { if (this.closed) return; await this.flush(); this.db.close(); this.closed = true; }
+  async close(): Promise<void> {
+    if (this.closingPromise) return this.closingPromise;
+    this.closingPromise = (async () => {
+      await this.transactionQueue;
+      if (this.closed) return;
+      try { await this.flush(); } finally { try { this.db.close(); this.closed = true; } finally { await this.releaseLease(); } }
+    })();
+    return this.closingPromise;
+  }
 }

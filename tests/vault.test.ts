@@ -101,3 +101,16 @@ test('credential rollback restores encrypted bytes without needing an available 
   await vault.restoreCheckpoint(empty);await assert.rejects(readFile(join(dir,'model-key.bin')),{code:'ENOENT'});assert.equal(vault.snapshot(),null);
  }finally{await rm(dir,{recursive:true,force:true});}
 });
+
+test('Tauri credential namespace preserves legacy ciphertext across save, rollback and clear',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'law-vault-tauri-'));const encryption=encryptionProvider();
+ try{
+  const legacy=new CredentialVault(dir,encryption);await legacy.init();const binding=credentialEndpoint('https://api.example/v1');await legacy.set({endpoint:binding,apiKey:'legacy-synthetic-key'});const before=await readFile(join(dir,'model-key.bin'));
+  const current=new CredentialVault(dir,encryption,credentialEndpoint,2000,'model-key.tauri.bin');await current.init();assert.equal(current.get(binding),null);
+  const empty=await current.checkpoint();await current.set({endpoint:binding,apiKey:'tauri-synthetic-key'});assert.deepEqual(await readFile(join(dir,'model-key.bin')),before);
+  const restarted=new CredentialVault(dir,encryption,credentialEndpoint,2000,'model-key.tauri.bin');await restarted.init();assert.equal(restarted.get(binding),'tauri-synthetic-key');
+  await current.restoreCheckpoint(empty);await assert.rejects(readFile(join(dir,'model-key.tauri.bin')),{code:'ENOENT'});assert.deepEqual(await readFile(join(dir,'model-key.bin')),before);
+  await current.set({endpoint:binding,apiKey:'second-synthetic-key'});await current.set(null);assert.deepEqual(await readFile(join(dir,'model-key.bin')),before);
+  assert.throws(()=>new CredentialVault(dir,encryption,credentialEndpoint,2000,'../escape.bin'),/filename/u);
+ }finally{await rm(dir,{recursive:true,force:true});}
+});

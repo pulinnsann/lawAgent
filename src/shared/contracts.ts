@@ -51,6 +51,20 @@ export interface ContractSummary {
 
 export interface ContractDetail extends ContractSummary { blocks: ContractBlock[]; reviews: ReviewResult[] }
 
+/** Cursors are scoped to the requested immutable document version. Text offsets
+ * count Unicode code points (SQLite substr), never DOCX edit/UTF-16 offsets. */
+export interface DocumentListCursor { createdAt: string; id: string }
+export interface DocumentListInput { cursor?: DocumentListCursor; limit?: number }
+export interface DocumentListPage { items: ContractSummary[]; nextCursor: DocumentListCursor | null; hasMore: boolean; totalCount: number }
+export interface BlockPageCursor { ordinal: number; textOffset: number }
+export interface DocumentBlocksInput { documentId: string; cursor?: BlockPageCursor; limit?: number; query?: string; aroundBlockId?: string }
+export interface DisplayContractBlock extends ContractBlock { textWindow?: { offset: number; length: number; totalLength: number; unit: 'unicode-code-point' } }
+export interface DocumentBlockPage { items: DisplayContractBlock[]; nextCursor: BlockPageCursor | null; hasMore: boolean; totalCount: number; matchedCount: number; byteSize: number; maxBytes: number }
+export interface ReviewSummary { id: string; documentId: string; createdAt: string; mode: ReviewResult['mode']; findingCount: number }
+export interface DocumentReviewsInput { documentId: string; cursor?: DocumentListCursor; limit?: number }
+export interface ReviewSummaryPage { items: ReviewSummary[]; nextCursor: DocumentListCursor | null; hasMore: boolean; totalCount: number }
+export interface ContractView extends ContractDetail { blockPage: DocumentBlockPage; reviewPage: ReviewSummaryPage }
+
 export interface ModelConfigInput {
   /** Missing on existing configurations: continue using Chat Completions. */
   provider?: 'chat-completions' | 'codex-cli';
@@ -267,6 +281,10 @@ export interface ReviewTask {
 
 export interface AppState {
   documents: ContractSummary[];
+  /** Electron-encrypted files are retained until users re-enter their keys in the native shell. */
+  credentialMigration?: { legacyCredentialFiles: number };
+  storageBackend?: 'rust' | 'sqljs';
+  documentsPage?: Omit<DocumentListPage, 'items'>;
   modelConfig: PublicModelConfig | null;
   retrievalConfig?: PublicRetrievalConfig | null;
   tasks: ReviewTask[];
@@ -282,6 +300,11 @@ export interface ContractAssistantBridge {
   importContract(): Promise<ContractDetail | null>;
   loadSample(): Promise<ContractDetail>;
   getDocument(id: string): Promise<ContractDetail>;
+  getDocumentView(id: string): Promise<ContractView>;
+  listDocumentsPage(input?: DocumentListInput): Promise<DocumentListPage>;
+  getDocumentBlocks(input: DocumentBlocksInput): Promise<DocumentBlockPage>;
+  getDocumentReviews(input: DocumentReviewsInput): Promise<ReviewSummaryPage>;
+  getReview(id: string): Promise<ReviewResult>;
   saveModelConfig(input: ModelConfigInput): Promise<PublicModelConfig>;
   testModelConnection(): Promise<ConnectionTestResult>;
   selectKnowledgeFolder(): Promise<string | null>;

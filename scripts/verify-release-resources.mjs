@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Worker } from 'node:worker_threads';
+import { tmpdir } from 'node:os';
 
 // Electron treats app.asar as a virtual directory. Inventory must inspect its
 // physical file, while runtime module resolution deliberately keeps ASAR on.
@@ -58,6 +59,13 @@ export async function verifyReleaseResources(options) {
   await readResource('node_modules/tesseract.js/src/worker-script/index.js', true); await readResource('node_modules/tesseract.js/src/worker-script/node/getCore.js', true);
   for (const name of wasmNames) { await readResource(`node_modules/tesseract.js-core/${name}.js`, true); await readResource(`node_modules/tesseract.js-core/${name}.wasm.js`, true); const bytes = await readResource(`node_modules/tesseract.js-core/${name}.wasm`, true); if (bytes.subarray(0, 8).toString('hex') !== '0061736d01000000') throw new Error(`Tesseract WASM header is invalid: ${name}`); }
   await readResource('node_modules/pdfjs-dist/legacy/build/pdf.mjs'); await readResource('node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs');
+  const businessName = `law-agent-store-${options.platform}-${options.arch}.node`;
+  const businessRoot = options.nativeRoot ?? (options.resources ? join(options.resources, 'native') : join(options.root, '.local', 'native'));
+  const businessPath = await regularFile(businessRoot, businessName);
+  const businessBytes = await readFile(businessPath);
+  const businessSignature = options.platform === 'win32' ? businessBytes.subarray(0, 2).toString('ascii') === 'MZ' : ['cffaedfe', 'feedfacf', 'cafebabe', 'bebafeca'].includes(businessBytes.subarray(0, 4).toString('hex'));
+  if (!businessSignature) throw new Error('Rust business storage does not have the expected target binary signature');
+  entries.push({ path: `native/${businessName}`, location: archive ? 'resources' : 'development-native', bytes: businessBytes.length, sha256: sha(businessBytes) });
   const workerPath = archive ? join(options.resources, 'app.asar.unpacked', workerRelative) : join(options.root, workerRelative);
   const corePath = archive ? join(options.resources, 'app.asar.unpacked', 'node_modules/tesseract.js-core') : join(options.root, 'node_modules/tesseract.js-core');
   // These are imported during worker startup, before any OCR language/data
@@ -71,8 +79,16 @@ export async function verifyReleaseResources(options) {
     if (archive && ['@napi-rs/canvas', 'sql.js'].some(name => !within(options.resources, runtimeRequire.resolve(name)))) throw new Error('A runtime dependency resolved outside packaged resources');
     const canvas = runtimeRequire('@napi-rs/canvas'); const image = canvas.createCanvas(2, 2); const context = image.getContext('2d'); context.fillStyle = '#123456'; context.fillRect(0, 0, 2, 2); const pixel = [...context.getImageData(0, 0, 1, 1).data]; if (pixel.join(',') !== '18,52,86,255' || image.toBuffer('image/png').subarray(1, 4).toString('ascii') !== 'PNG') throw new Error('Native Canvas raster/PNG probe failed');
     const { DatabaseSync } = await import('node:sqlite'); const database = new DatabaseSync(':memory:'); try { database.exec("CREATE VIRTUAL TABLE probe USING fts5(text); INSERT INTO probe(text) VALUES('contract');"); if (database.prepare("SELECT COUNT(*) AS n FROM probe WHERE probe MATCH 'contract'").get().n !== 1) throw new Error('SQLite FTS5 probe failed'); } finally { database.close(); }
-    const initSqlJs = runtimeRequire('sql.js'); const SQL = await initSqlJs({ wasmBinary: new Uint8Array(sqlWasm).buffer }); const business = new SQL.Database(); try { if (business.exec("SELECT json_extract('{\"ok\":1}','$.ok')")[0]?.values[0]?.[0] !== 1) throw new Error('Business SQLite WASM/JSON probe failed'); } finally { business.close(); }
-    await ocrCoreProbe(workerPath, corePath); runtime.verified = true; Object.assign(runtime, { canvas: 'raster-and-png-passed', nativeSqlite: 'fts5-passed', businessSqlite: 'wasm-json-passed', tesseract: 'offline-worker-and-core-passed' });
+    const { mkdtemp, rm } = await import('node:fs/promises');
+    const probeRoot = await mkdtemp(join(tmpdir(), 'law-native-resource-'));
+    try {
+      const { NativeDatabase, WorkspaceLease } = runtimeRequire(businessPath);
+      const lease = new WorkspaceLease(join(probeRoot, 'writer.lock'));
+      const business = new NativeDatabase(join(probeRoot, 'probe.sqlite'));
+      try { business.run('CREATE TABLE probe(value TEXT);BEGIN IMMEDIATE'); business.run('INSERT INTO probe VALUES(?)', '["中 English ไทย"]'); business.run('COMMIT'); if (JSON.parse(business.query('SELECT value FROM probe'))[0]?.values[0]?.[0] !== '中 English ไทย') throw new Error('Rust business SQLite Unicode transaction probe failed'); }
+      finally { business.close(); lease.close(); }
+    } finally { await rm(probeRoot, { recursive: true, force: true }); }
+    await ocrCoreProbe(workerPath, corePath); runtime.verified = true; Object.assign(runtime, { canvas: 'raster-and-png-passed', nativeSqlite: 'fts5-passed', businessSqlite: 'rust-napi-unicode-transaction-passed', tesseract: 'offline-worker-and-core-passed' });
   }
   return { format: 'law-agent-release-resources-v1', createdAt: new Date().toISOString(), target: { platform: options.platform, arch: options.arch }, stage: archive ? 'packaged' : 'preflight', versions, files: entries, workerDependencies, runtime, limitations: ['OCR traineddata language files are installed by the user; this probe does not download them or test recognition accuracy.', 'Resource and engine probes do not certify legal correctness, Word rendering, installer behavior or code signing.'] };
 }

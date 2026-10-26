@@ -5,6 +5,7 @@ import { join, basename, extname, dirname, resolve, relative, isAbsolute, sep } 
 import { defaultRetrievalConfig } from '../shared/contracts';
 import type { AppState, ContractDetail, ModelConfigInput, PublicRetrievalConfig, RetrievalBundle, RetrievalConfigInput, ReviewResult, ReviewTask, StartReviewInput } from '../shared/contracts';
 import { AppStore } from './storage';
+import { getDocumentView, getDocumentBlocks, getDocumentReviews, listDocumentsPage } from './storage-pages';
 import { parseContract } from './documents';
 import { createSampleContract } from './sample';
 import { reviewContract } from './review';
@@ -23,7 +24,7 @@ import { CHANGE_TEXT_LIMIT, draftContractChange } from './change-drafting';
 import type { ContractDraft, GenerateContractInput, ExportContractDraftInput, ExportContractDraftResult } from '../shared/generation';
 import { normalizeGenerateContractInput, generateContractDraft, buildGeneratedContractDocx } from './contract-generation';
 import { WorkspaceAssets } from './workspace-assets';
-import { runDocumentWorkspaceCommand, visibleDocuments, assertDocumentActive } from './workspace-documents';
+import { runDocumentWorkspaceCommand, assertDocumentActive } from './workspace-documents';
 import { generateReferenceTranslation } from './reference-translation';
 import { clauseAlignmentSnapshot, runClauseAlignmentCommand, requestAlignmentComparison } from './workspace-clause-alignment';
 import { inspectContractPurge, purgeContract } from './document-purge';
@@ -78,10 +79,13 @@ export class ContractService {
   private extensionProgress = new Map<string,unknown>();
   private active = new Map<string, { controller: AbortController; runId: string; task: ReviewTask; done: Promise<void>; mode: StartReviewInput['mode'] }>();
   private starting = new Set<string>();
+  private startingModels = new Set<string>();
   private importing = 0;
   private startingDone = new Map<string, Promise<void>>();
   private mutationQueue: Promise<unknown> = Promise.resolve();
   private closing = false;
+  private closeTask: Promise<void> | null = null;
+  private connectionTests = new Map<AbortController, Promise<void>>();
   private runtimeReady: Promise<void>;
   private officialTests = new Set<AbortController>();
   private changeDrafts = new Map<string, { controller: AbortController; done: Promise<ChangeWorkspace> }>();
@@ -158,7 +162,11 @@ export class ContractService {
     if (this.knowledgeTask?.folderPath === folder && this.knowledgeTask.job) state.job = structuredClone(this.knowledgeTask.job);
     return state;
   }
+  private modelReviewPending(): boolean {
+    return this.startingModels.size > 0 || [...this.active.values()].some(item => item.mode === 'model' && (item.task.status === 'queued' || item.task.status === 'running'));
+  }
   async startKnowledgeSync(mode: KnowledgeSyncMode = 'incremental'): Promise<{ jobId: string }> {
+    if (this.modelReviewPending()) throw new Error('模型审核正在准备或运行，知识库建库已暂缓。请等待审核完成或取消审核后再开始建库。');
     if (this.closing) throw new Error('应用正在关闭，无法开始建库。');
     if (this.knowledgeTask) throw new Error('本地知识库正在更新，请等待或取消当前任务。');
     const folderPath = this.knowledgeFolder(); const id = randomUUID(); const controller = new AbortController();
@@ -203,10 +211,27 @@ export class ContractService {
     const progress=this.extensionProgress.get(task.id) as import('../shared/model-runtime').ModelRuntimeProgress|undefined;
     return (task.status==='queued'||task.status==='running')&&progress?.modelRuntime?{...task,runtimeProgress:structuredClone(progress.modelRuntime)}:{...task};
   }
-  getState(): AppState { return { documents: visibleDocuments(this.store), modelConfig: this.store.getConfig(), retrievalConfig: this.store.getRetrievalConfig(), tasks: this.store.listTasks().map(task=>this.publicTask(task)), isPreview: false, appVersion: APP_VERSION }; }
+  getState(): AppState { const { items, ...documentsPage } = this.listDocumentsPage(); return { documents: items, documentsPage, storageBackend: this.store.storageBackend, modelConfig: this.store.getConfig(), retrievalConfig: this.store.getRetrievalConfig(), tasks: this.store.listTasks().map(task=>this.publicTask(task)), isPreview: false, appVersion: APP_VERSION }; }
   getDocument(id: string): ContractDetail { return this.store.getDocument(id); }
+  getDocumentView(id: string) { return getDocumentView(this.store, id); }
+  listDocumentsPage(input: import('../shared/contracts').DocumentListInput = {}) { return listDocumentsPage(this.store, input); }
+  getDocumentBlocks(input: import('../shared/contracts').DocumentBlocksInput) { return getDocumentBlocks(this.store, input); }
+  getDocumentReviews(input: import('../shared/contracts').DocumentReviewsInput) { return getDocumentReviews(this.store, input); }
   saveConfig(input: ModelConfigInput) { const config = validateModelConfig(input); return this.write(() => this.store.saveConfig(config)); }
-  async testConnection(apiKey: string | null) { await this.runtimeReady;const config = this.store.getConfig(); if (!config) throw new Error('请先保存模型 API 配置。'); return withModelRuntime({assets:this.assets,config,taskId:randomUUID(),operation:'connection_test',secrets:[apiKey??'']},()=>testConnection(config, apiKey)); }
+  private async connectionTest<T>(operation: (signal: AbortSignal) => Promise<T>): Promise<T> {
+    if (this.closing) throw new Error('应用正在关闭，无法开始连接测试。');
+    const controller = new AbortController(); let finish!:()=>void;
+    const done = new Promise<void>(resolve=>{finish=resolve;}); this.connectionTests.set(controller,done);
+    try { return await operation(controller.signal); }
+    finally { this.connectionTests.delete(controller); finish(); }
+  }
+  async testConnection(apiKey: string | null) {
+    return this.connectionTest(async signal=>{
+      await this.runtimeReady; signal.throwIfAborted();
+      const config = this.store.getConfig(); if (!config) throw new Error('请先保存模型 API 配置。');
+      return withModelRuntime({assets:this.assets,config,taskId:randomUUID(),operation:'connection_test',signal,secrets:[apiKey??'']},()=>testConnection(config, apiKey, signal));
+    });
+  }
   saveRetrievalConfig(input: RetrievalConfigInput) {
     const config = validateRetrievalConfig({ ...input, knowledge: { ...input.knowledge, preferences: input.knowledge.preferences ?? this.knowledgePreferences() } });
     if (this.knowledgeTask && config.knowledge.folderPath !== this.knowledgeTask.folderPath) throw new Error('请先取消或等待当前建库任务完成，再更换知识库目录。');
@@ -221,14 +246,16 @@ export class ContractService {
   }
 
   async testRetrieval(keys: RetrievalKeys = noRetrievalKeys()): Promise<RetrievalBundle> {
+    return this.connectionTest(async signal=>{
     const config = this.store.getRetrievalConfig();
     if (!config) throw new Error('请先保存检索配置。');
     const stamp = new Date().toISOString();
     const document: ContractDetail = { id: randomUUID(), name: '连接测试 · 明确虚构的服务采购背景', format: 'docx', language: 'zh', byteSize: 0, blockCount: 1, importedAt: stamp, warnings: ['仅用于检索连接测试，不是真实合同或案例。'], partial: false, latestReviewId: null, reviews: [],
       blocks: [{ id: randomUUID(), ordinal: 0, kind: 'paragraph', text: '这是明确虚构的检索连接测试背景：企业采购一项服务，需要了解验收标准、交付要求与付款前提之间的关系。没有真实交易主体、金额或案件事实。', locator: { kind: 'docx', partName: 'connection-test', structuralPath: '/test[1]', paragraphId: null } }] };
     const context = { contractType: 'service', ourPartyRole: 'service_recipient', businessContext: '检索连接测试，虚构业务背景，不形成合同审核或法律意见。', strictness: 'balanced' } as const;
-    const bundle = await retrieveContext(document, context, config, keys, new AbortController().signal, () => {}, (input, signal) => this.searchReviewKnowledge(input, signal), this.officialReader);
+    const bundle = await retrieveContext(document, context, config, keys, signal, () => {}, (input, signal) => this.searchReviewKnowledge(input, signal), this.officialReader);
     return safeBundle(bundle, [keys.knowledgeApiKey, keys.webApiKey]);
+    });
   }
 
   async testOfficialRetrieval(input: { query: string }): Promise<RetrievalBundle> {
@@ -252,8 +279,8 @@ export class ContractService {
   async importVersionFile(sourcePath: string, input: import('../shared/document-workspace').ImportVersionInput): Promise<ContractDetail> {
     if (this.closing) throw new Error('应用正在关闭。');
     assertDocumentActive(this.store, input.parentDocumentId);
-    const parent = this.store.getDocument(input.parentDocumentId);
-    if ([...this.active.values()].some(t=>this.store.getDocument(t.task.documentId).contractId===parent.contractId)) throw new Error('此合同仍在审核，请等待完成或取消。');
+    const parent = this.store.getDocumentForReview(input.parentDocumentId);
+    if ([...this.active.values()].some(t=>this.store.getDocumentForReview(t.task.documentId).contractId===parent.contractId)) throw new Error('此合同仍在审核，请等待完成或取消。');
     const info=await stat(sourcePath); if(!info.isFile()||info.size>50*1024*1024)throw new Error('请选择不超过50 MB的 DOCX 或 PDF 文件。');
     return this.importBytes(basename(sourcePath),await readFile(sourcePath),undefined,input);
   }
@@ -269,7 +296,7 @@ export class ContractService {
     const extension = extname(name).toLowerCase();
     if (!['.docx', '.pdf'].includes(extension)) throw new Error('当前支持 DOCX 和 PDF；旧式 DOC 请先另存为 DOCX。');
     const sha256 = createHash('sha256').update(bytes).digest('hex');
-    const parent = versionInput ? this.store.getDocument(versionInput.parentDocumentId) : null;
+    const parent = versionInput ? this.store.getDocumentForReview(versionInput.parentDocumentId) : null;
     const findDuplicate = () => versionInput ? this.store.rows('SELECT d.id FROM document_versions d WHERE d.contract_id=? AND d.file_sha256=? LIMIT 1',[parent!.contractId!,sha256])[0]?.id : this.store.findByHash(sha256)?.id;
     const duplicate = findDuplicate(); if (duplicate) { assertDocumentActive(this.store,String(duplicate)); return this.store.getDocument(String(duplicate)); }
     const id = randomUUID(); const dir = join(this.dataDir, 'documents', id); await mkdir(dir, { recursive: true });
@@ -292,7 +319,7 @@ export class ContractService {
     const runningReviews = [...this.active.values()].filter(item => item.task.status === 'queued' || item.task.status === 'running');
     if (this.starting.has(input.documentId) || runningReviews.some(item => item.task.documentId === input.documentId)) throw new Error('这份合同正在审核，请等待或取消当前任务。');
     if (runningReviews.length + this.starting.size >= 2) throw new Error('已有两个审核任务运行中，请稍后再试。');
-    const document = this.store.getDocument(input.documentId);
+    const document = this.store.getDocumentForReview(input.documentId);
     assertDocumentActive(this.store,document.id);
     const standard = input.standardVersionId ? this.store.getEnterpriseStandardVersion(input.standardVersionId) : undefined;
     const allSecrets = [apiKey, keys.knowledgeApiKey, keys.webApiKey, ...Object.values(connectionSecrets)];
@@ -323,9 +350,16 @@ export class ContractService {
     if (input.mode === 'model' && !config) throw new Error('请先配置并保存模型 API。');
     const task: ReviewTask = { id: randomUUID(), documentId: document.id, status: 'queued', stage: '准备审核', startedAt: new Date().toISOString(), finishedAt: null, error: null, resultId: null };
     this.starting.add(input.documentId);
+    if (input.mode === 'model') this.startingModels.add(input.documentId);
     let finishStarting!: () => void;
     this.startingDone.set(input.documentId, new Promise<void>(resolve => { finishStarting = resolve; }));
     try {
+      if (input.mode === 'model') {
+        // Reserve model priority before yielding. Index cancellation is awaited:
+        // signalling AbortController alone does not prove heavy workers stopped.
+        const indexing = this.knowledgeTask;
+        if (indexing) { indexing.controller.abort(); await indexing.done; }
+      }
       await this.runtimeReady;
       const workflow = await getWorkflowBeforeReview({store:this.store,assets:this.assets},document.id,standard);
       if (workflow.paused) throw new Error(`审核暂停，先在“审核资料与核验”中补充或确认资料：${workflow.reasons.join('；')}`);
@@ -339,7 +373,7 @@ export class ContractService {
       this.active.set(task.id, active); this.emit({ ...task });
       active.done = this.performReview(task, runId, document, input, config, apiKey, controller, retrievalConfig, { ...keys }, standard, experienceSnapshot, connections, { ...connectionSecrets });
       return { taskId: task.id };
-    } finally { this.starting.delete(input.documentId); this.startingDone.delete(input.documentId); finishStarting(); }
+    } finally { this.starting.delete(input.documentId); this.startingModels.delete(input.documentId); this.startingDone.delete(input.documentId); finishStarting(); }
   }
 
   private async performReview(task: ReviewTask, runId: string, document: ContractDetail, input: StartReviewInput, config: ModelConfigInput | null, apiKey: string | null, controller: AbortController, retrievalConfig: PublicRetrievalConfig | null, keys: RetrievalKeys, standard?: EnterpriseStandardSnapshot, experienceSnapshot: ExperienceSnapshot[] = [], connections: WorkspaceAsset[] = [], connectionSecrets: ConnectionSecrets = {}): Promise<void> {
@@ -439,13 +473,13 @@ export class ContractService {
         if(this.importing||this.active.size||this.starting.size||this.changeDrafts.size||this.contractGenerations.size||this.extensionJobs.size>1)throw new Error('请等待其他合同或工作台任务完成，再永久清理。');
         return this.write(()=>purgeContract(this.store,this.dataDir,input.payload));
       }
-      if (input.action.startsWith('reviewCompletion.')) return runReviewCompletionCommand(input.action,input.payload,deps);
+      if (input.action.startsWith('reviewCompletion.')) return await runReviewCompletionCommand(input.action,input.payload,deps);
       if (input.action.startsWith('alignment.')) return await runClauseAlignmentCommand(input.action,input.payload,{...deps,compare: async comparison => {
         const config=this.store.getConfig();if(!config)throw new Error('请先配置模型 API。');
         if(JSON.stringify(comparison)!==JSON.stringify(redactSecrets(comparison,[apiKey,...Object.values(secrets)])))throw new Error('对齐资料含有与连接凭据相同的内容，已阻止发送，请检查资料。');
         return redactSecrets(await withModelRuntime({assets:this.assets,config,taskId:id,operation:'clause_alignment',signal:controller.signal,secrets:[apiKey??''],onProgress:value=>this.extensionProgress.set(id,value)},()=>requestAlignmentComparison(this.store,comparison,apiKey,controller.signal)),[apiKey,...Object.values(secrets)]);
       }});
-      if (input.action.startsWith('modelRuntime.')) return runModelRuntimeCommand(input.action,input.payload,{assets:this.assets,config:this.store.getConfig(),apiKey,signal:controller.signal,onProgress:value=>this.extensionProgress.set(id,value)});
+      if (input.action.startsWith('modelRuntime.')) return await runModelRuntimeCommand(input.action,input.payload,{assets:this.assets,config:this.store.getConfig(),apiKey,signal:controller.signal,onProgress:value=>this.extensionProgress.set(id,value)});
       if (input.action === 'translations.generate') { const config=this.store.getConfig();if(!config)throw new Error('请先配置模型 API。');return redactSecrets(await withModelRuntime({assets:this.assets,config,taskId:id,operation:'reference_translation',documentId:(input.payload as any)?.documentId,signal:controller.signal,secrets:[apiKey??''],onProgress:value=>this.extensionProgress.set(id,value)},()=>generateReferenceTranslation(this.store,input.payload,apiKey,controller.signal)),[apiKey,...Object.values(secrets)]); }
       if (input.action.startsWith('documents.') || input.action.startsWith('translations.')) return await runDocumentWorkspaceCommand(input.action,input.payload,{...deps,enqueue:operation=>this.write(operation),assertIdle:ids=>{if(this.importing||ids.some(docId=>this.starting.has(docId)||[...this.active.values()].some(t=>t.task.documentId===docId))||this.changeDrafts.size||this.contractGenerations.size)throw new Error('相关合同仍有任务运行，请先等待或取消任务。');}});
       if (input.action.startsWith('library.authoring.')) return await runAuthoringCommand(input.action,input.payload,{...deps,dataDir:this.dataDir});
@@ -512,7 +546,7 @@ export class ContractService {
     return this.store.getEditableCopyAuthorization(reviewId).enabled ? createDocxEditableCopy(bytes) : { bytes, warnings: [] };
   }
   async getChanges(reviewId: string): Promise<ChangeWorkspace> {
-    const review = this.store.getReview(reviewId); const document = this.store.getDocument(review.documentId);
+    const review = this.store.getReview(reviewId); const document = this.store.getDocumentForReview(review.documentId);
     const artifact = this.store.getDocumentArtifact(document.id);
     const basic = { reviewId, documentId: document.id, sourceFileSha256: artifact.sha256, revision: this.store.getChangeRevision(reviewId),
       proposals: this.store.getChangeProposals(reviewId), exports: this.store.getChangeExports(reviewId) };
@@ -542,7 +576,7 @@ export class ContractService {
     return this.write(async () => {
       if (this.closing) throw new Error('应用正在关闭，无法启用可编辑副本。');
       this.assertChangeRevision(input.reviewId, input.expectedRevision);
-      const review = this.store.getReview(input.reviewId); const document = this.store.getDocument(review.documentId);
+      const review = this.store.getReview(input.reviewId); const document = this.store.getDocumentForReview(review.documentId);
       if (document.format !== 'docx') throw new Error('只有DOCX可启用可编辑副本。');
       const source = await this.changeSource(document.id); const protection = await inspectDocxEditProtection(source);
       if (!protection.canCreateEditableCopy) throw new Error(protection.reason ?? '此合同未启用支持的Word只读限制，无需启用可编辑副本。');
@@ -573,7 +607,7 @@ export class ContractService {
     if (this.closing) throw new Error('应用正在关闭，无法保存修改。');
     this.assertChangeRevision(input.reviewId, input.expectedRevision);
     const workspace = await this.getChanges(input.reviewId);
-    const review = this.store.getReview(input.reviewId); const document = this.store.getDocument(review.documentId);
+    const review = this.store.getReview(input.reviewId); const document = this.store.getDocumentForReview(review.documentId);
     assertDocumentActive(this.store,document.id);
     const target = workspace.targets.find(item => item.blockId === input.blockId);
     if (!workspace.supported || !target?.editable) throw new Error(target?.reason ?? workspace.reason ?? '该位置暂不支持修改。');
@@ -608,7 +642,7 @@ export class ContractService {
   private async runChangeDraft(input: GenerateChangeInput, apiKey: string | null, signal: AbortSignal): Promise<ChangeWorkspace> {
     this.assertChangeRevision(input.reviewId, input.expectedRevision);
     const workspace = await this.getChanges(input.reviewId);
-    const review = this.store.getReview(input.reviewId); const document = this.store.getDocument(review.documentId);
+    const review = this.store.getReview(input.reviewId); const document = this.store.getDocumentForReview(review.documentId);
     const finding = review.findings.find(item => item.id === input.findingId); const block = document.blocks.find(item => item.id === input.blockId);
     const target = workspace.targets.find(item => item.blockId === block?.id && item.editable);
     if (!finding || !block || !target) throw new Error('请选择本次报告中的意见和可修改的原文段落。');
@@ -683,7 +717,7 @@ export class ContractService {
       const workspace = await this.getChanges(input.reviewId);
       const proposal = workspace.proposals.find(item => item.id === input.proposalId);
       if (!proposal) throw new Error('修改建议不存在或不属于本次审核。');
-      const document = this.store.getDocument(workspace.documentId);
+      const document = this.store.getDocumentForReview(workspace.documentId);
       if (proposal.sourceFileSha256 !== workspace.sourceFileSha256) throw new Error('修改建议已不适用于当前原文。');
       const working = await this.changeEditingSource(input.reviewId, document.id);
       await applyDocxPatches(working.bytes, [this.changePatch(proposal, document)]);
@@ -701,7 +735,7 @@ export class ContractService {
       const accepted = workspace.proposals.filter(item => item.status === 'accepted');
       if (!accepted.length) throw new Error('请先逐项采纳需要写入修改稿的建议。');
       if (accepted.some(item => item.sourceFileSha256 !== workspace.sourceFileSha256)) throw new Error('已采纳建议的原文版本不一致，已阻止导出。');
-      const document = this.store.getDocument(workspace.documentId);
+      const document = this.store.getDocumentForReview(workspace.documentId);
       const working = await this.changeEditingSource(input.reviewId, document.id);
       const format = input.format ?? 'clean';
       if (!['clean', 'tracked'].includes(format)) throw new Error('请选择有效的修改稿导出格式。');
@@ -741,8 +775,19 @@ export class ContractService {
       }
     });
   }
-  async close(): Promise<void> {
+  close(): Promise<void> {
+    return this.closeTask ??= (async()=>{
     this.closing = true;
+    const connectionTests = [...this.connectionTests.entries()];
+    for (const [controller] of connectionTests) controller.abort();
+    // Signal every active branch before waiting for any branch's cleanup; a
+    // slow extension must not keep a paid model request running during close.
+    for (const controller of this.extensionJobs.values()) controller.abort();
+    for (const controller of this.officialTests) controller.abort();
+    for (const draft of this.changeDrafts.values()) draft.controller.abort();
+    for (const generation of this.contractGenerations.values()) generation.controller.abort();
+    for (const review of this.active.values()) review.controller.abort();
+    this.knowledgeTask?.controller.abort();
     await this.runtimeReady.catch(()=>{});
     for (const controller of this.extensionJobs.values()) controller.abort();
     await Promise.allSettled([...this.extensionDone.values()]);
@@ -754,6 +799,10 @@ export class ContractService {
     if (this.knowledgeTimer) clearInterval(this.knowledgeTimer);
     const knowledgeTask = this.knowledgeTask;
     knowledgeTask?.controller.abort();
+    // Closing the index client also bounds a parser which cannot finish its
+    // cancellation. Start it before awaiting the indexing task's completion.
+    const knowledgeClosing = this.knowledge.close();
+    void knowledgeClosing.catch(()=>{});
     await Promise.allSettled([...this.startingDone.values()]);
     const running = [...this.active.values()];
     for (const item of running) item.controller.abort();
@@ -761,9 +810,11 @@ export class ContractService {
     await Promise.allSettled(drafts.map(item => item.done));
     await Promise.allSettled(generations.map(item => item.done));
     await knowledgeTask?.done;
+    await Promise.allSettled(connectionTests.map(([,done])=>done));
     await this.mutationQueue;
-    await this.knowledge.close();
-    await this.store.close();
+    try { await knowledgeClosing; }
+    finally { await this.store.close(); }
+    })();
   }
 }
 

@@ -1,6 +1,6 @@
 import { APP_VERSION } from '../../shared/app-version';
 import type {
-  AppState, ContractAssistantBridge, ContractBlock, ContractDetail, ModelConfigInput,
+  AppState, ContractAssistantBridge, ContractBlock, ContractDetail, DocumentBlocksInput, DocumentReviewsInput, DocumentListInput, ModelConfigInput,
   PublicModelConfig, PublicRetrievalConfig, RetrievalBundle, ReviewFinding, ReviewResult, ReviewTask,
 } from '../../shared/contracts';
 import { defaultRetrievalConfig } from '../../shared/contracts';
@@ -89,6 +89,25 @@ export function createPreviewBridge(): ContractAssistantBridge {
     limitations: ['浏览器界面预览未联网、未读取本地文件，也没有执行任何真实知识库或互联网检索。'],
   });
 
+  const blockPage = (input: DocumentBlocksInput) => {
+    const document = documents.get(input.documentId); if (!document) throw new Error('预览合同不存在，请重新加载样例。');
+    const target = input.aroundBlockId ? document.blocks.find(block => block.id === input.aroundBlockId)?.ordinal : input.cursor?.ordinal ?? 0;
+    const matched = document.blocks.filter(block => !input.query || `${block.numberingLabel ?? ''} ${block.text}`.toLocaleLowerCase().includes(input.query.toLocaleLowerCase()));
+    const candidates = matched.filter(block => block.ordinal >= (target ?? 0)); const items = candidates.slice(0, input.limit ?? 50); const next = candidates[items.length];
+    return { items: copy(items), nextCursor: next ? { ordinal: next.ordinal, textOffset: 0 } : null, hasMore: Boolean(next), totalCount: document.blocks.length, matchedCount: matched.length, byteSize: new TextEncoder().encode(JSON.stringify(items)).length, maxBytes: 512 * 1024 };
+  };
+  const reviewPage = (input: DocumentReviewsInput) => {
+    const document = documents.get(input.documentId); if (!document) throw new Error('预览合同不存在，请重新加载样例。');
+    const all = [...document.reviews].sort((a,b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id));
+    const candidates = all.filter(review => !input.cursor || review.createdAt < input.cursor.createdAt || review.createdAt === input.cursor.createdAt && review.id < input.cursor.id);
+    const items = candidates.slice(0, input.limit ?? 25).map(review => ({ id: review.id, documentId: review.documentId, createdAt: review.createdAt, mode: review.mode, findingCount: review.findings.length })); const last = items.at(-1); const hasMore = candidates.length > items.length;
+    return { items, nextCursor: hasMore && last ? { createdAt: last.createdAt, id: last.id } : null, hasMore, totalCount: all.length };
+  };
+  const documentPage = (input: DocumentListInput = {}) => {
+    const all = state().documents.sort((a,b) => b.importedAt.localeCompare(a.importedAt) || b.id.localeCompare(a.id)); const candidates = all.filter(document => !input.cursor || document.importedAt < input.cursor.createdAt || document.importedAt === input.cursor.createdAt && document.id < input.cursor.id);
+    const items = candidates.slice(0, input.limit ?? 50); const last = items.at(-1); const hasMore = candidates.length > items.length;
+    return { items, nextCursor: hasMore && last ? { createdAt: last.importedAt, id: last.id } : null, hasMore, totalCount: all.length };
+  };
   return {
     async runWorkspaceCommand(input) { if(input.action==='workspace.interfaceLocale') return {locale:(input.payload as {locale?:string})?.locale??'zh'}; throw new Error('此功能需要桌面本地工作空间；浏览器预览不会连接或写入真实资料。'); },
     async getState() { return state(); },
@@ -114,6 +133,11 @@ export function createPreviewBridge(): ContractAssistantBridge {
       if (!document) throw new Error('预览合同不存在，请重新加载样例。');
       return copy(document);
     },
+    async getDocumentView(id) { const document = documents.get(id); if (!document) throw new Error('预览合同不存在，请重新加载样例。'); const blocks = blockPage({ documentId: id }); return { ...copy(document), blocks: blocks.items, reviews: [], blockPage: blocks, reviewPage: reviewPage({ documentId: id }) }; },
+    async listDocumentsPage(input) { return documentPage(input); },
+    async getDocumentBlocks(input) { return blockPage(input); },
+    async getDocumentReviews(input) { return reviewPage(input); },
+    async getReview(id) { for (const document of documents.values()) { const review = document.reviews.find(value => value.id === id); if (review) return copy(review); } throw new Error('审核结果不存在。'); },
     async saveModelConfig(input: ModelConfigInput) {
       modelConfig = {
         ...(input.provider ? { provider: input.provider } : {}),

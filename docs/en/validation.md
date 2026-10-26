@@ -1,5 +1,7 @@
 # Engineering validation: source version 0.3.0
 
+This page records the pre-migration feature validation. For the 2026-10-26 Tauri migration, process-memory comparison and rapid-reopen tests, see [Tauri desktop validation](tauri-desktop-validation.md).
+
 Validated on 2026-10-23 using synthetic documents, isolated temporary workspaces, and local mock model APIs. No customer workspace, real API credential, or paid model request was used.
 
 ## Automated checks

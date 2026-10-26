@@ -1,0 +1,26 @@
+[package]
+name = "law-agent-node"
+version = "0.1.0"
+edition.workspace = true
+rust-version = "1.89"
+license.workspace = true
+repository.workspace = true
+publish = false
+description = "Bounded native SQLite storage adapter for LawAgent Node and Electron workers"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+napi = { version = "=3.15.0", default-features = false, features = ["napi8", "dyn-symbols"] }
+napi-derive = "=3.6.12"
+rusqlite = { version = "=0.40.2", features = ["bundled", "backup", "limits"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+fallible-iterator = "0.3"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[build-dependencies]
+napi-build = "=2.6.0"

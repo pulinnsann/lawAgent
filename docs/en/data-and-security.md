@@ -10,7 +10,7 @@ Configured external knowledge, MCP, remote index, and web retrieval endpoints re
 
 ## Credentials
 
-The main process uses the operating system's encryption service for saved keys. Startup opens the application window before attempting to unlock credentials. An unavailable or timed-out system service can fall back to session-only replacement credentials without overwriting previously encrypted files. There is no plaintext fallback.
+The privileged desktop backend binds saved keys to their endpoints; the Tauri Rust host uses the operating system's protection service for encryption. Startup opens the application window before attempting to unlock credentials. An unavailable or timed-out system service can fall back to session-only replacement credentials without overwriting previously encrypted files. There is no plaintext fallback. Legacy Electron ciphertext is retained unchanged, and the interface asks for one-time key re-entry into the separate Tauri vault namespace.
 
 Do not include keys in business context, enterprise rules, knowledge documents, advisor prompts, or bug reports. Task preparation rejects known credential collisions in reference assets. Unknown backend errors may retain their original message for diagnosis; use redacted, synthetic reproductions when reporting issues.
 
@@ -25,3 +25,7 @@ A matched quotation proves text traceability only. Authenticity, effectivity, ap
 Source publication excludes customer contracts, local workspaces, knowledge corpora, keys, databases, caches, screenshots, OCR models, and installers. The dependency lockfile remains committed for reproducibility. Historical private implementation notes and customer-specific investigation records are not part of the public documentation set.
 
 Do not post production documents or credentials in public issues. Provide a synthetic or explicitly authorized redacted reproduction instead.
+
+## Closing and reopening
+
+Closing cancels active model, retrieval, generation and indexing operations before waiting for cleanup. Native PDF admission stops and its owned print/WebView resources are cancelled while the application event loop still runs. Read-only preflight does not disable the ordinary shutdown deadline. Critical backup, restoration and index-publication phases finish or roll back before writer ownership is released. An open request arriving during shutdown is remembered and reopened after the previous instance releases its ownership. Startup errors are reported as ordinary failures rather than deliberately aborting the process.

@@ -25,7 +25,7 @@ export default function ChangesPanel({ bridge, document, review, isPreview, sele
 
   const [workspace, setWorkspace] = useState<ChangeWorkspace | null>(null);
   const [expanded, setExpanded] = useState(false);
-  const [busy, setBusy] = useState<string | null>('load');
+  const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [findingId, setFindingId] = useState('');
   const [blockId, setBlockId] = useState('');
@@ -45,14 +45,21 @@ export default function ChangesPanel({ bridge, document, review, isPreview, sele
 
   useEffect(() => {
     alive.current = true;
-    bridge.getChanges(review.id).then(value => { if (alive.current) setWorkspace(value); })
-      .catch(error => { if (alive.current) setNotice({ kind: 'error', text: messageOf(error) }); })
-      .finally(() => { if (alive.current) setBusy(null); });
     return () => {
       alive.current = false;
       if (generating.current) void bridge.cancelChangeDraft(review.id).catch(() => {});
     };
   }, [bridge, review.id]);
+
+  useEffect(() => {
+    if (!expanded || workspace) return;
+    let current = true;
+    setBusy('load'); setNotice(null);
+    bridge.getChanges(review.id).then(value => { if (current && alive.current) setWorkspace(value); })
+      .catch(error => { if (current && alive.current) setNotice({ kind: 'error', text: messageOf(error) }); })
+      .finally(() => { if (current && alive.current) setBusy(null); });
+    return () => { current = false; };
+  }, [bridge, review.id, expanded]);
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -88,10 +95,11 @@ export default function ChangesPanel({ bridge, document, review, isPreview, sele
 
   useEffect(() => {
     const key = `${selectedFindingId}:${requestSequence}`;
-    if (!workspace || !selectedFindingId || key === lastSelectedFinding.current) return;
+    if (!selectedFindingId || key === lastSelectedFinding.current) return;
     if (!review.findings.some(item => item.id === selectedFindingId)) return;
-    lastSelectedFinding.current = key;
     setExpanded(true);
+    if (!workspace) return;
+    lastSelectedFinding.current = key;
     if (busy || dirty) {
       setNotice({ kind: 'info', text: busy ? '当前操作正在进行，原文段落和草稿已保留。请先完成或取消，再选择其他审核意见。' : '当前有未保存编辑，原文段落和草稿已保留。请先保存或撤销编辑，再选择其他审核意见。' });
       return;
@@ -189,7 +197,14 @@ export default function ChangesPanel({ bridge, document, review, isPreview, sele
     finally { if (alive.current) setBusy(null); }
   };
   const canEdit = workspace?.supported && selectionEditable && !busy;
-  return <details ref={panelRef} className="card changes-panel" id={`changes-${review.id}`} open={expanded} onToggle={event => setExpanded(event.currentTarget.open)}>
+  return <details ref={panelRef} className="card changes-panel" id={`changes-${review.id}`} open={expanded} onToggle={event => {
+    const open = event.currentTarget.open; setExpanded(open);
+    // Saved drafts remain in SQLite. Retain only genuinely unsaved edits or an
+    // active generation when collapsing; the complete XML target map is lazy.
+    if (!open && !dirty && !generating.current && (!busy || busy === 'load')) {
+      setWorkspace(null); setBusy(null); setBlockId(''); setSegmentId(''); setProposalId(null); setReplacement('');
+    }
+  }}>
     <summary className="pane-heading"><div className="section-heading-left"><FilePenLine size={17} /><h2>{t("合同修改")}</h2>{workspace && <span className="count-badge">{accepted.length}{t("项已采纳")}</span>}</div><span className="changes-heading-note">{t("预览后逐项确认")}</span><ChevronDown size={14} /></summary>
     <div className="changes-body">
       <p className="changes-intro">{t("修改基于本次审核的原文版本。先核对修改前后文字，再采纳需要的条款；修改稿单独保存，原件和原审核记录保留。")}</p>

@@ -1,4 +1,8 @@
 {
+  "已保留旧版加密凭据文件。请在模型或资料连接设置中重新输入密钥；合同、审核记录和连接地址保持不变。": {
+    "en": "Encrypted credentials from the previous version are retained. Re-enter keys in model or source connection settings. Contracts, reviews, and connection addresses are preserved.",
+    "th": "เก็บไฟล์ข้อมูลรับรองที่เข้ารหัสจากรุ่นก่อนหน้าไว้แล้ว โปรดป้อนคีย์อีกครั้งในการตั้งค่าโมเดลหรือแหล่งข้อมูล สัญญา ผลการตรวจ และที่อยู่การเชื่อมต่อยังคงอยู่"
+  },
   "中文": {
     "en": "Chinese",
     "th": "ภาษาจีน"
@@ -1206,5 +1210,65 @@
   "模型连接": {
     "en": "Model connection",
     "th": "การเชื่อมต่อโมเดล"
+  },
+  "上一页合同": {
+    "en": "Previous contracts",
+    "th": "สัญญาหน้าก่อน"
+  },
+  "下一页合同": {
+    "en": "Next contracts",
+    "th": "สัญญาหน้าถัดไป"
+  },
+  "上一页原文": {
+    "en": "Previous text page",
+    "th": "ข้อความหน้าก่อน"
+  },
+  "下一页原文": {
+    "en": "Next text page",
+    "th": "ข้อความหน้าถัดไป"
+  },
+  "上一页审核记录": {
+    "en": "Previous review records",
+    "th": "บันทึกการตรวจหน้าก่อน"
+  },
+  "下一页审核记录": {
+    "en": "Next review records",
+    "th": "บันทึกการตรวจหน้าถัดไป"
+  },
+  "份审核记录": {
+    "en": " review records",
+    "th": " รายการตรวจ"
+  },
+  "本页 {v0} 个片段，共匹配 {v1} 个原文块": {
+    "en": "{v0} fragments on this page; {v1} matching source blocks",
+    "th": "หน้านี้มี {v0} ส่วน พบข้อความต้นฉบับ {v1} ย่อหน้า"
+  },
+  "长段落分段显示：第 {v0}–{v1} 字符，共 {v2} 字符": {
+    "en": "Long paragraph window: characters {v0}–{v1} of {v2}",
+    "th": "แบ่งแสดงย่อหน้ายาว: อักขระ {v0}–{v1} จาก {v2}"
+  },
+  "正在读取完整原文，仅在此功能打开时加载。": {
+    "en": "Loading the complete source text while this tool is open.",
+    "th": "กำลังโหลดต้นฉบับทั้งหมดขณะเปิดเครื่องมือนี้"
+  },
+  "关联段落选项按页读取，已关联的段落保持不变。": {
+    "en": "Linked-clause choices load by page. Existing links are preserved.",
+    "th": "โหลดตัวเลือกย่อหน้าทีละหน้า โดยคงการเชื่อมโยงเดิม"
+  },
+  "已关联段落：{v0}": {
+    "en": "Linked source block: {v0}",
+    "th": "ย่อหน้าที่เชื่อมโยง: {v0}"
+  },
+  "模型审核正在准备或运行，知识库建库已暂缓。请等待审核完成或取消审核后再开始建库。": {
+    "en": "Knowledge indexing is deferred while a model review is starting or running. Wait for it to finish or cancel the review before indexing.",
+    "th": "พักการสร้างดัชนีระหว่างเตรียมหรือตรวจสัญญาด้วยโมเดล โปรดรอให้เสร็จหรือยกเลิกการตรวจก่อนสร้างดัชนี"
+  },
+  "已选 {count} 个原文段落；翻页不会清除已有选择。": {
+    "en": "{count} source blocks selected. Changing pages preserves existing links.",
+    "th": "เลือกข้อความต้นฉบับ {count} ย่อหน้า การเปลี่ยนหน้าจะคงรายการที่เลือกไว้"
+  },
+  "清除全部关联段落": {
+    "en": "Clear all linked blocks",
+    "th": "ล้างย่อหน้าที่เชื่อมโยงทั้งหมด"
   }
 }

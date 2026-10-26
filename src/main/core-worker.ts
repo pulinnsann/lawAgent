@@ -25,6 +25,10 @@ port.on('message', async (message: {id:string; command:string; payload:unknown; 
       case 'importVersionFile': { const p=message.payload as {path:string;parentDocumentId:string;expectedLatestDocumentId:string}; data=await service.importVersionFile(p.path,{parentDocumentId:p.parentDocumentId,expectedLatestDocumentId:p.expectedLatestDocumentId}); break; }
       case 'loadSample': data = await service.loadSample(); break;
       case 'getDocument': data = service.getDocument(message.payload as string); break;
+      case 'getDocumentView': data = service.getDocumentView(message.payload as string); break;
+      case 'listDocumentsPage': data = service.listDocumentsPage(message.payload as import('../shared/contracts').DocumentListInput); break;
+      case 'getDocumentBlocks': data = service.getDocumentBlocks(message.payload as import('../shared/contracts').DocumentBlocksInput); break;
+      case 'getDocumentReviews': data = service.getDocumentReviews(message.payload as import('../shared/contracts').DocumentReviewsInput); break;
       case 'saveModelConfig': data = await service.saveConfig(message.payload as ModelConfigInput); break;
       case 'testModelConnection': data = await service.testConnection(message.apiKey ?? null); break;
       case 'saveRetrievalConfig': data = await service.saveRetrievalConfig(message.payload as RetrievalConfigInput); break;
@@ -61,7 +65,7 @@ port.on('message', async (message: {id:string; command:string; payload:unknown; 
       case 'saveRiskDisposition': data = await service.saveRiskDisposition(message.payload as SaveRiskDispositionInput); break;
       case 'exportReview': {
         const review = service.getReview(message.payload as string);
-        const document = service.getDocument(review.documentId);
+        const document = service.getDocumentView(review.documentId);
         const rendered=await service.runWorkspaceCommand({action:'reporting.render',payload:{scope:'current',reviewId:review.id,style:'risk'}});
         data = { content: rendered.markdown, snapshot:rendered.snapshot, name: document.name.replace(/\.[^.]+$/, '') };
         break;

@@ -18,6 +18,7 @@ import type { ContractDraft } from '../shared/generation';
 import { normalizeGenerateContractInput } from '../core/contract-generation';
 import { connectionBinding, normalizeConnection } from '../core/workspace-connections';
 import { createWorkspaceBackup, inspectWorkspaceBackup, restoreWorkspaceBackup, clearKnowledgeIndex, undoKnowledgeClear } from '../core/workspace-maintenance';
+import { acquireWorkspaceLease } from '../core/storage-backend';
 import type { WorkspaceAsset } from '../core/workspace-assets';
 import type { WorkspaceCommand } from '../shared/workspace-tools';
 import { normalizeSaveEnterpriseStandardInput, normalizePublishEnterpriseStandardInput } from '../core/enterprise-standards';
@@ -31,6 +32,10 @@ app.setName('合同工作台');
 if (!app.requestSingleInstanceLock()) { app.quit(); process.exit(0); }
 
 const uuid = z.string().uuid();
+const pageCursorSchema = z.object({ createdAt: z.string().datetime(), id: uuid }).strict();
+const listPageSchema = z.object({ cursor: pageCursorSchema.optional(), limit: z.number().int().min(1).max(100).optional() }).strict();
+const reviewPageSchema = z.object({ documentId: uuid, cursor: pageCursorSchema.optional(), limit: z.number().int().min(1).max(50).optional() }).strict();
+const blockPageSchema = z.object({ documentId: uuid, cursor: z.object({ ordinal: z.number().int().min(0), textOffset: z.number().int().min(0) }).strict().optional(), limit: z.number().int().min(1).max(100).optional(), query: z.string().max(1000).optional(), aroundBlockId: uuid.optional() }).strict();
 const chunkId = z.string().min(1).max(200).regex(/^[a-zA-Z0-9_-]+$/);
 const knowledgeQuerySchema = z.object({ query: z.string().trim().min(1).max(1000), limit: z.number().int().min(1).max(20).optional(), terms: z.array(z.string().max(120)).max(64).optional() }).strict();
 const configSchema = z.object({
@@ -149,6 +154,11 @@ async function execute(name: string, payload: unknown): Promise<unknown> {
       const path = await realpath(choice.filePaths[0]); approvedFolders.add(path); return path;
     }
     case 'getDocument': return rpc('getDocument', uuid.parse(payload));
+    case 'getDocumentView': return rpc('getDocumentView', uuid.parse(payload));
+    case 'getReview': return rpc('getReview', uuid.parse(payload));
+    case 'listDocumentsPage': return rpc('listDocumentsPage', listPageSchema.parse(payload ?? {}));
+    case 'getDocumentBlocks': return rpc('getDocumentBlocks', blockPageSchema.parse(payload));
+    case 'getDocumentReviews': return rpc('getDocumentReviews', reviewPageSchema.parse(payload));
     case 'saveModelConfig': {
       const input = configSchema.parse(payload);
       if (input.provider === 'codex-cli') {
@@ -293,7 +303,7 @@ async function execute(name: string, payload: unknown): Promise<unknown> {
       const workspace = await rpc<ChangeWorkspace>('getChanges', input.reviewId);
       if (!workspace.supported || !workspace.proposals.some(item => item.status === 'accepted')) throw new Error(workspace.reason ?? '请先逐项采纳需要导出的修改。');
       const review = await rpc<ReviewResult>('getReview', input.reviewId);
-      const document = await rpc<{ name: string }>('getDocument', review.documentId);
+      const document = await rpc<{ name: string }>('getDocumentView', review.documentId);
       const safeName = document.name.replace(/\.[^.]+$/, '').replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').slice(0, 100);
       const chosen = await dialog.showSaveDialog(window!, { title: nativeText('导出修改稿和修改清单（新文件）'), defaultPath: `${safeName}-${input.format === 'tracked' ? '修订稿' : '修改稿'}.docx`, filters: [{ name: nativeText('Word 修改稿'), extensions: ['docx'] }] });
       if (chosen.canceled || !chosen.filePath) return null;
@@ -392,7 +402,7 @@ async function executeMaintenance(input:WorkspaceCommand):Promise<unknown>{
  if(pending.size)throw new Error('仍有本地操作运行，请先等待或取消后再维护数据。');
  if(mainOperations.size)throw new Error('仍有配置、导出或文件操作运行，请先等待完成后再维护数据。');
  if(input.action==='maintenance.restore'&&!p.confirmed||input.action==='maintenance.clearKnowledge'&&!p.confirmed)throw new Error('请先在界面确认恢复或清理操作。');
- maintenanceBusy=true;let stopped=false;
+ maintenanceBusy=true;let stopped=false;let releaseMaintenance:(()=>Promise<void>)|undefined;
  try{
   if(input.action==='maintenance.restore'){const path=await realpath(z.string().min(1).max(4096).parse(p.backupPath));if(!approvedBackups.has(path))throw new Error('请先通过界面选择并核验备份。');await inspectWorkspaceBackup(path);}
   await connectionSaveQueue;
@@ -403,11 +413,12 @@ async function executeMaintenance(input:WorkspaceCommand):Promise<unknown>{
   if (knowledge.job?.status === 'running') throw new Error('知识库仍在同步，请先等待或取消同步后再维护数据。');
   if(input.action==='maintenance.clearKnowledge'&&state.retrievalConfig)await rpc('saveRetrievalConfig',{...state.retrievalConfig,knowledge:{...state.retrievalConfig.knowledge,enabled:false,preferences:{...state.retrievalConfig.knowledge.preferences,autoSyncEnabled:false}}});
   await rpc('close');await core.terminate();stopped=true;
+  releaseMaintenance=await acquireWorkspaceLease(devData);
   if(input.action==='maintenance.backup')return await createWorkspaceBackup(devData,backupParent!,Boolean(p.includeKnowledge));
   if(input.action==='maintenance.restore'){const result=await restoreWorkspaceBackup(devData,p.backupPath);return{...result,message:'备份已恢复，恢复前数据保留在恢复目录；请关闭并重新打开功能面板。'};}
   if(input.action==='maintenance.clearKnowledge')return{...await clearKnowledgeIndex(devData,state.retrievalConfig),message:'索引已移至恢复目录，原资料与历史报告保留，资料连接已停用。'};
   const restored=await undoKnowledgeClear(devData);return{...restored,message:'已恢复清理前索引，资料连接可在设置中重新启用。'};
- }finally{try{if(stopped){startCore();await workerReady;}}finally{maintenanceBusy=false;if(!BrowserWindow.getAllWindows().length)app.quit();}}
+ }finally{try{await releaseMaintenance?.();if(stopped){startCore();await workerReady;}}finally{maintenanceBusy=false;if(!BrowserWindow.getAllWindows().length)app.quit();}}
 }
 
 function startCore(): void {

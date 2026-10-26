@@ -66,5 +66,5 @@ test('最高法栏目配置有界校验并真实保存重启，缺省保持旧�
   const next = { ...value, official: { enabled: true, maxCatalogPages: 2, sourceUrls: [], courtCatalogs: ['interpretations' as const] } }; assert.deepEqual(validateRetrievalConfig(next).official?.courtCatalogs, ['interpretations']);
   assert.throws(() => validateRetrievalConfig({ ...value, official: { ...next.official, courtCatalogs: ['interpretations', 'interpretations'] } }));
   const dir = await mkdtemp(join(tmpdir(), 'law-court-config-'));
-  try { const store = await AppStore.open(dir); await store.saveRetrievalConfig(validateRetrievalConfig(next)); const reopened = await AppStore.open(dir); assert.deepEqual(reopened.getRetrievalConfig()?.official?.courtCatalogs, ['interpretations']); } finally { await rm(dir, { recursive: true, force: true }); }
+  try { const store = await AppStore.open(dir); try { await store.saveRetrievalConfig(validateRetrievalConfig(next)); } finally { await store.close(); } const reopened = await AppStore.open(dir); try { assert.deepEqual(reopened.getRetrievalConfig()?.official?.courtCatalogs, ['interpretations']); } finally { await reopened.close(); } } finally { await rm(dir, { recursive: true, force: true }); }
 });

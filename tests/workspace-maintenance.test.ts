@@ -91,3 +91,21 @@ test('篡改索引恢复记录不能把受管目录外资料搬入工作空间',
     await writeFile(join(f.dataDir, 'recovery', 'latest-knowledge.json'), JSON.stringify({ recoveryPath: external, previousConfig: {} })); await assert.rejects(undoKnowledgeClear(f.dataDir), /无效/u); assert.equal(await readFile(join(external, 'local-knowledge', 'outside.txt'), 'utf8'), 'outside');
   } finally { await f.close(); }
 });
+
+
+test('native backup inspection rejects SQLite sidecars absent from the manifest', async () => {
+  const f = await fixture();
+  try {
+    const backup = await createWorkspaceBackup(f.dataDir, f.root, false);
+    const database = await readFile(join(backup.path, 'workspace.sqlite'));
+    for (const suffix of ['-wal', '-shm', '-journal']) {
+      const path = join(backup.path, `workspace.sqlite${suffix}`);
+      await writeFile(path, 'unlisted-sidecar-must-stay');
+      await assert.rejects(inspectWorkspaceBackup(backup.path), /旁路/);
+      assert.equal(await readFile(path, 'utf8'), 'unlisted-sidecar-must-stay');
+      assert.deepEqual(await readFile(join(backup.path, 'workspace.sqlite')), database);
+      await rm(path);
+    }
+    assert.equal((await inspectWorkspaceBackup(backup.path)).documents, 1);
+  } finally { await f.close(); }
+});

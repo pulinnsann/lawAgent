@@ -22,7 +22,9 @@ export class CredentialVault {
   private deferred = false;
   private unlocking: Promise<void> | null = null;
   storage: 'os-encrypted' | 'session-only' = 'session-only';
-  constructor(private directory: string, private encryption: SecretEncryption, private normalizeEndpoint: (value: string) => string = credentialEndpoint, private timeoutMs = 2000) {}
+  constructor(private directory: string, private encryption: SecretEncryption, private normalizeEndpoint: (value: string) => string = credentialEndpoint, private timeoutMs = 2000, private filename = 'model-key.bin') {
+    if (!/^[a-zA-Z0-9._-]+$/u.test(filename) || filename === '.' || filename === '..') throw new Error('Invalid credential filename.');
+  }
   private async bounded<T>(operation: () => Promise<T>): Promise<T> {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try { return await Promise.race([Promise.resolve().then(operation),new Promise<never>((_resolve,reject)=>{timer=setTimeout(()=>reject(new Error('SYSTEM_CREDENTIAL_TIMEOUT')),this.timeoutMs);})]); }
@@ -40,7 +42,7 @@ export class CredentialVault {
     // keychain before a window exists just to discover an empty vault.
     let bytes: Buffer;
     try {
-      const path=join(this.directory,'model-key.bin');const file=await lstat(path);
+      const path=join(this.directory,this.filename);const file=await lstat(path);
       if(!file.isFile()||file.isSymbolicLink()||file.size>128*1024)return;
       bytes=await readFile(path);
     } catch { return; }
@@ -60,19 +62,19 @@ export class CredentialVault {
   get encryptionWasChecked(): boolean { return this.encryptionChecked; }
   snapshot(): BoundCredential | null { return this.credential ? { ...this.credential } : null; }
   async checkpoint():Promise<CredentialCheckpoint> {
-    const path=join(this.directory,'model-key.bin');let encryptedBytes:Buffer|null=null;
+    const path=join(this.directory,this.filename);let encryptedBytes:Buffer|null=null;
     try{const file=await lstat(path);if(!file.isFile()||file.isSymbolicLink()||file.size>128*1024)throw new Error('系统密钥文件不是受管普通文件。');encryptedBytes=await readFile(path);}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;}
     return{credential:this.snapshot(),encryptedBytes,storage:this.storage,encryptionChecked:this.encryptionChecked};
   }
   async restoreCheckpoint(checkpoint:CredentialCheckpoint):Promise<void> {
-    const path=join(this.directory,'model-key.bin');
+    const path=join(this.directory,this.filename);
     if(checkpoint.encryptedBytes){await mkdir(this.directory,{recursive:true});const temporary=`${path}.${randomUUID()}.tmp`;try{await writeFile(temporary,checkpoint.encryptedBytes,{mode:0o600,flag:'wx'});await rename(temporary,path);}finally{await rm(temporary,{force:true});}}
     else await rm(path,{force:true});
     this.credential=checkpoint.credential?{...checkpoint.credential}:null;this.storage=checkpoint.storage;this.encryptionChecked=checkpoint.encryptionChecked;
   }
   get(baseUrl: string): string | null { return this.credential?.endpoint === this.normalizeEndpoint(baseUrl) ? this.credential.apiKey : null; }
   async set(value: BoundCredential | null): Promise<void> {
-    const path = join(this.directory, 'model-key.bin');
+    const path = join(this.directory, this.filename);
     if (!value) { await rm(path, { force: true }); this.credential = null; this.deferred=false; return; }
     await this.unlock();
     if(!this.encryptionChecked)await this.checkEncryption();

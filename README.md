@@ -1,12 +1,28 @@
 # LawAgent
 
-Source version **0.3.0**.
+Source version **0.3.0**. Latest source update: **2026-10-26** — Tauri desktop and memory-first Rust storage.
 
 A local-first desktop workbench for enterprise contract review, drafting, and reporting. Bring your own model API, connect your knowledge sources, and keep source documents, review decisions, and citations traceable.
 
-LawAgent runs on Windows and macOS. It processes Chinese, English, and Thai contracts, provides a Chinese / English / Thai interface, and supports separately reviewed English and Thai reports.
+The Tauri build targets Windows 10+ with WebView2 and macOS 13.5+ (the bundled official Node 24 runtime's minimum). It processes Chinese, English, and Thai contracts, provides a Chinese / English / Thai interface, and supports separately reviewed English and Thai reports.
 
 **Current legal scope: mainland China law.** Contract language, interface language, and report language do not change the applicable legal scope. Legal correctness, language quality, and practical suitability require qualified human review.
+
+## Latest update
+
+- **Tauri is now the default desktop shell**, using the system WebView. The existing document and review engines run in one bundled Node sidecar; installed users do not need a separate Node installation. Electron remains a development reference.
+- **Rust-backed disk SQLite and paged workspaces** reduce retained business data in memory. Knowledge workers start on demand, and model review takes priority over indexing.
+- **Startup and shutdown handling** now cancels active review, indexing and PDF work, drains owned workers, releases workspace locks, and handles a second launch during exit. Startup failures exit through a controlled error path.
+- **Existing workflows and data are retained**, including cited reviews, human decisions, Word tracked changes and Chinese / English / Thai reporting. Existing API secrets need one-time re-entry in the new OS-protected vault; the previous encrypted files are preserved.
+
+In paired synthetic-workspace measurements on one macOS arm64 machine, initial idle summed process RSS changed as follows:
+
+| Workspace | Electron reference | Tauri | Reduction |
+| --- | ---: | ---: | ---: |
+| Small, 3 documents | 557.30 MiB | 419.83 MiB | 24.67% |
+| History, 161 documents | 636.38 MiB | 483.55 MiB | 24.02% |
+
+These are individual migration-build runs with a loopback model mock. RSS sums can count shared pages more than once; startup peaks and a real resident local model were not measured. Subsequent lifecycle fixes were validated separately. See the [change log](CHANGELOG.md) and [measurement method, full results and limitations](docs/en/tauri-desktop-validation.md).
 
 ## Features
 
@@ -24,7 +40,7 @@ LawAgent runs on Windows and macOS. It processes Chinese, English, and Thai cont
 
 ## Quick start
 
-Development requires **Node.js 24 or later** and npm. Desktop builds include their runtime; an installed desktop user does not need npm.
+Development requires **Node.js 24 or later**, npm, **Rust 1.90 or later**, and a native C build toolchain (Xcode Command Line Tools on macOS; MSVC Build Tools and WebView2 on Windows). Development/build/test commands prepare the native storage binding automatically. The desktop shell uses Tauri and the system WebView. The first build downloads a checksum-pinned portable Node 24 runtime; installed users do not install Node themselves. Installed desktop users do not need npm, Rust or build tools.
 
 ```bash
 git clone https://github.com/pulinnsann/lawAgent.git
@@ -49,6 +65,8 @@ npm run preview
 7. Open the **Feature center** for alignment, report translations, templates, remote connections, OCR, and maintenance.
 
 A local application can still send document text to a remote model or retrieval endpoint **you configure**. Choose endpoints and material scopes appropriate for your organization. Interface localization does not translate user documents automatically.
+
+Installed Tauri builds reuse the previous `law-agent-desktop` data directory. Contracts, history and original files stay in place. Legacy Electron-encrypted credential files are preserved; enter API secrets once in Tauri settings to store them in the new OS-protected namespace. Source-based development continues to use `.local/data/`.
 
 ## Multilingual behavior
 
@@ -82,11 +100,27 @@ See [Jurisdiction adaptation guide](docs/en/adapting-jurisdiction.md) for the de
 
 ## Architecture
 
-Electron's main process owns native dialogs and credentials. A Core worker performs document and review operations; indexing runs separately. React renders the desktop interface through a constrained bridge.
+Tauri owns the native window, file dialogs, system-protected credentials and offline PDF export. A bundled Node sidecar preserves the existing review and document engines, communicating only over inherited private pipes. A Core worker performs business operations; the index worker starts on demand. React uses the same constrained bridge. No Electron or Chromium distribution is included in Tauri packages.
 
-Business records use local SQLite storage; versioned workspace assets use the existing append-only audit mechanism. Knowledge search uses a persistent local index. Reviews and reports retain source-version snapshots instead of following mutable documents silently.
+Business records use disk SQLite through a Rust N-API binding, with one Core worker owning the connection and actual page-level transactions; versioned workspace assets use the existing append-only audit mechanism. Knowledge search uses a persistent local index. Reviews and reports retain source-version snapshots instead of following mutable documents silently.
 
 See [Architecture and development](docs/en/development.md) and [Data and security boundaries](docs/en/data-and-security.md).
+
+## Memory-first Rust storage
+
+The default desktop shell now uses Tauri. Business storage defaults to `native/law-node`: Rust disk SQLite loaded into the existing Core worker, without an extra resident service. The schema and original files remain compatible. For an existing workspace, first activation retains a validated, byte-identical `workspace.sqlite.pre-rust-backup`; older schemas migrate on a closed staged copy and retain their version backups. An OS writer lease prevents current-version instances from sharing a data root and is released on process termination.
+
+The interface pages contracts, original text and review history, loads selected reports on demand, and opens the modification workspace only when requested. Internal review/edit operations omit unrelated historical reports. Model review cancels and waits for an existing index job before proceeding; new indexing is deferred during that review. This does not control an independent model server's RAM or GPU use.
+
+```sh
+npm run native:test
+npm run native:binding
+npm run native:test:binding
+npm run build
+npm run smoke:desktop
+```
+
+The desktop comparison uses isolated synthetic data and a loopback model API. See [Tauri desktop migration](docs/en/tauri-desktop-migration.md) for architecture and compatibility, and [Tauri validation](docs/en/tauri-desktop-validation.md) for measured whole-application memory and workflow checks. See [Native business-storage validation](docs/en/native-business-storage-validation.md) for measured scope and limitations. The earlier `native/law-core` CLI remains a separate storage/admission experiment; its governor is not a complete production scheduler or hard RSS limit. The review/document engines still use Node; a complete Rust business-logic port remains a later migration stage. See [Memory-first native migration](docs/en/rust-low-memory-migration.md) and [Measured baseline](docs/en/lightweight-baseline.md).
 
 ## Engineering checks
 
@@ -96,7 +130,9 @@ npm test
 npm run build
 ```
 
-Synthetic integration tests use temporary workspaces and local mock APIs. Some smoke scripts open real Electron windows; optional source-reading checks access public official sites. Tests do not establish legal accuracy or certify every Windows / Word layout.
+Synthetic integration tests use temporary workspaces and local mock APIs. The desktop smoke opens a real Tauri window; older reference scripts open Electron windows; optional source-reading checks access public official sites. Tests do not establish legal accuracy or certify every Windows / Word layout.
+
+The current milestone passed **437 TypeScript/Node tests, 45 Rust tests and 6 actual N-API checks**, plus the native-window import, cited review, tracked DOCX export, multilingual PDF and restart workflow. A separate macOS lifecycle loop passed **21 scenarios**, including closing during active work and overlapping relaunch. See the [current validation record](docs/en/tauri-desktop-validation.md); Windows and Intel Mac runtime acceptance remains outstanding.
 
 Useful focused checks:
 
@@ -106,7 +142,7 @@ node --import tsx scripts/smoke-clause-alignment-ui.mjs
 node --import tsx scripts/smoke-multilingual-report-ui.mjs
 ```
 
-Build before running UI smoke scripts. Use only synthetic or explicitly authorized documents. See [Contributing](CONTRIBUTING.md) and the [0.3.0 engineering validation record](docs/en/validation.md).
+The two focused UI scripts above use the Electron reference: run `npm run build:electron` first. Use `npm run smoke:desktop` for the current Tauri workflow. Use only synthetic or explicitly authorized documents. See [Contributing](CONTRIBUTING.md) and the [earlier 0.3.0 engineering validation record](docs/en/validation.md).
 
 ## Desktop builds and current limitations
 
@@ -115,7 +151,7 @@ npm run pack:win
 npm run pack:mac
 ```
 
-`pack:win` targets Windows x64 NSIS and ZIP. `pack:mac` builds a local macOS application directory; distribution signing and notarization need separate configuration. The Windows workflow is manually triggered and does not automatically publish a release.
+Run each packaging command on its target operating system. `pack:win` builds a Tauri NSIS installer; the manual Windows x64 workflow additionally creates a portable ZIP requiring an installed WebView2 runtime. `pack:mac` builds an app and DMG for the host architecture. Distribution signing and notarization need separate configuration. The Windows workflow is manually triggered and does not automatically publish a release.
 
 This repository publishes source code. Local historical installer artifacts are excluded. Engineering checks have not replaced target-device acceptance for Windows, Intel Macs, Microsoft Word formatting / revisions, enterprise services, or a 1 TB knowledge corpus.
 

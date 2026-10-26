@@ -5,3 +5,8 @@ html[lang=en] .breadcrumb,html[lang=th] .breadcrumb{flex-shrink:0;margin-right:1
 @media(max-width:1100px){.topbar .environment-badge{display:none}.topbar-right{gap:10px}.topbar{padding-inline:18px}.setup-launch-button span{max-width:180px;white-space:normal;text-align:start}}
 @media(max-width:760px){.topbar{min-height:69px;height:auto;padding-block:10px;gap:8px;flex-wrap:wrap}.topbar-right{margin-left:auto;flex-wrap:wrap;justify-content:flex-end;min-width:0}.interface-language select{max-width:116px}.topbar .setup-launch-button{min-width:0;max-width:180px}.breadcrumb{font-size:10px}}
 @media(max-width:480px){.topbar .breadcrumb>span,.topbar .breadcrumb>svg,.topbar .breadcrumb>strong{display:none}.topbar{flex-wrap:nowrap;padding-inline:12px}.topbar-right{gap:8px;flex:1}.topbar .setup-launch-button{max-width:148px;line-height:1.45}.topbar .topbar-settings span{display:none}.interface-language>svg{display:none}}
+
+.page-controls { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .5rem .75rem; flex-wrap: wrap; border-top: 1px solid var(--border, #e5e7eb); font-size: .75rem; }
+.page-controls button { padding: .35rem .5rem; border-radius: .3rem; border: 1px solid var(--border, #d1d5db); background: transparent; color: inherit; cursor: pointer; }
+.page-controls button:disabled { opacity: .45; cursor: default; }
+.text-window-note { display: block; margin-top: .5rem; color: #65727b; }
