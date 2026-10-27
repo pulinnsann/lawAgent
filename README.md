@@ -167,6 +167,8 @@ Run each packaging command on its target operating system. `pack:win` builds a T
 
 After packaging on macOS arm64 or Windows x64, run `node scripts/collect-desktop-installers.mjs` to verify and collect the current customer installer into `release/law-agent-<version>-<Shanghai-date>/`, with SHA-256 checksums, a build manifest and installation instructions. The macOS check reads the actual DMG payload. Private signing keys, issuance ledgers and customer workspaces are excluded. The Windows workflow performs collection automatically.
 
+Windows collection uses full 7-Zip with NSIS support to inspect the installer payload; this build-time tool is not needed by customers. The workflow defaults to all application tests. Its `packaging_only` option is for packaging-script repairs after the same application code has already passed the full Windows run.
+
 This repository publishes source code. Local historical installer artifacts are excluded. Engineering checks have not replaced target-device acceptance for Windows, Intel Macs, Microsoft Word formatting / revisions, enterprise services, or a 1 TB knowledge corpus.
 
 Independent legal consultation, multi-user approvals, SaaS subscription billing, a complete proprietary legal database, and automatic model fine-tuning are outside this version. Brave search remains deferred.

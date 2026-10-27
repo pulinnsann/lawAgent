@@ -4,7 +4,7 @@ import { copyFile, lstat, mkdir, mkdtemp, open, readdir, readFile, realpath, rm,
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
-import { isAbsolute, join, relative, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 
 // Run on the build target. This collects the customer app, never the issuer.
 const root = resolve(import.meta.dirname, '..');
@@ -81,6 +81,51 @@ async function verifyRuntime(runtime) {
   if (result.passed !== true || result.electronBundled !== false) throw new Error('Packaged runtime validation failed.');
   return { ...result, runtimeManifestSha256: await hash(join(runtime, 'runtime-manifest.json')), privateIssuerPathsIncluded: false };
 }
+async function nsisReader() {
+  const candidates = [...new Set([
+    process.env.ProgramFiles && join(process.env.ProgramFiles, '7-Zip/7z.exe'),
+    process.env['ProgramFiles(x86)'] && join(process.env['ProgramFiles(x86)'], '7-Zip/7z.exe'),
+    '7z.exe',
+  ].filter(Boolean))];
+  for (const candidate of candidates) {
+    try {
+      const { stdout } = await run(candidate, ['i'], { windowsHide: true, timeout: 15000, maxBuffer: 1024 ** 2 });
+      if (/\bNsis\b/iu.test(stdout)) return candidate;
+    } catch {}
+  }
+  throw new Error('NSIS payload validation requires full 7-Zip with its NSIS reader. Install 7-Zip on the Windows build machine and make 7z.exe available; limited 7za.exe is insufficient.');
+}
+async function verifyNsisPayload(expectedNative, buildRuntime) {
+  const reader = await nsisReader();
+  const extracted = await mkdtemp(join(tmpdir(), 'lawagent-nsis-check-'));
+  try {
+    try {
+      await run(reader, ['x', source, `-o${extracted}`, '-y', '-bso0', '-bsp0'], { windowsHide: true, timeout: 120000, maxBuffer: 2 * 1024 ** 2 });
+    } catch (cause) {
+      throw new Error('Could not extract the self-built NSIS installer for payload validation. Use full 7-Zip with NSIS/compression support; the installer has not been collected.', { cause });
+    }
+    const matches = [], manifests = [];
+    async function visit(directory) {
+      for (const name of await readdir(directory)) {
+        const path = join(directory, name), info = await lstat(path);
+        if (info.isSymbolicLink()) throw new Error('Unexpected link in the extracted NSIS payload.');
+        if (info.isDirectory()) await visit(path);
+        else if (info.isFile()) {
+          if (name === 'runtime-manifest.json') manifests.push(path);
+          if (info.size === expectedNative.bytes && await hash(path) === expectedNative.sha256) matches.push(path);
+        } else throw new Error('Unexpected entry in the extracted NSIS payload.');
+      }
+    }
+    await visit(extracted);
+    if (matches.length !== 1) throw new Error(`NSIS payload must contain exactly one executable matching the validated native SHA-256; found ${matches.length}.`);
+    if (manifests.length !== 1) throw new Error(`NSIS payload must contain exactly one runtime-manifest.json; found ${manifests.length}.`);
+    const result = await verifyRuntime(dirname(manifests[0]));
+    if (result.runtimeManifestSha256 !== buildRuntime.runtimeManifestSha256) throw new Error('The NSIS runtime manifest does not match the validated build runtime.');
+    return { ...result, nativePayloadSha256: expectedNative.sha256, buildRuntimeManifestSha256: buildRuntime.runtimeManifestSha256 };
+  } finally {
+    await rm(extracted, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  }
+}
 await regular(source);
 let native, resources;
 if (mac) {
@@ -103,8 +148,8 @@ if (mac) {
   const binary = join(target, 'release/law-agent-desktop.exe');
   native = await executable(binary);
   await windowsIdentity(binary); await windowsIdentity(source);
-  resources = await verifyRuntime(join(root, '.local/tauri-runtime'));
-  if ((await lstat(source)).mtimeMs < (await lstat(binary)).mtimeMs) throw new Error('The installer predates the current executable.');
+  const buildRuntime = await verifyRuntime(join(root, '.local/tauri-runtime'));
+  resources = await verifyNsisPayload(native, buildRuntime);
 }
 await mkdir(output, { recursive: true });
 const artifacts = [];
@@ -123,7 +168,7 @@ if (options['--portable-zip']) {
   } finally { await handle.close(); }
   await collect(zip, `LawAgent-${version}-Windows-x64-Portable.zip`);
 }
-await writeFile(join(output, `build-manifest-${label}.json`), JSON.stringify({ format: 'law-agent-installer-v1', version, date, platform, arch, native, resources, resourceValidation: mac ? 'actual-read-only-dmg-payload' : 'native-executable-and-nsis-version-resource-plus-build-runtime', artifacts, productionSmokeHooksIncluded: false, commercialCodeSigning: false, notarized: false, customerDataIncluded: false, privateSigningMaterialIncluded: false, physicalWindowsAcceptance: 'pending' }, null, 2) + '\n');
+await writeFile(join(output, `build-manifest-${label}.json`), JSON.stringify({ format: 'law-agent-installer-v1', version, date, platform, arch, native, resources, resourceValidation: mac ? 'actual-read-only-dmg-payload' : 'actual-extracted-nsis-payload-native-hash-runtime-manifest-and-engines', artifacts, productionSmokeHooksIncluded: false, commercialCodeSigning: false, notarized: false, customerDataIncluded: false, privateSigningMaterialIncluded: false, physicalWindowsAcceptance: 'pending' }, null, 2) + '\n');
 const sums = [];
 for (const name of (await readdir(output)).filter(name => /\.(?:dmg|exe|zip)$/u.test(name)).sort()) sums.push(`${await hash(join(output, name))}  ${name}`);
 await writeFile(join(output, 'SHA256SUMS.txt'), `${sums.join('\n')}\n`);
