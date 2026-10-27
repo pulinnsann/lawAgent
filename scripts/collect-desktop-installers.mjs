@@ -5,6 +5,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { expectedNsisNativeIdentity } from './nsis-native-identity.mjs';
 
 // Run on the build target. This collects the customer app, never the issuer.
 const root = resolve(import.meta.dirname, '..');
@@ -121,7 +122,7 @@ async function verifyNsisPayload(expectedNative, buildRuntime) {
     if (manifests.length !== 1) throw new Error(`NSIS payload must contain exactly one runtime-manifest.json; found ${manifests.length}.`);
     const result = await verifyRuntime(dirname(manifests[0]));
     if (result.runtimeManifestSha256 !== buildRuntime.runtimeManifestSha256) throw new Error('The NSIS runtime manifest does not match the validated build runtime.');
-    return { ...result, nativePayloadSha256: expectedNative.sha256, buildRuntimeManifestSha256: buildRuntime.runtimeManifestSha256 };
+    return { ...result, nativePayloadSha256: expectedNative.sha256, buildNativeSha256: expectedNative.sourceSha256, nativeBundleTypePatch: expectedNative.patch, buildRuntimeManifestSha256: buildRuntime.runtimeManifestSha256 };
   } finally {
     await rm(extracted, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   }
@@ -148,8 +149,10 @@ if (mac) {
   const binary = join(target, 'release/law-agent-desktop.exe');
   native = await executable(binary);
   await windowsIdentity(binary); await windowsIdentity(source);
+  const nsisIdentity = expectedNsisNativeIdentity(await readFile(binary));
+  if (nsisIdentity.sourceSha256 !== native.sha256) throw new Error('The native executable changed during installer validation.');
   const buildRuntime = await verifyRuntime(join(root, '.local/tauri-runtime'));
-  resources = await verifyNsisPayload(native, buildRuntime);
+  resources = await verifyNsisPayload(nsisIdentity, buildRuntime);
 }
 await mkdir(output, { recursive: true });
 const artifacts = [];
