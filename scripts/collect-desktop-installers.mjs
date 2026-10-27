@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
-import { copyFile, lstat, mkdir, mkdtemp, open, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { copyFile, lstat, mkdir, mkdtemp, open, readdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
@@ -55,6 +55,9 @@ async function windowsIdentity(path) {
   if (![version, `${version}.0`].includes(identity.ProductVersion) || identity.ProductName !== config.productName) throw new Error('Windows artifact version or product identity does not match the app.');
 }
 async function verifyRuntime(runtime) {
+  // macOS /var is an alias of /private/var; require.resolve canonicalizes it.
+  // Use that same root for the verifier's containment checks.
+  runtime = await realpath(runtime);
   const manifest = JSON.parse(await readFile(join(runtime, 'runtime-manifest.json'), 'utf8'));
   if (manifest.format !== 'law-agent-tauri-runtime-v1' || manifest.platform !== platform || manifest.arch !== arch || !Array.isArray(manifest.files)) throw new Error('The bundled runtime target does not match the installer.');
   const privatePaths = /(?:^|\/)(?:\.local|license-issuer|credentials|local-knowledge|remote-cache|backups|diagnostics)(?:\/|$)|(?:^|\/)(?:issuer-private\.pem|issuer-identity\.json|licenses\.sqlite(?:[-.].*)?)$/iu;
