@@ -34,6 +34,8 @@ async function launch(workspace=dataDir){
  async function handleHost(message){
   hostCalls.push(message.operation);
   switch(message.operation){
+   case 'deviceIdentity':return{deviceCode:'LAWDEV1-'+'c'.repeat(64)};
+   case 'licenseBuildMode':return'development';
    case 'showSaveDialog':return{canceled:false,filePath:exportPath};
    case 'showOpenDialog':return openSelections.length?{canceled:false,filePaths:[openSelections.shift()]}:{canceled:true,filePaths:[]};
    case 'credentialAvailable':return true;

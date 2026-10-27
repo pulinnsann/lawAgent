@@ -1,4 +1,5 @@
 import { APP_VERSION } from '../../shared/app-version';
+import type { LicenseState } from '../../shared/licensing';
 import type {
   AppState, ContractAssistantBridge, ContractBlock, ContractDetail, DocumentBlocksInput, DocumentReviewsInput, DocumentListInput, ModelConfigInput,
   PublicModelConfig, PublicRetrievalConfig, RetrievalBundle, ReviewFinding, ReviewResult, ReviewTask,
@@ -109,7 +110,12 @@ export function createPreviewBridge(): ContractAssistantBridge {
     return { items, nextCursor: hasMore && last ? { createdAt: last.importedAt, id: last.id } : null, hasMore, totalCount: all.length };
   };
   return {
-    async runWorkspaceCommand(input) { if(input.action==='workspace.interfaceLocale') return {locale:(input.payload as {locale?:string})?.locale??'zh'}; throw new Error('此功能需要桌面本地工作空间；浏览器预览不会连接或写入真实资料。'); },
+    async runWorkspaceCommand(input) {
+      if(input.action==='workspace.interfaceLocale') return {locale:(input.payload as {locale?:string})?.locale??'zh'};
+      if(input.action==='workspace.licenseState') return { mode:'development',status:'development',canCreate:true,canViewExport:true,deviceCode:null,license:null,checkedAt:new Date().toISOString(),message:'开发与浏览器预览不使用真实激活码，也不会创建正式许可。' } satisfies LicenseState;
+      if(input.action==='workspace.licenseActivate') throw new Error('开发与浏览器预览不使用真实激活码，也不会创建正式许可。');
+      throw new Error('此功能需要桌面本地工作空间；浏览器预览不会连接或写入真实资料。');
+    },
     async getState() { return state(); },
     async importContract() { throw new Error('浏览器界面预览不能导入本机合同，请在桌面应用中使用真实文件导入。'); },
     async loadSample() {

@@ -10,6 +10,10 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Runtime data
+**/issuer-private.pem
+**/issuer-identity.json
+**/licensing/activation.json
+*.lawlicense
 pids
 *.pid
 *.seed
@@ -184,3 +188,5 @@ Thumbs.db
 # Generated Tauri icons and capability schemas; reproducible from assets/desktop-icon.svg.
 /native/law-desktop/icons/
 /native/law-desktop/gen/
+/native/license-issuer/icons/
+/native/license-issuer/gen/

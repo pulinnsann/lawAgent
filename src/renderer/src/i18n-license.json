@@ -1,0 +1,310 @@
+{
+  "授权与体验许可": {
+    "en": "Licensing and trial access",
+    "th": "สิทธิ์การใช้งานและสิทธิ์ทดลอง"
+  },
+  "开发与界面预览": {
+    "en": "Development and UI preview",
+    "th": "โหมดพัฒนาและตัวอย่างหน้าจอ"
+  },
+  "尚未激活": {
+    "en": "Not activated",
+    "th": "ยังไม่เปิดใช้งาน"
+  },
+  "许可有效": {
+    "en": "License active",
+    "th": "สิทธิ์ใช้งานมีผล"
+  },
+  "许可尚未开始": {
+    "en": "License has not started",
+    "th": "ยังไม่ถึงวันเริ่มสิทธิ์"
+  },
+  "许可已到期": {
+    "en": "License expired",
+    "th": "สิทธิ์ใช้งานหมดอายุ"
+  },
+  "许可无效": {
+    "en": "License invalid",
+    "th": "สิทธิ์ใช้งานไม่ถูกต้อง"
+  },
+  "无法取得设备码": {
+    "en": "Device code unavailable",
+    "th": "ไม่สามารถอ่านรหัสอุปกรณ์ได้"
+  },
+  "需要核对系统时间": {
+    "en": "Check the system time",
+    "th": "โปรดตรวจสอบเวลาของระบบ"
+  },
+  "许可保存异常": {
+    "en": "License storage issue",
+    "th": "มีปัญหาในการบันทึกสิทธิ์"
+  },
+  "许可状态响应无效，请刷新后重试。": {
+    "en": "The license status response is invalid. Refresh and try again.",
+    "th": "ข้อมูลสถานะสิทธิ์ไม่ถูกต้อง โปรดรีเฟรชแล้วลองอีกครั้ง"
+  },
+  "请先粘贴取得的激活码。": {
+    "en": "Paste the activation code you received first.",
+    "th": "โปรดวางรหัสเปิดใช้งานที่ได้รับก่อน"
+  },
+  "激活码过长，请检查是否混入其他内容。": {
+    "en": "The activation code is too long. Check for unrelated content.",
+    "th": "รหัสเปิดใช้งานยาวเกินไป โปรดตรวจสอบว่ามีเนื้อหาอื่นปะปนหรือไม่"
+  },
+  "当前许可状态": {
+    "en": "License status",
+    "th": "สถานะสิทธิ์ปัจจุบัน"
+  },
+  "许可状态暂不可用": {
+    "en": "License status unavailable",
+    "th": "ยังไม่สามารถอ่านสถานะสิทธิ์ได้"
+  },
+  "正在检查许可…": {
+    "en": "Checking license…",
+    "th": "กำลังตรวจสอบสิทธิ์…"
+  },
+  "刷新许可状态": {
+    "en": "Refresh license status",
+    "th": "รีเฟรชสถานะสิทธิ์"
+  },
+  "已有资料仍可查看与导出。": {
+    "en": "Existing material remains available to view and export.",
+    "th": "ยังสามารถดูและส่งออกข้อมูลที่มีอยู่ได้"
+  },
+  "没有有效许可时，不能新建导入、审核或合同生成任务。": {
+    "en": "A valid license is required to start new imports, reviews or contract generation.",
+    "th": "ต้องมีสิทธิ์ที่ใช้ได้เพื่อเริ่มนำเข้า ตรวจสอบ หรือสร้างสัญญาใหม่"
+  },
+  "许可编号": {
+    "en": "License ID",
+    "th": "หมายเลขสิทธิ์"
+  },
+  "许可序号": {
+    "en": "License seat number",
+    "th": "ลำดับสิทธิ์"
+  },
+  "签发时间": {
+    "en": "Issued at",
+    "th": "วันเวลาที่ออกสิทธิ์"
+  },
+  "许可开始时间": {
+    "en": "License starts at",
+    "th": "วันเวลาเริ่มสิทธิ์"
+  },
+  "许可到期时间": {
+    "en": "License expires at",
+    "th": "วันเวลาหมดอายุ"
+  },
+  "开发与浏览器预览不使用真实激活码，也不会创建正式许可。": {
+    "en": "Development and browser previews do not use real activation codes or create official licenses.",
+    "th": "โหมดพัฒนาและตัวอย่างในเบราว์เซอร์ไม่ใช้รหัสเปิดใช้งานจริงและไม่สร้างสิทธิ์อย่างเป็นทางการ"
+  },
+  "本机设备码": {
+    "en": "This device's code",
+    "th": "รหัสของอุปกรณ์นี้"
+  },
+  "将设备码交给许可提供方，取得适用于本机的激活码。": {
+    "en": "Send this device code to your license provider to obtain an activation code for this device.",
+    "th": "ส่งรหัสอุปกรณ์นี้ให้ผู้ให้สิทธิ์เพื่อรับรหัสเปิดใช้งานสำหรับเครื่องนี้"
+  },
+  "暂未取得设备码": {
+    "en": "Device code is not available yet",
+    "th": "ยังไม่ได้รับรหัสอุปกรณ์"
+  },
+  "复制设备码": {
+    "en": "Copy device code",
+    "th": "คัดลอกรหัสอุปกรณ์"
+  },
+  "粘贴激活码": {
+    "en": "Paste activation code",
+    "th": "วางรหัสเปิดใช้งาน"
+  },
+  "激活码仅在本机提交，不需要在此输入模型 API 密钥。": {
+    "en": "The code is submitted on this device. Do not enter your model API key here.",
+    "th": "รหัสจะถูกส่งบนเครื่องนี้ ไม่ต้องใส่คีย์ API ของโมเดลในช่องนี้"
+  },
+  "正在激活…": {
+    "en": "Activating…",
+    "th": "กำลังเปิดใช้งาน…"
+  },
+  "激活本机许可": {
+    "en": "Activate this device",
+    "th": "เปิดใช้งานสิทธิ์ของเครื่องนี้"
+  },
+  "离线体验许可": {
+    "en": "Offline trial license",
+    "th": "สิทธิ์ทดลองแบบออฟไลน์"
+  },
+  "本次体验计划最多签发 100 份许可，每份绑定 1 台设备。": {
+    "en": "This trial program allows up to 100 licenses, each bound to one device.",
+    "th": "โครงการทดลองนี้ออกสิทธิ์ได้สูงสุด 100 สิทธิ์ แต่ละสิทธิ์ผูกกับอุปกรณ์ 1 เครื่อง"
+  },
+  "每份许可自载明的开始时间起有效 90 天，以显示的到期时间为准。": {
+    "en": "Each license lasts 90 days from its stated start time. The displayed expiry time applies.",
+    "th": "แต่ละสิทธิ์มีอายุ 90 วันนับจากเวลาเริ่มที่ระบุ โดยยึดวันเวลาหมดอายุที่แสดง"
+  },
+  "此页面只显示本机许可状态，不显示全部许可的剩余名额。": {
+    "en": "This page shows only this device's license, not the number of licenses remaining.",
+    "th": "หน้านี้แสดงเฉพาะสถานะสิทธิ์ของเครื่องนี้ ไม่แสดงจำนวนสิทธิ์ทั้งหมดที่เหลือ"
+  },
+  "体验许可不改变项目源代码的 Apache-2.0 开源授权。": {
+    "en": "The trial license does not change the project's Apache-2.0 source license.",
+    "th": "สิทธิ์ทดลองไม่เปลี่ยนสัญญาอนุญาตโอเพนซอร์ส Apache-2.0 ของซอร์สโค้ดโครงการ"
+  },
+  "许可检查时间：{time}": {
+    "en": "License checked at: {time}",
+    "th": "ตรวจสอบสิทธิ์เมื่อ: {time}"
+  },
+  "许可已激活，可继续新建任务。": {
+    "en": "License activated. You can start new tasks.",
+    "th": "เปิดใช้งานสิทธิ์แล้ว สามารถเริ่มงานใหม่ได้"
+  },
+  "许可状态已更新，请核对有效期和本机状态。": {
+    "en": "License status updated. Check its dates and this device's status.",
+    "th": "อัปเดตสถานะสิทธิ์แล้ว โปรดตรวจสอบระยะเวลาและสถานะของเครื่องนี้"
+  },
+  "已隐藏的激活码": {
+    "en": "[activation code hidden]",
+    "th": "[ซ่อนรหัสเปิดใช้งาน]"
+  },
+  "设备码已复制。": {
+    "en": "Device code copied.",
+    "th": "คัดลอกรหัสอุปกรณ์แล้ว"
+  },
+  "无法自动复制，请选择设备码后手动复制。": {
+    "en": "Automatic copy is unavailable. Select the device code and copy it manually.",
+    "th": "ไม่สามารถคัดลอกอัตโนมัติได้ โปรดเลือกรหัสอุปกรณ์แล้วคัดลอกด้วยตนเอง"
+  },
+  "查看本机许可、设备码与有效期，或激活离线许可。": {
+    "en": "View this device's license, code and validity period, or activate an offline license.",
+    "th": "ดูสิทธิ์ รหัสอุปกรณ์ และระยะเวลาที่ใช้ได้ หรือเปิดใช้งานสิทธิ์แบบออฟไลน์"
+  },
+  "关闭许可窗口": {
+    "en": "Close license window",
+    "th": "ปิดหน้าต่างสิทธิ์"
+  },
+  "新建任务需要有效许可": {
+    "en": "New tasks require a valid license",
+    "th": "ต้องมีสิทธิ์ที่ใช้ได้เพื่อเริ่มงานใหม่"
+  },
+  "查看已有合同和导出历史结果不受影响。请打开许可窗口查看状态或激活。": {
+    "en": "You can still view existing contracts and export saved results. Open licensing to check the status or activate.",
+    "th": "ยังดูสัญญาที่มีอยู่และส่งออกผลลัพธ์ที่บันทึกไว้ได้ เปิดหน้าต่างสิทธิ์เพื่อตรวจสอบสถานะหรือเปิดใช้งาน"
+  },
+  "查看许可": {
+    "en": "View license",
+    "th": "ดูสิทธิ์ใช้งาน"
+  },
+  "激活有效许可后可新建任务": {
+    "en": "Activate a valid license to start new tasks",
+    "th": "เปิดใช้งานสิทธิ์ที่ใช้ได้เพื่อเริ่มงานใหม่"
+  },
+  "许可暂不可新建任务；可查看已保存草稿，或导出此前已确认的合同。": {
+    "en": "New tasks are unavailable under the current license. You can view saved drafts or export previously confirmed contracts.",
+    "th": "สิทธิ์ปัจจุบันยังเริ่มงานใหม่ไม่ได้ แต่สามารถดูฉบับร่างที่บันทึกไว้หรือส่งออกสัญญาที่เคยยืนยันแล้วได้"
+  },
+  "仅导出此前已完成审核与确认的合同，未确认草稿仍需有效许可继续处理。": {
+    "en": "Export is available for contracts already reviewed and confirmed. Continuing an unconfirmed draft requires a valid license.",
+    "th": "ส่งออกได้เฉพาะสัญญาที่ตรวจสอบและยืนยันแล้ว การดำเนินการกับฉบับร่างที่ยังไม่ยืนยันต้องมีสิทธิ์ที่ใช้ได้"
+  },
+  "正在导出已确认合同…": {
+    "en": "Exporting the confirmed contract…",
+    "th": "กำลังส่งออกสัญญาที่ยืนยันแล้ว…"
+  },
+  "导出已确认合同": {
+    "en": "Export confirmed contract",
+    "th": "ส่งออกสัญญาที่ยืนยันแล้ว"
+  },
+  "已确认合同已导出。": {
+    "en": "The confirmed contract has been exported.",
+    "th": "ส่งออกสัญญาที่ยืนยันแล้วเรียบร้อย"
+  },
+  "开发版本可使用全部功能；正式发行版需要有效授权。": {
+    "en": "Development builds can use all features. Official distributions require a valid license.",
+    "th": "รุ่นพัฒนาใช้ได้ทุกฟังก์ชัน รุ่นเผยแพร่อย่างเป็นทางการต้องมีสิทธิ์ที่ใช้ได้"
+  },
+  "尚未激活本机授权；可以查看和导出已有数据。": {
+    "en": "This device is not activated. Existing data can still be viewed and exported.",
+    "th": "ยังไม่ได้เปิดใช้งานสิทธิ์ของเครื่องนี้ แต่ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "本机试用授权有效。": {
+    "en": "This device has an active trial license.",
+    "th": "สิทธิ์ทดลองของเครื่องนี้มีผลใช้งาน"
+  },
+  "试用授权尚未开始；可以查看和导出已有数据。": {
+    "en": "The trial license has not started. Existing data can still be viewed and exported.",
+    "th": "ยังไม่ถึงวันเริ่มสิทธิ์ทดลอง แต่ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "90 天试用授权已到期；可以查看和导出已有数据，不能创建新的审核或生成任务。": {
+    "en": "The 90-day trial has expired. Existing data can be viewed and exported; new review or generation tasks are unavailable.",
+    "th": "สิทธิ์ทดลอง 90 วันหมดอายุแล้ว ยังดูและส่งออกข้อมูลเดิมได้ แต่เริ่มงานตรวจสอบหรือสร้างเอกสารใหม่ไม่ได้"
+  },
+  "授权无法核验；可以查看和导出已有数据，请重新提供有效授权。": {
+    "en": "The license could not be verified. Existing data can be viewed and exported. Provide a valid license.",
+    "th": "ไม่สามารถตรวจสอบสิทธิ์ได้ ยังดูและส่งออกข้อมูลเดิมได้ โปรดใช้สิทธิ์ที่ถูกต้อง"
+  },
+  "无法取得有效的本机设备码；可以查看和导出已有数据。": {
+    "en": "A valid code for this device is unavailable. Existing data can still be viewed and exported.",
+    "th": "ไม่สามารถอ่านรหัสที่ถูกต้องของเครื่องนี้ได้ แต่ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "检测到本机时间明显早于已记录时间；请核对时间后重试。已有数据仍可查看和导出。": {
+    "en": "The device time is earlier than the recorded time. Check the clock and retry. Existing data remains available to view and export.",
+    "th": "เวลาของเครื่องเร็วย้อนก่อนเวลาที่บันทึกไว้ โปรดตรวจสอบนาฬิกาแล้วลองอีกครั้ง ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "该授权不属于本机设备，未替换已有授权。": {
+    "en": "This license belongs to another device. The existing license was kept.",
+    "th": "สิทธิ์นี้เป็นของอุปกรณ์อื่น โดยยังคงสิทธิ์เดิมไว้"
+  },
+  "请输入有效的许可证字符串。": {
+    "en": "Enter a valid license code.",
+    "th": "โปรดป้อนรหัสสิทธิ์ที่ถูกต้อง"
+  },
+  "授权管理器已关闭。": {
+    "en": "License management is closed.",
+    "th": "ระบบจัดการสิทธิ์ปิดแล้ว"
+  },
+  "无法安全读取授权记录；可以查看和导出已有数据。": {
+    "en": "The license record could not be read safely. Existing data can still be viewed and exported.",
+    "th": "ไม่สามารถอ่านบันทึกสิทธิ์ได้อย่างปลอดภัย แต่ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "签发所需本机信息": {
+    "en": "Device information for license issuance",
+    "th": "ข้อมูลเครื่องสำหรับออกสิทธิ์ใช้งาน"
+  },
+  "将本机设备码交给许可提供方，或复制整份签发信息以便核对产品与版本。": {
+    "en": "Send this device code to your license provider, or copy the full issuance information to confirm the product and version.",
+    "th": "ส่งรหัสอุปกรณ์นี้ให้ผู้ให้สิทธิ์ หรือคัดลอกข้อมูลการออกสิทธิ์ทั้งหมดเพื่อตรวจสอบผลิตภัณฑ์และเวอร์ชัน"
+  },
+  "产品名称": {
+    "en": "Product name",
+    "th": "ชื่อผลิตภัณฑ์"
+  },
+  "应用版本": {
+    "en": "App version",
+    "th": "เวอร์ชันแอป"
+  },
+  "本机签发信息": {
+    "en": "License request information",
+    "th": "ข้อมูลขอสิทธิ์ของเครื่องนี้"
+  },
+  "取得有效设备码后显示签发信息": {
+    "en": "Issuance information appears when a valid device code is available",
+    "th": "ข้อมูลการออกสิทธิ์จะแสดงเมื่อได้รับรหัสอุปกรณ์ที่ถูกต้อง"
+  },
+  "复制签发信息": {
+    "en": "Copy issuance information",
+    "th": "คัดลอกข้อมูลการออกสิทธิ์"
+  },
+  "签发信息仅包含产品、应用版本和设备码。": {
+    "en": "Issuance information contains only the product, app version and device code.",
+    "th": "ข้อมูลการออกสิทธิ์มีเฉพาะผลิตภัณฑ์ เวอร์ชันแอป และรหัสอุปกรณ์เท่านั้น"
+  },
+  "签发信息已复制。": {
+    "en": "Issuance information copied.",
+    "th": "คัดลอกข้อมูลการออกสิทธิ์แล้ว"
+  },
+  "无法自动复制，已选中签发信息，请使用系统复制快捷键。": {
+    "en": "Automatic copy is unavailable. The issuance information is selected; use your system copy shortcut.",
+    "th": "ไม่สามารถคัดลอกอัตโนมัติได้ เลือกข้อมูลการออกสิทธิ์แล้ว โปรดใช้แป้นลัดคัดลอกของระบบ"
+  }
+}

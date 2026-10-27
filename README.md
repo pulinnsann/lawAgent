@@ -1,6 +1,6 @@
 # LawAgent
 
-Source version **0.3.0**. Latest source update: **2026-10-26** — Tauri desktop and memory-first Rust storage.
+Source version **0.3.0**. Latest source update: **2026-10-27** — an installable Rust license issuer, offline trial licensing and resource control for 8 GB Windows office computers.
 
 A local-first desktop workbench for enterprise contract review, drafting, and reporting. Bring your own model API, connect your knowledge sources, and keep source documents, review decisions, and citations traceable.
 
@@ -10,8 +10,16 @@ The Tauri build targets Windows 10+ with WebView2 and macOS 13.5+ (the bundled o
 
 ## Latest update
 
+- **Export local problem logs:** an always-available support entry saves a bounded troubleshooting file without contract text, credentials, activation codes or device identifiers. No upload occurs automatically; startup failures can offer a limited launcher log. See [problem-log contents and limits](docs/en/problem-logs.md).
+- **Plain-language interface for legal professionals:** use everyday task descriptions across review, references, service setup and activation. Raw authorization JSON, model compatibility settings and technical verification records are optional details. Chinese, English and Thai wording is updated while contracts, quotations and saved findings stay unchanged. See [interface wording conventions](docs/en/plain-language-interface.md).
+- **Copyable local issuance information:** the customer license panel displays the product, running app version and complete device code. Copy the raw code or a compact information block; the separate native issuer accepts either without adding hardware probes or changing the device binding.
+- **Installable administrator license issuer:** a separate Rust/Tauri utility continues the existing issuance ledger and supports signing, original-code retrieval, copying and activation-file export without Node.js or a local HTTP server. The macOS arm64 installer is built locally; Windows packaging is prepared for a Windows runner and still needs qualification. No signing private key is included in either installer. See [installation and operation](docs/en/license-issuer-desktop.md).
+- **Offline trial licensing for official builds:** 100 single-device trial seats, each valid for 90 days from its signed start time. Expiry preserves viewing/export of existing data. A separate local operator issuer keeps the private key and issuance ledger outside customer bundles. See [activation and issuer operation](docs/en/offline-licensing.md).
 - **Tauri is now the default desktop shell**, using the system WebView. The existing document and review engines run in one bundled Node sidecar; installed users do not need a separate Node installation. Electron remains a development reference.
 - **Rust-backed disk SQLite and paged workspaces** reduce retained business data in memory. Knowledge workers start on demand, and model review takes priority over indexing.
+- **Heavy operations now share a bounded, serial queue.** Reviews, model tools, imports, indexing, OCR and exports wait for actual cleanup before the next admitted operation starts. Knowledge workers retire after 60 idle seconds and reopen the persisted index when needed.
+- **Repeated Word inspection and current-asset reads allocate less redundant data.** A short-lived bounded cache retains compact target metadata while freshly hashing the original on every reuse; current-asset SQL excludes superseded bodies. Human decisions, source checks and full export validation remain live.
+- **OS memory-pressure sampling and a resource-status panel** expose running tasks and queue reasons. Elevated pressure defers new document and index tasks; critical pressure defers all new scheduled tasks. Existing local and remote model APIs remain user-configured.
 - **Startup and shutdown handling** now cancels active review, indexing and PDF work, drains owned workers, releases workspace locks, and handles a second launch during exit. Startup failures exit through a controlled error path.
 - **Existing workflows and data are retained**, including cited reviews, human decisions, Word tracked changes and Chinese / English / Thai reporting. Existing API secrets need one-time re-entry in the new OS-protected vault; the previous encrypted files are preserved.
 
@@ -23,6 +31,8 @@ In paired synthetic-workspace measurements on one macOS arm64 machine, initial i
 | History, 161 documents | 636.38 MiB | 483.55 MiB | 24.02% |
 
 These are individual migration-build runs with a loopback model mock. RSS sums can count shared pages more than once; startup peaks and a real resident local model were not measured. Subsequent lifecycle fixes were validated separately. See the [change log](CHANGELOG.md) and [measurement method, full results and limitations](docs/en/tauri-desktop-validation.md).
+
+The current acceptance target is a **physical Windows computer with 8 GB RAM**, with particularly responsive operation when using a remote model API. A separately deployed local model remains supported through its API; the app does not start an additional inference, embedding or reranking model. Passing this target still requires Windows measurements with Office and the intended model deployment. See [resource-control scope](docs/en/p0-resource-control.md) and the [Windows 8 GB acceptance plan](docs/en/windows-8gb-acceptance.md). Scheduling is cooperative, not a hard process-memory or GPU-memory limit.
 
 ## Features
 
@@ -56,7 +66,7 @@ npm run build
 npm run preview
 ```
 
-1. Choose the interface language in the top bar. The default is Chinese; the selection is saved locally.
+1. Choose the interface language in the top bar. The default is Chinese; the selection is saved locally. For an official build, open **License and trial access**, copy the device code and activate the code supplied by the operator before starting new work. Existing data remains viewable/exportable without a valid trial.
 2. Load the synthetic demonstration contract or import a document you are authorized to process.
 3. Open **Model settings** and configure your own API endpoint, model, and key. A local endpoint may omit a key if its server allows this. The Codex option uses the locally installed CLI's login state.
 4. Open **Environment and knowledge setup** to choose a directory, file scope, exclusions, and an incremental-update schedule. Local indexing does not require a model.
@@ -112,6 +122,8 @@ The default desktop shell now uses Tauri. Business storage defaults to `native/l
 
 The interface pages contracts, original text and review history, loads selected reports on demand, and opens the modification workspace only when requested. Internal review/edit operations omit unrelated historical reports. Model review cancels and waits for an existing index job before proceeding; new indexing is deferred during that review. This does not control an independent model server's RAM or GPU use.
 
+The production Core now admits integrated heavy operations through one serial lease, with model tasks ahead of document tasks and indexing. The lease lasts through actual worker cleanup, including cancellation. Small interactive reads and human edits remain available. Native OS samples guide new admissions; unavailable samples retain serial operation. This production scheduler is separate from the earlier Rust CLI governor experiment. See [P0 resource control](docs/en/p0-resource-control.md) for covered operations and limitations.
+
 ```sh
 npm run native:test
 npm run native:binding
@@ -132,7 +144,7 @@ npm run build
 
 Synthetic integration tests use temporary workspaces and local mock APIs. The desktop smoke opens a real Tauri window; older reference scripts open Electron windows; optional source-reading checks access public official sites. Tests do not establish legal accuracy or certify every Windows / Word layout.
 
-The current milestone passed **437 TypeScript/Node tests, 45 Rust tests and 6 actual N-API checks**, plus the native-window import, cited review, tracked DOCX export, multilingual PDF and restart workflow. A separate macOS lifecycle loop passed **21 scenarios**, including closing during active work and overlapping relaunch. See the [current validation record](docs/en/tauri-desktop-validation.md); Windows and Intel Mac runtime acceptance remains outstanding.
+The current source passes **594 TypeScript/Node tests and 61 Rust tests**. The native-window workflow passed cited mock review, tracked DOCX export, multilingual PDF and restart persistence, with explicit native device-code/development-build checks; **21 macOS lifecycle scenarios** also passed. Six actual N-API checks were established with this storage binding. See [offline licensing](docs/en/offline-licensing.md), the [current backlog](docs/en/iteration-backlog.md), [P0 validation and boundaries](docs/en/p0-resource-control.md) and [historical migration validation](docs/en/tauri-desktop-validation.md); Windows 8 GB, real-model and Intel Mac acceptance remain outstanding.
 
 Useful focused checks:
 
@@ -160,3 +172,5 @@ Independent legal consultation, multi-user approvals, SaaS subscription billing,
 ## License
 
 [Apache License 2.0](LICENSE). Third-party dependencies retain their own licenses; this license does not relicense retrieved legal materials, customer contracts, knowledge-base content, or model services. See [Third-party dependencies](THIRD_PARTY_NOTICES.md).
+
+Official binaries additionally use the [offline activation policy](docs/en/offline-licensing.md). The client includes public verification keys, never the issuer private key. The administrator tool starts with `npm run license:issuer` and uses separately retained local signing material; a public source checkout cannot sign official licenses.

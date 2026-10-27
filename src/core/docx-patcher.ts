@@ -355,8 +355,7 @@ export async function createDocxEditableCopy(bytes: Buffer): Promise<{ bytes: Bu
   return { bytes: result, warnings: ['已仅从工作副本移除只读编辑限制；原件与原审核记录应保留，副本需独立标记。', '原有修订、书签、权限范围、换行及其他复杂内容保持原样；相关段落仍按定点修改边界处理。'] };
 }
 
-export async function inspectDocxTargets(bytes: Buffer): Promise<DocxEditableTarget[]> {
-  const loaded = await load(bytes);
+function editableTargets(loaded: Loaded): DocxEditableTarget[] {
   return loaded.parsed.blocks.flatMap(block => {
     if (block.locator.kind !== 'docx') return [];
     const record = loaded.targets.get(keyOf(block.locator.partName, block.locator.structuralPath));
@@ -375,6 +374,16 @@ export async function inspectDocxTargets(bytes: Buffer): Promise<DocxEditableTar
     return [{ partName: block.locator.partName, structuralPath: block.locator.structuralPath, text: block.text, editable, reason: reason ?? (editable ? null : '此段没有可安全修改的普通文字片段。'),
       editMode: segmented ? 'segments' : 'paragraph', warnings: segmented ? ['本段含原有锚点、分页或编号修订，仅可逐个修改普通文字片段；原有结构与其他片段保留。'] : [], ...(segmented ? { segments } : {}) }];
   });
+}
+
+/** Share one bounded package parse when callers need protection and targets. */
+export async function inspectDocxEditState(bytes: Buffer): Promise<{ protection: DocxEditProtection; targets: DocxEditableTarget[] }> {
+  const loaded = await load(bytes);
+  return { protection: { ...loaded.protection.public }, targets: editableTargets(loaded) };
+}
+
+export async function inspectDocxTargets(bytes: Buffer): Promise<DocxEditableTarget[]> {
+  return editableTargets(await load(bytes));
 }
 
 function validBoundary(text: string, index: number): boolean {

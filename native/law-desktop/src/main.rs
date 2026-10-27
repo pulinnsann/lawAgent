@@ -2,6 +2,7 @@
 
 mod host;
 mod platform;
+mod diagnostics;
 #[cfg(feature = "desktop-smoke")]
 mod smoke;
 

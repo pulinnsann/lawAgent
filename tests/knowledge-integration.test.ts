@@ -128,6 +128,7 @@ test('a queued directory save is rejected if a sync starts before that write com
     savingB = service.saveRetrievalConfig(configuration(folderB));
     const rejectedSave = assert.rejects(savingB, /建库任务.*知识库目录|更换知识库目录/);
     await service.startKnowledgeSync();
+    await within((async()=>{while(!syncCalls.length)await nextTurn();})());
     assert.deepEqual(syncCalls.map(input => input.folderPath), [folderA]);
     releaseWrite.resolve();
     await blockingSave;

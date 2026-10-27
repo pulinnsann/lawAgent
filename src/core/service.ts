@@ -1,7 +1,15 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { ResourceScheduler, type ResourceLease } from './resource-scheduler';
+import { DocxChangeInspector, changeTextSha256 } from './docx-change-inspector';
+import { readManagedDocumentSource } from './managed-document-source';
+import { LicenseManager } from './license-manager';
+import { workspaceRequiresLicense } from '../shared/license-access';
+import { LICENSE_TOKEN_MAX_BYTES } from '../shared/licensing';
+import type { ResourceKind, ResourceOperation, ResourcePressure } from '../shared/resources';
 import { randomUUID, createHash } from 'node:crypto';
 import { APP_VERSION } from '../shared/app-version';
-import { mkdir, readFile, writeFile, stat, rm, realpath, lstat, open } from 'node:fs/promises';
-import { join, basename, extname, dirname, resolve, relative, isAbsolute, sep } from 'node:path';
+import { mkdir, readFile, writeFile, stat, rm, realpath, open } from 'node:fs/promises';
+import { join, basename, extname, dirname, relative, isAbsolute, sep } from 'node:path';
 import { defaultRetrievalConfig } from '../shared/contracts';
 import type { AppState, ContractDetail, ModelConfigInput, PublicRetrievalConfig, RetrievalBundle, RetrievalConfigInput, ReviewResult, ReviewTask, StartReviewInput } from '../shared/contracts';
 import { AppStore } from './storage';
@@ -19,7 +27,7 @@ import type { ConfigureKnowledgeInput, ConfigureKnowledgeResult, EnvironmentRepo
 import { defaultKnowledgePreferences, intersectKnowledgePreferences, normalizeKnowledgePreferences } from '../shared/knowledge-preferences';
 import { runEnvironmentProbe } from './setup-environment';
 import type { ChangeWorkspace, ChangeProposal, ChangeTarget, SaveChangeInput, GenerateChangeInput, DecideChangeInput, ExportChangesInput, ExportChangesResult, EnableEditableCopyInput } from '../shared/changes';
-import { inspectDocxTargets, inspectDocxEditProtection, createDocxEditableCopy, applyDocxPatches, applyDocxTrackedPatches, type DocxTextPatch } from './docx-patcher';
+import { createDocxEditableCopy, applyDocxPatches, applyDocxTrackedPatches, type DocxTextPatch } from './docx-patcher';
 import { CHANGE_TEXT_LIMIT, draftContractChange } from './change-drafting';
 import type { ContractDraft, GenerateContractInput, ExportContractDraftInput, ExportContractDraftResult } from '../shared/generation';
 import { normalizeGenerateContractInput, generateContractDraft, buildGeneratedContractDocx } from './contract-generation';
@@ -74,6 +82,13 @@ function safeBundle(bundle: RetrievalBundle, secrets: Array<string | null>): Ret
 
 export class ContractService {
   readonly assets: WorkspaceAssets;
+  private readonly resources: ResourceScheduler;
+  private readonly changeInspector: DocxChangeInspector;
+  private readonly license: LicenseManager;
+  private readonly resourceScope = new AsyncLocalStorage<{ active: boolean }>();
+  private readonly resourceControllers = new Set<AbortController>();
+  private readonly resourceDone = new Set<Promise<unknown>>();
+  private readonly externalResources = new Map<string, {controller: AbortController; lease?: ResourceLease}>();
   private extensionJobs = new Map<string,AbortController>();
   private extensionDone = new Map<string,Promise<void>>();
   private extensionProgress = new Map<string,unknown>();
@@ -95,13 +110,47 @@ export class ContractService {
   private knowledgeTimer: ReturnType<typeof setInterval> | null = null;
   private knowledgeSettingsRevision = 0;
   private knowledgeScopeRevision = 0;
-  constructor(private store: AppStore, private dataDir: string, private emit: (task: ReviewTask) => void = () => {}, knowledge?: KnowledgePort, private officialReader?: OfficialPageReader) {
+  constructor(private store: AppStore, private dataDir: string, private emit: (task: ReviewTask) => void = () => {}, knowledge?: KnowledgePort, private officialReader?: OfficialPageReader, options: {resourceScheduler?: ResourceScheduler; docxInspector?: DocxChangeInspector; licenseManager?: LicenseManager} = {}) {
+    this.resources = options.resourceScheduler ?? new ResourceScheduler();
+    this.changeInspector = options.docxInspector ?? new DocxChangeInspector(dataDir);
+    // The official Core worker supplies its host-selected required manager.
+    // Direct service construction is the development/engineering boundary.
+    this.license = options.licenseManager ?? new LicenseManager(dataDir, { mode: 'development', deviceCode: null, publicKeys: {} });
     this.assets = new WorkspaceAssets(store, operation => this.write(operation));
     this.runtimeReady = recoverModelRuntimeRuns(this.assets).then(()=>{});
     void this.runtimeReady.catch(()=>{});
     this.knowledge = knowledge ?? new LocalKnowledgeIndex(dataDir);
     this.scheduleKnowledge();
     void this.refreshKnowledge().catch(() => {});
+  }
+
+  getResourceState() { return this.resources.snapshot(); }
+  assertLicenseWritable() { return this.license.assertWritable(); }
+  updateResourcePressure(sample: ResourcePressure): void { this.resources.updatePressure(sample); }
+  async acquireExternalResource(id: string, signal?: AbortSignal): Promise<void> {
+    if(this.closing||this.externalResources.has(id))throw new Error('资源请求已存在或应用正在关闭。');
+    const controller=new AbortController(); const stop=()=>controller.abort();signal?.addEventListener('abort',stop,{once:true});if(signal?.aborted)controller.abort();
+    const entry:{controller:AbortController;lease?:ResourceLease}={controller};this.externalResources.set(id,entry);
+    try { entry.lease=await this.resources.acquire({id,kind:'heavy',operation:'native_pdf',signal:controller.signal});controller.signal.throwIfAborted(); }
+    catch(error){entry.lease?.release();if(this.externalResources.get(id)===entry)this.externalResources.delete(id);throw error;}
+    finally{signal?.removeEventListener('abort',stop);}
+  }
+  releaseExternalResource(id: string): void { const entry=this.externalResources.get(id);if(!entry)return;entry.controller.abort();entry.lease?.release();this.externalResources.delete(id); }
+  private withResource<T>(kind: ResourceKind, operation: ResourceOperation, signal: AbortSignal | undefined, run: () => Promise<T> | T, id?: string, cancelActive?: () => void, forceNew=false): Promise<T> {
+    if(this.closing)return Promise.reject(new Error('应用正在关闭，未开始新的资源任务。'));
+    if(!forceNew&&this.resourceScope.getStore()?.active){if(signal?.aborted)return Promise.reject(signal.reason);return Promise.resolve().then(run);}
+    const controller=signal?null:new AbortController();if(controller)this.resourceControllers.add(controller);const effectiveSignal=signal??controller!.signal;
+    const done=(async()=>{const lease=await this.resources.acquire({id,kind,operation,signal:effectiveSignal,cancelActive});const scope={active:true};
+      try{effectiveSignal.throwIfAborted();if(this.closing)throw new Error('应用正在关闭，未开始新的资源任务。');if(!['knowledge_search','report_render','document_export','native_pdf','maintenance'].includes(operation))await this.license.assertWritable();effectiveSignal.throwIfAborted();if(this.closing)throw new Error('应用正在关闭，未开始新的资源任务。');return await this.resourceScope.run(scope,run);}
+      finally{scope.active=false;try{await this.knowledge.waitForIdle?.();}finally{lease.release();}}
+    })();
+    this.resourceDone.add(done);const cleanup=()=>{this.resourceDone.delete(done);if(controller)this.resourceControllers.delete(controller);};void done.then(cleanup,cleanup);return done;
+  }
+  private runWorkspaceResource<T>(action: string, id: string, signal: AbortSignal, run: () => Promise<T>): Promise<T> {
+    const models:Record<string,ResourceOperation>={'alignment.compare':'clause_alignment','translations.generate':'reference_translation','reporting.translation.generate':'report_translation','modelRuntime.probe':'model_probe'};
+    const heavy:Record<string,ResourceOperation>={'conversion.convert':'document_conversion','conversion.download':'document_conversion','reporting.render':'report_render','library.authoring.renderConfirmed':'document_export','library.authoring.prepareDescription':'document_import','library.authoring.prepareTemplate':'document_import','library.authoring.update':'document_import','library.template.render':'document_import','connections.sync':'knowledge_index'};
+    const op=models[action]??heavy[action];if(!op)return run();this.extensionProgress.set(id,{phase:'等待资源调度'});
+    return this.withResource(models[action]?'model':'heavy',op,signal,async()=>{this.extensionProgress.set(id,{phase:'开始处理'});return run();},id);
   }
 
   private knowledgePreferences(): KnowledgePreferences {
@@ -136,8 +185,10 @@ export class ContractService {
     }
   }
   async configureLocalKnowledge(input: ConfigureKnowledgeInput): Promise<ConfigureKnowledgeResult> {
+    await this.license.assertWritable();
     const preferences = normalizeKnowledgePreferences(input.preferences);
     const config = await this.write(async () => {
+      await this.license.assertWritable();
       if (this.closing) throw new Error('应用正在关闭，无法保存配置。');
       if (this.knowledgeTask) throw new Error('知识库正在同步，请先取消或等待完成后再保存个性化配置。');
       const current = this.store.getRetrievalConfig() ?? defaultRetrievalConfig();
@@ -163,16 +214,21 @@ export class ContractService {
     return state;
   }
   private modelReviewPending(): boolean {
-    return this.startingModels.size > 0 || [...this.active.values()].some(item => item.mode === 'model' && (item.task.status === 'queued' || item.task.status === 'running'));
+    const state=this.resources.snapshot();
+    // A published terminal review may still be draining worker buffers. Allow
+    // indexing to queue, while its lease still prevents actual overlap.
+    const reviewIsRunning=(id:string)=>{const status=this.active.get(id)?.task.status;return status==='queued'||status==='running';};
+    return Boolean(state.active?.kind==='model'&&(state.active.operation!=='contract_review'||reviewIsRunning(state.active.id)))||state.queued.some(task=>task.kind==='model')||this.startingModels.size>0||[...this.active.values()].some(item=>item.mode==='model'&&(item.task.status==='queued'||item.task.status==='running'));
   }
   async startKnowledgeSync(mode: KnowledgeSyncMode = 'incremental'): Promise<{ jobId: string }> {
+    await this.license.assertWritable();
     if (this.modelReviewPending()) throw new Error('模型审核正在准备或运行，知识库建库已暂缓。请等待审核完成或取消审核后再开始建库。');
     if (this.closing) throw new Error('应用正在关闭，无法开始建库。');
     if (this.knowledgeTask) throw new Error('本地知识库正在更新，请等待或取消当前任务。');
     const folderPath = this.knowledgeFolder(); const id = randomUUID(); const controller = new AbortController();
     const task = { id, folderPath, controller, done: Promise.resolve(), job: null as KnowledgeSyncJob | null };
     this.knowledgeTask = task;
-    task.done = this.knowledge.syncFolder({ folderPath, jobId: id, mode, preferences: structuredClone(this.knowledgePreferences()) }, controller.signal, job => { task.job = job; })
+    task.done = this.withResource('index','knowledge_index',controller.signal,()=>this.knowledge.syncFolder({ folderPath, jobId: id, mode, preferences: structuredClone(this.knowledgePreferences()) }, controller.signal, job => { task.job = job; }),id,()=>controller.abort())
       .then(job => { task.job = job; })
       .catch(error => {
         // The index normally persists failed jobs itself. A crashed worker is surfaced by getState.
@@ -183,8 +239,8 @@ export class ContractService {
   async cancelKnowledgeSync(jobId: string): Promise<void> {
     if (this.knowledgeTask?.id === jobId) this.knowledgeTask.controller.abort();
   }
-  searchKnowledge(input: KnowledgeSearchInput) { return this.knowledge.search({ ...input, folderPath: this.knowledgeFolder(), preferences: this.knowledgePreferences() }); }
-  getKnowledgeChunk(chunkId: string) { return this.knowledge.readChunk({ folderPath: this.knowledgeFolder(), chunkId, preferences: this.knowledgePreferences() }); }
+  searchKnowledge(input: KnowledgeSearchInput) { return this.withResource('heavy','knowledge_search',undefined,()=>this.knowledge.search({ ...input, folderPath: this.knowledgeFolder(), preferences: this.knowledgePreferences() })); }
+  getKnowledgeChunk(chunkId: string) { return this.withResource('heavy','knowledge_search',undefined,()=>this.knowledge.readChunk({ folderPath: this.knowledgeFolder(), chunkId, preferences: this.knowledgePreferences() })); }
   private searchReviewKnowledge(input: KnowledgeSearchInput & { folderPath: string }, signal: AbortSignal) {
     const current = this.store.getRetrievalConfig();
     const previous = input.preferences ?? defaultKnowledgePreferences();
@@ -192,13 +248,14 @@ export class ContractService {
     return this.knowledge.search({ ...input, preferences }, signal);
   }
   private async refreshKnowledge(): Promise<void> {
-    if (this.closing || this.knowledgeTask || this.active.size || this.starting.size) return;
+    if (!(await this.license.state()).canCreate) return;
+    if (this.closing || this.knowledgeTask || this.active.size || this.starting.size || this.modelReviewPending()) return;
     const config = this.store.getRetrievalConfig();
     if (!config?.knowledge.enabled || !config.knowledge.folderPath || !this.knowledgePreferences().autoSyncEnabled) return;
     const revision = this.knowledgeSettingsRevision;
     const state = await this.knowledge.getState(config.knowledge.folderPath, config.knowledge.preferences);
     const current = this.store.getRetrievalConfig();
-    if (this.closing || this.knowledgeTask || this.active.size || this.starting.size || revision !== this.knowledgeSettingsRevision || !this.knowledgePreferences().autoSyncEnabled || !current?.knowledge.enabled || current.knowledge.folderPath !== config.knowledge.folderPath) return;
+    if (this.closing || this.knowledgeTask || this.active.size || this.starting.size || this.modelReviewPending() || revision !== this.knowledgeSettingsRevision || !this.knowledgePreferences().autoSyncEnabled || !current?.knowledge.enabled || current.knowledge.folderPath !== config.knowledge.folderPath) return;
     if (state.lastSyncedAt || state.job?.status === 'interrupted') await this.startKnowledgeSync('incremental');
   }
 
@@ -217,7 +274,7 @@ export class ContractService {
   listDocumentsPage(input: import('../shared/contracts').DocumentListInput = {}) { return listDocumentsPage(this.store, input); }
   getDocumentBlocks(input: import('../shared/contracts').DocumentBlocksInput) { return getDocumentBlocks(this.store, input); }
   getDocumentReviews(input: import('../shared/contracts').DocumentReviewsInput) { return getDocumentReviews(this.store, input); }
-  saveConfig(input: ModelConfigInput) { const config = validateModelConfig(input); return this.write(() => this.store.saveConfig(config)); }
+  saveConfig(input: ModelConfigInput) { const config = validateModelConfig(input); return this.write(async () => { await this.license.assertWritable(); return this.store.saveConfig(config); }); }
   private async connectionTest<T>(operation: (signal: AbortSignal) => Promise<T>): Promise<T> {
     if (this.closing) throw new Error('应用正在关闭，无法开始连接测试。');
     const controller = new AbortController(); let finish!:()=>void;
@@ -229,13 +286,14 @@ export class ContractService {
     return this.connectionTest(async signal=>{
       await this.runtimeReady; signal.throwIfAborted();
       const config = this.store.getConfig(); if (!config) throw new Error('请先保存模型 API 配置。');
-      return withModelRuntime({assets:this.assets,config,taskId:randomUUID(),operation:'connection_test',signal,secrets:[apiKey??'']},()=>testConnection(config, apiKey, signal));
+      return this.withResource('model','connection_test',signal,()=>withModelRuntime({assets:this.assets,config,taskId:randomUUID(),operation:'connection_test',signal,secrets:[apiKey??'']},()=>testConnection(config, apiKey, signal)));
     });
   }
   saveRetrievalConfig(input: RetrievalConfigInput) {
     const config = validateRetrievalConfig({ ...input, knowledge: { ...input.knowledge, preferences: input.knowledge.preferences ?? this.knowledgePreferences() } });
     if (this.knowledgeTask && config.knowledge.folderPath !== this.knowledgeTask.folderPath) throw new Error('请先取消或等待当前建库任务完成，再更换知识库目录。');
     return this.write(async () => {
+      await this.license.assertWritable();
       if (this.knowledgeTask && config.knowledge.folderPath !== this.knowledgeTask.folderPath) throw new Error('请先取消或等待当前建库任务完成，再更换知识库目录。');
       if (this.knowledgeTask && JSON.stringify(config.knowledge.preferences) !== JSON.stringify(this.knowledgePreferences())) throw new Error('知识库正在同步，请先取消或等待完成后再更改个性化配置。');
       const previous = this.store.getRetrievalConfig();
@@ -271,21 +329,27 @@ export class ContractService {
   }
 
   async importFile(sourcePath: string): Promise<ContractDetail> {
+    return this.withResource('heavy','document_import',undefined,async()=>{
     const info = await stat(sourcePath);
     if (!info.isFile() || info.size > 50 * 1024 * 1024) throw new Error('请选择不超过50 MB的 DOCX 或 PDF 文件。');
     return this.importBytes(basename(sourcePath), await readFile(sourcePath));
+
+    });
   }
 
   async importVersionFile(sourcePath: string, input: import('../shared/document-workspace').ImportVersionInput): Promise<ContractDetail> {
+    return this.withResource('heavy','document_import',undefined,async()=>{
     if (this.closing) throw new Error('应用正在关闭。');
     assertDocumentActive(this.store, input.parentDocumentId);
     const parent = this.store.getDocumentForReview(input.parentDocumentId);
     if ([...this.active.values()].some(t=>this.store.getDocumentForReview(t.task.documentId).contractId===parent.contractId)) throw new Error('此合同仍在审核，请等待完成或取消。');
     const info=await stat(sourcePath); if(!info.isFile()||info.size>50*1024*1024)throw new Error('请选择不超过50 MB的 DOCX 或 PDF 文件。');
     return this.importBytes(basename(sourcePath),await readFile(sourcePath),undefined,input);
+
+    });
   }
 
-  loadSample() { return createSampleContract().then(bytes => this.importBytes('示例 · 服务采购合同.docx', bytes)); }
+  async loadSample() { await this.license.assertWritable(); return createSampleContract().then(bytes => this.importBytes('示例 · 服务采购合同.docx', bytes)); }
 
   private async importBytes(name: string, bytes: Buffer, derivation?: { warnings?: string[]; partial?: boolean }, versionInput?: import('../shared/document-workspace').ImportVersionInput): Promise<ContractDetail> {
     if(this.closing)throw new Error('应用正在关闭，无法导入。');
@@ -307,6 +371,7 @@ export class ContractService {
       if (derivation?.partial) parsed.partial = true;
       if (derivation?.warnings?.length) parsed.warnings.push(...derivation.warnings);
       return await this.write(async () => {
+        if(this.closing)throw new Error('应用正在关闭，未保存新的导入。');
         const existing = findDuplicate(); if (existing) { assertDocumentActive(this.store,String(existing)); await rm(dir, { recursive: true, force: true }); return this.store.getDocument(String(existing)); }
         return this.store.addDocument(id, name, `documents/${id}/original${extension}`, bytes.length, sha256, parsed,undefined,versionInput);
       });
@@ -319,14 +384,14 @@ export class ContractService {
     const runningReviews = [...this.active.values()].filter(item => item.task.status === 'queued' || item.task.status === 'running');
     if (this.starting.has(input.documentId) || runningReviews.some(item => item.task.documentId === input.documentId)) throw new Error('这份合同正在审核，请等待或取消当前任务。');
     if (runningReviews.length + this.starting.size >= 2) throw new Error('已有两个审核任务运行中，请稍后再试。');
-    const document = this.store.getDocumentForReview(input.documentId);
+    const document = this.getDocumentView(input.documentId);
     assertDocumentActive(this.store,document.id);
     const standard = input.standardVersionId ? this.store.getEnterpriseStandardVersion(input.standardVersionId) : undefined;
     const allSecrets = [apiKey, keys.knowledgeApiKey, keys.webApiKey, ...Object.values(connectionSecrets)];
     if (standard && JSON.stringify(standard) !== JSON.stringify(redactSecrets(standard, allSecrets))) throw new Error('所选企业标准内容与当前连接凭据包含相同字符串。为避免凭据进入模型或报告且保留已发布版本，已在创建任务前阻止审核；请检查标准内容或更换测试凭据后重试。');
     input.context.businessContext = redactSecrets(input.context.businessContext, allSecrets);
     if (standard && (!standard.content.contractTypes.includes(input.context.contractType) || !standard.content.partyRoles.includes(input.context.ourPartyRole))) throw new Error('所选企业审核标准不适用于当前合同类型或我方立场，请重新选择。');
-    if (!document.blocks.some(block => block.text.trim())) throw new Error('合同没有可审核文字；扫描件请先进行 OCR 或提供文字版。');
+    if (!this.store.rows('SELECT id FROM document_blocks WHERE document_version_id=? AND length(trim(original_text))>0 LIMIT 1',[document.id]).length) throw new Error('合同没有可审核文字；扫描件请先进行 OCR 或提供文字版。');
     const config = this.store.getConfig();
     // Client-supplied snapshots are never authoritative. Resolve and pin the
     // workspace's actual versions before any model call.
@@ -354,11 +419,14 @@ export class ContractService {
     let finishStarting!: () => void;
     this.startingDone.set(input.documentId, new Promise<void>(resolve => { finishStarting = resolve; }));
     try {
+      await this.license.assertWritable();
       if (input.mode === 'model') {
-        // Reserve model priority before yielding. Index cancellation is awaited:
-        // signalling AbortController alone does not prove heavy workers stopped.
+        // Reserve model priority before yielding and signal index cancellation.
+        // Enqueue this review without waiting here: its exclusive resource
+        // lease already waits for actual index cleanup, and must be visible
+        // before a queued PDF/document task can claim the next resource slot.
         const indexing = this.knowledgeTask;
-        if (indexing) { indexing.controller.abort(); await indexing.done; }
+        if (indexing) indexing.controller.abort();
       }
       await this.runtimeReady;
       const workflow = await getWorkflowBeforeReview({store:this.store,assets:this.assets},document.id,standard);
@@ -377,6 +445,17 @@ export class ContractService {
   }
 
   private async performReview(task: ReviewTask, runId: string, document: ContractDetail, input: StartReviewInput, config: ModelConfigInput | null, apiKey: string | null, controller: AbortController, retrievalConfig: PublicRetrievalConfig | null, keys: RetrievalKeys, standard?: EnterpriseStandardSnapshot, experienceSnapshot: ExperienceSnapshot[] = [], connections: WorkspaceAsset[] = [], connectionSecrets: ConnectionSecrets = {}): Promise<void> {
+    task.stage='等待资源调度';this.emit(this.publicTask(task));
+    try{await this.withResource(input.mode==='model'?'model':'heavy',input.mode==='model'?'contract_review':'local_review',controller.signal,async()=>{
+      const full=this.store.getDocumentForReview(document.id);assertDocumentActive(this.store,full.id);
+      await this.performAdmittedReview(task,runId,full,input,config,apiKey,controller,retrievalConfig,keys,standard,experienceSnapshot,connections,connectionSecrets);
+    },task.id,undefined,true);}catch(error){
+      task.status=controller.signal.aborted?'cancelled':'failed';task.stage=task.status==='cancelled'?'已取消':'审核未完成';task.finishedAt=new Date().toISOString();task.error=controller.signal.aborted?(controller.signal.reason instanceof KnowledgeScopeChangedError?controller.signal.reason.message:null):redactSecrets(error instanceof Error?error.message:'资源任务未完成',[apiKey,keys.knowledgeApiKey,keys.webApiKey,...Object.values(connectionSecrets)]);
+      await this.write(()=>this.store.updateTask({...task},runId)).catch(()=>{});this.emit(this.publicTask(task));this.active.delete(task.id);this.extensionProgress.delete(task.id);
+    }
+  }
+
+  private async performAdmittedReview(task: ReviewTask, runId: string, document: ContractDetail, input: StartReviewInput, config: ModelConfigInput | null, apiKey: string | null, controller: AbortController, retrievalConfig: PublicRetrievalConfig | null, keys: RetrievalKeys, standard?: EnterpriseStandardSnapshot, experienceSnapshot: ExperienceSnapshot[] = [], connections: WorkspaceAsset[] = [], connectionSecrets: ConnectionSecrets = {}): Promise<void> {
     const started = performance.now();
     const secrets = [apiKey, keys.knowledgeApiKey, keys.webApiKey, ...Object.values(connectionSecrets)];
     let stages = Promise.resolve();
@@ -457,17 +536,27 @@ export class ContractService {
 
   async runWorkspaceCommand(input: WorkspaceCommand, secrets: ConnectionSecrets = {}, apiKey: string | null = null): Promise<any> {
     await this.runtimeReady;
+    if (input.action === 'workspace.licenseState') return this.license.state();
+    if (input.action === 'workspace.licenseActivate') {
+      if(this.closing)throw new Error('应用正在关闭，无法激活授权。');
+      const payload=input.payload as {token?:unknown}|null;
+      if(!payload||typeof payload!=='object'||Array.isArray(payload)||Object.keys(payload).some(key=>key!=='token')||typeof payload.token!=='string'||Buffer.byteLength(payload.token)>LICENSE_TOKEN_MAX_BYTES)throw new Error('请输入有效的许可证字符串。');
+      return this.license.activate(payload.token.trim());
+    }
+    if (input.action === 'workspace.resources') return this.getResourceState();
     if (input.action === 'workspace.status') return { documentCount: Number(this.store.rows('SELECT COUNT(*) n FROM document_versions d JOIN contracts c ON c.id=d.contract_id WHERE c.workspace_id=?',[this.store.workspaceId])[0].n), reportCount: Number(this.store.rows('SELECT COUNT(*) n FROM reports WHERE workspace_id=?',[this.store.workspaceId])[0].n) };
     if (input.action === 'workspace.progress') return this.extensionProgress.get(String((input.payload as any)?.requestId)) ?? { phase: '等待处理或已完成' };
     if (input.action === 'workspace.cancel') { this.extensionJobs.get(String((input.payload as any)?.requestId))?.abort(); return { cancelled: true }; }
     if (this.closing) throw new Error('应用正在关闭，无法开始工作台操作。');
+    if (workspaceRequiresLicense(input.action)) await this.license.assertWritable();
     const id = input.requestId ?? randomUUID();
     if (this.extensionJobs.has(id)) throw new Error('此操作正在执行。');
     const controller = new AbortController(); this.extensionJobs.set(id, controller); this.extensionProgress.set(id, { phase: '开始处理' });
     let finish!: () => void;
     this.extensionDone.set(id, new Promise<void>(resolve => { finish = resolve; }));
     const deps = { store: this.store, service: this, assets: this.assets,dataDir:this.dataDir };
-    try {
+    try { return await this.runWorkspaceResource(input.action,id,controller.signal,async()=>{
+      if(workspaceRequiresLicense(input.action))await this.license.assertWritable();
       if (input.action==='documents.inspectPurge') return inspectContractPurge(this.store,String((input.payload as any)?.contractId));
       if (input.action==='documents.purge') {
         if(this.importing||this.active.size||this.starting.size||this.changeDrafts.size||this.contractGenerations.size||this.extensionJobs.size>1)throw new Error('请等待其他合同或工作台任务完成，再永久清理。');
@@ -495,16 +584,19 @@ export class ContractService {
       if (input.action.startsWith('connections.')) return redactSecrets(await runConnectionCommand(input.action, input.payload, { assets: this.assets, dataDir: this.dataDir, secrets, knowledge: this.knowledge, signal: controller.signal, onProgress: value => this.extensionProgress.set(id, value) }), Object.values(secrets));
       if (input.action.startsWith('conversion.')) { const { runConversionCommand } = await import('./document-conversion'); return await runConversionCommand(input.action, input.payload, { ...deps, dataDir: this.dataDir, signal: controller.signal, onProgress: value => this.extensionProgress.set(id, value) }); }
       throw new Error('不支持的工作台操作。');
-    } finally { this.extensionJobs.delete(id); this.extensionProgress.delete(id); this.extensionDone.delete(id); finish(); }
+    }); } finally { this.extensionJobs.delete(id); this.extensionProgress.delete(id); this.extensionDone.delete(id); finish(); }
   }
 
   async importDerivedBytes(input: { name: string; base64: string; source: unknown; draft?: ContractDraft; warnings?: string[]; partial?: boolean }): Promise<ContractDetail> {
+    return this.withResource('heavy','document_import',undefined,async()=>{
     if (this.closing) throw new Error('应用正在关闭。');
     const bytes = Buffer.from(input.base64, 'base64');
     if (bytes.length > 50 * 1024 * 1024) throw new Error('派生文档超过50 MiB。');
     const detail = await this.importBytes(input.name, bytes, input);
     await this.assets.save({ kind: 'document_derivation', expectedRevision: 0, body: { documentId: detail.id, source: input.source } });
     return detail;
+
+    });
   }
 
   async cancelReview(taskId: string): Promise<void> { this.active.get(taskId)?.controller.abort(); }
@@ -512,14 +604,15 @@ export class ContractService {
   listEnterpriseStandards() { return this.store.listEnterpriseStandards(); }
   getEnterpriseStandard(id: string) { return this.store.getEnterpriseStandard(id); }
   saveEnterpriseStandard(input: SaveEnterpriseStandardInput) {
-    return this.write(() => { if (this.closing) throw new Error('应用正在关闭，无法保存审核标准。'); return this.store.saveEnterpriseStandard(structuredClone(input)); });
+    return this.write(async () => { await this.license.assertWritable(); if (this.closing) throw new Error('应用正在关闭，无法保存审核标准。'); return this.store.saveEnterpriseStandard(structuredClone(input)); });
   }
   publishEnterpriseStandard(input: PublishEnterpriseStandardInput) {
-    return this.write(() => { if (this.closing) throw new Error('应用正在关闭，无法发布审核标准。'); return this.store.publishEnterpriseStandard(structuredClone(input)); });
+    return this.write(async () => { await this.license.assertWritable(); if (this.closing) throw new Error('应用正在关闭，无法发布审核标准。'); return this.store.publishEnterpriseStandard(structuredClone(input)); });
   }
   getRiskDispositions(reviewId: string) { return this.store.getRiskDispositions(reviewId); }
   async saveRiskDisposition(input: SaveRiskDispositionInput) {
-    const result=await this.write(() => { if (this.closing) throw new Error('应用正在关闭，无法保存风险处置。'); return this.store.saveRiskDisposition(structuredClone(input)); });
+    await this.license.assertWritable();
+    const result=await this.write(async () => { await this.license.assertWritable(); if (this.closing) throw new Error('应用正在关闭，无法保存风险处置。'); return this.store.saveRiskDisposition(structuredClone(input)); });
     await getWorkflowAfterReview({store:this.store,assets:this.assets},this.store.getReview(input.reviewId));
     return result;
   }
@@ -528,41 +621,36 @@ export class ContractService {
     if (!Number.isSafeInteger(revision) || revision < 0 || this.store.getChangeRevision(reviewId) !== revision) throw new Error('修改列表已更新，请刷新后重新确认，未覆盖最新修改。');
   }
   private async changeSource(documentId: string): Promise<Buffer> {
-    const artifact = this.store.getDocumentArtifact(documentId);
-    const root = await realpath(this.dataDir);
-    const path = resolve(root, artifact.artifactUri);
-    const delta = relative(root, path);
-    if (!delta || isAbsolute(delta) || delta === '..' || delta.startsWith(`..${sep}`)) throw new Error('合同原件不在受管目录中。');
-    const file = await lstat(path);
-    if (!file.isFile() || file.isSymbolicLink() || file.size > 50 * 1024 * 1024) throw new Error('合同原件已变化或不可读取，无法安全生成修改稿。');
-    const canonical = await realpath(path); const canonicalDelta = relative(root, canonical);
-    if (isAbsolute(canonicalDelta) || canonicalDelta === '..' || canonicalDelta.startsWith(`..${sep}`)) throw new Error('合同原件已移出受管目录。');
-    const bytes = await readFile(canonical);
-    if (bytes.length !== artifact.byteSize || createHash('sha256').update(bytes).digest('hex') !== artifact.sha256) throw new Error('合同原件与审核版本不一致，已阻止修改。请重新导入并审核。');
-    return bytes;
+    return readManagedDocumentSource(this.dataDir, this.store.getDocumentArtifact(documentId));
   }
   private async changeEditingSource(reviewId: string, documentId: string): Promise<{ bytes: Buffer; warnings: string[] }> {
     const bytes = await this.changeSource(documentId);
     return this.store.getEditableCopyAuthorization(reviewId).enabled ? createDocxEditableCopy(bytes) : { bytes, warnings: [] };
   }
   async getChanges(reviewId: string): Promise<ChangeWorkspace> {
+    if (this.closing) throw new Error('应用正在关闭，无法读取修改列表。');
     const review = this.store.getReview(reviewId); const document = this.store.getDocumentForReview(review.documentId);
     const artifact = this.store.getDocumentArtifact(document.id);
     const basic = { reviewId, documentId: document.id, sourceFileSha256: artifact.sha256, revision: this.store.getChangeRevision(reviewId),
       proposals: this.store.getChangeProposals(reviewId), exports: this.store.getChangeExports(reviewId) };
     if (document.format !== 'docx') return { ...basic, supported: false, reason: '本轮修改稿先支持DOCX；PDF仍可审核，修改稿格式需后续单独验证。', targets: [], warnings: [] };
-    const source = await this.changeSource(document.id);
-    const protection = await inspectDocxEditProtection(source);
     const authorization = this.store.getEditableCopyAuthorization(reviewId);
-    const working = authorization.enabled ? await createDocxEditableCopy(source) : { bytes: source, warnings: [] };
-    const inspected = await inspectDocxTargets(working.bytes);
+    const inspected = await this.changeInspector.inspect({ documentId: document.id, artifact, editableCopy: authorization.enabled });
+    const protection = inspected.protection;
+    const byLocator = new Map<string, (typeof inspected.targets)[number]>();
+    for (const target of inspected.targets) { const key = `${target.partName}\n${target.structuralPath}`; if (!byLocator.has(key)) byLocator.set(key, target); }
     const targets = document.blocks.map(block => {
       const locator = block.locator;
-      const target = locator.kind === 'docx' ? inspected.find(item => item.partName === locator.partName && item.structuralPath === locator.structuralPath) : undefined;
-      const match = target?.text === block.text;
+      const target = locator.kind === 'docx' ? byLocator.get(`${locator.partName}\n${locator.structuralPath}`) : undefined;
+      const match = target?.textSha256 === changeTextSha256(block.text);
+      const segments = target?.segments?.map(({ textSha256, ...segment }) => {
+        const text = block.text.slice(segment.rangeStart, segment.rangeEnd);
+        const consistent = Number.isSafeInteger(segment.rangeStart) && Number.isSafeInteger(segment.rangeEnd) && segment.rangeStart >= 0 && segment.rangeEnd >= segment.rangeStart && segment.rangeEnd <= block.text.length && changeTextSha256(text) === textSha256;
+        return { ...segment, text, editable: segment.editable && consistent, reason: consistent ? segment.reason : '原文片段与已保存定位不一致，需重新导入审核。' };
+      });
       return { blockId: block.id, label: `${block.kind === 'table_cell' ? '表格段落' : block.kind === 'header' ? '页眉' : block.kind === 'footer' ? '页脚' : '段落'} ${block.ordinal + 1}`, text: block.text,
         editable: Boolean(match && target?.editable), reason: !match ? '原文与已保存定位不一致，需重新导入审核。' : target!.reason,
-        ...(match && target ? { editMode: target.editMode ?? 'paragraph', warnings: target.warnings ?? [], ...(target.segments ? { segments: target.segments } : {}) } : {}) };
+        ...(match && target ? { editMode: target.editMode ?? 'paragraph', warnings: target.warnings ?? [], ...(segments ? { segments } : {}) } : {}) };
     });
     // Enabling a copy is monotonic and can finish while a read is inspecting XML.
     if (this.store.getEditableCopyAuthorization(reviewId).enabled !== authorization.enabled) return this.getChanges(reviewId);
@@ -570,22 +658,27 @@ export class ContractService {
     return { ...basic, revision: this.store.getChangeRevision(reviewId), proposals: this.store.getChangeProposals(reviewId), exports: this.store.getChangeExports(reviewId),
       supported, reason: supported ? null : protection.reason ?? '没有可安全定点修改的普通段落，请在Word中处理复杂结构后重新导入。', targets,
       editableCopy: { available: protection.canCreateEditableCopy, enabled: authorization.enabled, enabledAt: authorization.enabledAt, reason: protection.reason },
-      warnings: ['修改稿仅包含已采纳的修改；采纳不等于法律判断已经确认。', ...working.warnings, ...(document.partial ? ['文档解析存在覆盖提示；未修改的图片、修订或其他对象保持原样，导出后仍需核对。'] : [])] };
-  }
+      warnings: ['修改稿仅包含已采纳的修改；采纳不等于法律判断已经确认。', ...inspected.warnings, ...(document.partial ? ['文档解析存在覆盖提示；未修改的图片、修订或其他对象保持原样，导出后仍需核对。'] : [])] };
+
+    }
   enableEditableCopy(input: EnableEditableCopyInput): Promise<ChangeWorkspace> {
     return this.write(async () => {
+      await this.license.assertWritable();
       if (this.closing) throw new Error('应用正在关闭，无法启用可编辑副本。');
       this.assertChangeRevision(input.reviewId, input.expectedRevision);
       const review = this.store.getReview(input.reviewId); const document = this.store.getDocumentForReview(review.documentId);
       if (document.format !== 'docx') throw new Error('只有DOCX可启用可编辑副本。');
-      const source = await this.changeSource(document.id); const protection = await inspectDocxEditProtection(source);
+      const artifact = this.store.getDocumentArtifact(document.id);
+      const original = await this.changeInspector.inspect({ documentId: document.id, artifact, editableCopy: false });
+      const protection = original.protection;
       if (!protection.canCreateEditableCopy) throw new Error(protection.reason ?? '此合同未启用支持的Word只读限制，无需启用可编辑副本。');
-      const copy = await createDocxEditableCopy(source);
-      if (!(await inspectDocxTargets(copy.bytes)).some(target => target.editable)) throw new Error('工作副本仍没有可安全修改的普通段落，请在Word中处理复杂结构。');
+      const copy = await this.changeInspector.inspect({ documentId: document.id, artifact, editableCopy: true });
+      if (!copy.targets.some(target => target.editable)) throw new Error('工作副本仍没有可安全修改的普通段落，请在Word中处理复杂结构。');
       await this.store.enableEditableCopy(input.reviewId, input.expectedRevision);
       return this.getChanges(input.reviewId);
     });
-  }
+
+    }
   private changePatch(proposal: ChangeProposal, document: ContractDetail): DocxTextPatch {
     const block = document.blocks.find(item => item.id === proposal.blockId);
     if (!block || block.locator.kind !== 'docx') throw new Error('修改目标不属于当前DOCX原文。');
@@ -630,7 +723,8 @@ export class ContractService {
     await this.store.saveChangeProposal(proposal, input.expectedRevision);
     return this.getChanges(review.id);
   }
-  saveChange(input: SaveChangeInput): Promise<ChangeWorkspace> { return this.write(() => this.persistChange(structuredClone(input))); }
+  saveChange(input: SaveChangeInput): Promise<ChangeWorkspace> { return this.write(async () => { await this.license.assertWritable(); return this.persistChange(structuredClone(input)); });
+    }
   generateChangeDraft(input: GenerateChangeInput, apiKey: string | null): Promise<ChangeWorkspace> {
     if (this.closing) return Promise.reject(new Error('应用正在关闭，无法生成修改草稿。'));
     if (this.changeDrafts.has(input.reviewId)) return Promise.reject(new Error('本次审核正在生成修改草稿，请等待或取消。'));
@@ -640,6 +734,7 @@ export class ContractService {
     this.changeDrafts.set(input.reviewId, { controller, done }); return done;
   }
   private async runChangeDraft(input: GenerateChangeInput, apiKey: string | null, signal: AbortSignal): Promise<ChangeWorkspace> {
+    return this.withResource('model','contract_change',signal,async()=>{
     this.assertChangeRevision(input.reviewId, input.expectedRevision);
     const workspace = await this.getChanges(input.reviewId);
     const review = this.store.getReview(input.reviewId); const document = this.store.getDocumentForReview(review.documentId);
@@ -655,6 +750,8 @@ export class ContractService {
     return this.write(async () => {
       if (signal.aborted) throw new Error('修改草稿生成已取消，未保存修改。');
       return this.persistChange({ ...input, replacementText: generated.replacementText }, generated, signal);
+    });
+
     });
   }
   async cancelChangeDraft(reviewId: string): Promise<void> { this.changeDrafts.get(reviewId)?.controller.abort(); }
@@ -675,6 +772,7 @@ export class ContractService {
     this.contractGenerations.set(input.requestId, { controller, done }); return done;
   }
   private async runContractGeneration(input: GenerateContractInput, apiKey: string | null, signal: AbortSignal): Promise<ContractDraft> {
+    return this.withResource('model','contract_generation',signal,async()=>{
     const config = this.store.getConfig();
     if (!config) throw new Error('请先配置并测试模型连接，再根据描述生成合同。');
     if (signal.aborted) throw new Error('合同生成已取消。');
@@ -684,9 +782,12 @@ export class ContractService {
       if (this.closing || signal.aborted) throw new Error('合同生成已取消，未保存草稿。');
       await this.store.saveContractDraft(draft); return draft;
     });
+
+    });
   }
   async cancelContractGeneration(requestId: string): Promise<void> { this.contractGenerations.get(requestId)?.controller.abort(); }
   exportContractDraft(input: ExportContractDraftInput & { filePath: string }): Promise<ExportContractDraftResult> {
+    return this.withResource('heavy','document_export',undefined,async()=>{
     return this.write(async () => {
       if (this.closing) throw new Error('应用正在关闭，无法导出合同草稿。');
       const checked=await assertAuthoringExport({store:this.store,assets:this.assets,service:this,dataDir:this.dataDir},{draftId:input.draftId});
@@ -708,9 +809,12 @@ export class ContractService {
         throw error;
       }
     });
+
+    });
   }
   decideChange(input: DecideChangeInput): Promise<ChangeWorkspace> {
     return this.write(async () => {
+      await this.license.assertWritable();
       if (this.closing) throw new Error('应用正在关闭，无法确认修改。');
       assertDocumentActive(this.store,this.store.getReview(input.reviewId).documentId);
       this.assertChangeRevision(input.reviewId, input.expectedRevision);
@@ -724,8 +828,10 @@ export class ContractService {
       await this.store.decideChangeProposal(input.reviewId, input.proposalId, input.status, input.expectedRevision);
       return this.getChanges(input.reviewId);
     });
-  }
+
+    }
   exportModified(input: ExportChangesInput & { filePath: string }): Promise<ExportChangesResult> {
+    return this.withResource('heavy','document_export',undefined,async()=>{
     return this.write(async () => {
       assertDocumentActive(this.store,this.store.getReview(input.reviewId).documentId);
       if (this.closing) throw new Error('应用正在关闭，无法导出修改稿。');
@@ -774,10 +880,13 @@ export class ContractService {
         throw error;
       }
     });
+
+    });
   }
   close(): Promise<void> {
     return this.closeTask ??= (async()=>{
     this.closing = true;
+    this.resources.close();for(const controller of this.resourceControllers)controller.abort();for(const entry of this.externalResources.values())if(!entry.lease)entry.controller.abort();
     const connectionTests = [...this.connectionTests.entries()];
     for (const [controller] of connectionTests) controller.abort();
     // Signal every active branch before waiting for any branch's cleanup; a
@@ -788,6 +897,8 @@ export class ContractService {
     for (const generation of this.contractGenerations.values()) generation.controller.abort();
     for (const review of this.active.values()) review.controller.abort();
     this.knowledgeTask?.controller.abort();
+    const knowledgeClosing=this.knowledge.close();void knowledgeClosing.catch(()=>{});
+    const changeInspectionClosing=this.changeInspector.close();void changeInspectionClosing.catch(()=>{});
     await this.runtimeReady.catch(()=>{});
     for (const controller of this.extensionJobs.values()) controller.abort();
     await Promise.allSettled([...this.extensionDone.values()]);
@@ -801,8 +912,7 @@ export class ContractService {
     knowledgeTask?.controller.abort();
     // Closing the index client also bounds a parser which cannot finish its
     // cancellation. Start it before awaiting the indexing task's completion.
-    const knowledgeClosing = this.knowledge.close();
-    void knowledgeClosing.catch(()=>{});
+    // Worker cleanup was started before waiting for any extension above.
     await Promise.allSettled([...this.startingDone.values()]);
     const running = [...this.active.values()];
     for (const item of running) item.controller.abort();
@@ -811,8 +921,14 @@ export class ContractService {
     await Promise.allSettled(generations.map(item => item.done));
     await knowledgeTask?.done;
     await Promise.allSettled(connectionTests.map(([,done])=>done));
+    await Promise.allSettled([...this.resourceDone]);
     await this.mutationQueue;
-    try { await knowledgeClosing; }
+    try {
+      const cleanup = await Promise.allSettled([knowledgeClosing, changeInspectionClosing]);
+      await this.license.close();
+      const failure = cleanup.find(item => item.status === 'rejected');
+      if (failure?.status === 'rejected') throw failure.reason;
+    }
     finally { await this.store.close(); }
     })();
   }

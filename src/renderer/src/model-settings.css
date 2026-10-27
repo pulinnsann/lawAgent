@@ -7,3 +7,11 @@
 .codex-connection-note p { margin-top: 4px; overflow-wrap: anywhere; }
 .codex-connection-note code { font-size: 10px; }
 .model-settings-panel .codex-budget-note { margin: -3px 0 18px; overflow-wrap: anywhere; }
+.settings-advanced { margin: 16px 0; padding: 12px 14px; border: 1px solid #dce4dc; border-radius: 8px; background: #f7faf6; min-width: 0; }
+.settings-advanced > summary { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #425c47; font-size: 13px; font-weight: 600; list-style: none; }
+.settings-advanced > summary::before { content: '▸'; flex-shrink: 0; }
+.settings-advanced[open] > summary::before { content: '▾'; }
+.settings-advanced > summary:focus-visible { outline: 3px solid #7c9d65; outline-offset: 4px; border-radius: 3px; }
+.settings-advanced[open] > summary { margin-bottom: 12px; }
+.settings-advanced .field { margin-top: 12px; }
+.settings-advanced .advanced-title { margin-top: 14px; }

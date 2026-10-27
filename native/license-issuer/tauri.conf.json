@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "LawAgent License Issuer",
+  "version": "0.1.0",
+  "identifier": "com.lawagent.license-issuer",
+  "build": {
+    "frontendDist": "../../tools/license-issuer/desktop"
+  },
+  "app": {
+    "windows": [{
+      "label": "main", "title": "LawAgent 许可签发器", "width": 1000, "height": 820,
+      "minWidth": 640, "minHeight": 600, "visible": true, "dragDropEnabled": false
+    }],
+    "withGlobalTauri": true,
+    "security": {
+      "csp": "default-src 'none'; script-src 'self'; style-src 'self'; connect-src ipc: http://ipc.localhost; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-src 'none'; object-src 'none'",
+      "capabilities": ["issuer-window"]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg", "nsis"],
+    "category": "Utilities",
+    "shortDescription": "Administrator-only offline LawAgent license issuer",
+    "resources": {"../../.local/license-issuer-notices/": "licenses/"},
+    "macOS": {"minimumSystemVersion": "13.5", "signingIdentity": null},
+    "windows": {
+      "webviewInstallMode": {"type": "downloadBootstrapper", "silent": true},
+      "nsis": {"installMode": "currentUser", "displayLanguageSelector": true, "languages": ["SimpChinese", "English"]}
+    },
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
+  }
+}

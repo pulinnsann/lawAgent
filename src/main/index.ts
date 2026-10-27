@@ -1,4 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, safeStorage, shell } from 'electron';
+import { DiagnosticLog, classifyDiagnosticError } from './diagnostic-log';
+import { APP_VERSION } from '../shared/app-version';
 import { Worker } from 'node:worker_threads';
 import { randomUUID, createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -8,6 +10,8 @@ import { z } from 'zod';
 import type { AppState, PublicModelConfig, ModelConfigInput, PublicRetrievalConfig, RetrievalConfigInput, ReviewResult } from '../shared/contracts';
 import { CredentialVault, credentialEndpoint } from './vault';
 import { nativeInterfaceText, type InterfaceLanguage } from '../shared/interface-language';
+import { desktopRequiresLicense } from '../shared/license-access';
+import { readElectronDeviceCode } from './device-identity';
 import type { KnowledgeHit } from '../shared/knowledge';
 import type { ConfigureKnowledgeResult, EnvironmentReport } from '../shared/setup';
 import { normalizeKnowledgePreferences } from '../shared/knowledge-preferences';
@@ -25,6 +29,9 @@ import { normalizeSaveEnterpriseStandardInput, normalizePublishEnterpriseStandar
 
 const here = dirname(fileURLToPath(import.meta.url));
 const devData = process.env.LAW_AGENT_DATA_DIR || (!app.isPackaged ? resolve('.local/data') : app.getPath('userData'));
+let licenseDeviceCode:string|null=null;
+let diagnostics:DiagnosticLog|undefined;
+const recordDiagnostic=(event:Parameters<DiagnosticLog['record']>[0])=>{try{diagnostics?.record(event);}catch{/* Logging cannot block application work. */}};
 app.setPath('userData', devData);
 app.setPath('sessionData', join(devData, 'chromium'));
 app.setAppLogsPath(join(devData, 'logs'));
@@ -87,6 +94,9 @@ let sensitiveQueue: Promise<unknown> = Promise.resolve();
 // requests that have not reached the Core worker yet.
 const changeDraftRequests = new Map<string, { cancelled: boolean }>();
 const contractGenerationRequests = new Map<string, { cancelled: boolean }>();
+const workspaceRequests = new Map<string, { cancelled: boolean }>();
+const modelWorkspaceActions = new Set(['translations.generate','modelRuntime.probe','alignment.compare','reporting.translation.generate']);
+const preflightWorkspaceActions = new Set([...modelWorkspaceActions,'conversion.convert']);
 let maintenanceBusy = false;
 const approvedBackups = new Set<string>();
 const extensionVaults = new Map<string,CredentialVault>();
@@ -134,6 +144,18 @@ function retrievalKeys(config: PublicRetrievalConfig | null | undefined) {
 }
 
 async function execute(name: string, payload: unknown): Promise<unknown> {
+  if(name==='runWorkspaceCommand'&&['maintenance.diagnosticsStatus','maintenance.exportDiagnostics'].includes(String((payload as any)?.action))){
+    const input=workspaceEnvelope.parse(payload);z.object({}).strict().parse(input.payload??{});
+    if(input.action==='maintenance.diagnosticsStatus')return{...diagnostics?.status(),coreReady:!workerError};
+    const choice=await dialog.showSaveDialog(window!,{title:nativeText('导出问题日志'),defaultPath:`lawagent-problem-log-${new Date().toISOString().replace(/[:.]/gu,'-')}.log`,filters:[{name:nativeText('问题日志文件'),extensions:['log']}]});
+    if(choice.canceled||!choice.filePath)return null;
+    if(shuttingDown)throw new Error('应用正在关闭，未保存新的排查记录。');
+    const text=await diagnostics!.exportText();
+    if(shuttingDown)throw new Error('应用正在关闭，未保存新的排查记录。');
+    const bytes=Buffer.from(text,'utf8');try{await writeFile(choice.filePath,bytes,{flag:'wx',mode:0o600});}catch{throw new Error('排查记录未保存，请选择尚不存在的新文件名，并检查保存位置权限。');}
+    recordDiagnostic({event:'diagnostics.exported'});return{path:choice.filePath,fileName:choice.filePath.split(/[\\/]/u).at(-1),bytes:bytes.length};
+  }
+  if(desktopRequiresLicense(name,payload))await rpc('assertLicenseWritable');
   // Local document and knowledge operations do not need the OS keychain.
   // Unlock only for a user action that actually uses or changes credentials,
   // after the application window has been created.
@@ -330,22 +352,33 @@ async function extensionSecrets(includeId?:string):Promise<Record<string,string>
  const assets=await rpc<WorkspaceAsset[]>('runWorkspaceCommand',{action:'connections.list'});const result:Record<string,string>={};for(const asset of assets.filter(a=>a.body.enabled||a.id===includeId).slice(0,16)){const value=(await extensionVault(asset.id)).get(connectionBinding(asset));if(value)result[asset.id]=value;}return result;
 }
 async function renderPdf(html:string):Promise<Buffer>{
+ const leaseId=randomUUID();
+ try{await rpc('acquireResource',{id:leaseId});if(shuttingDown)throw new Error('应用正在关闭，未开始 PDF 导出。');
  if(Buffer.byteLength(html)>10*1024**2)throw new Error('报告内容超过PDF导出上限。');
  const renderer=new BrowserWindow({show:false,webPreferences:{sandbox:true,contextIsolation:true,nodeIntegration:false,javascript:false,partition:`report-${randomUUID()}`}});
  renderer.webContents.setWindowOpenHandler(()=>({action:'deny'}));renderer.webContents.session.webRequest.onBeforeRequest((details,callback)=>callback({cancel:!details.url.startsWith('data:')&&!details.url.startsWith('about:')}));
  try{await renderer.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);return await renderer.webContents.printToPDF({pageSize:'A4',printBackground:true,preferCSSPageSize:true});}finally{renderer.destroy();}
+
+ }finally{await rpc('releaseResource',{id:leaseId}).catch(()=>{});}
 }
 async function executeWorkspaceCommand(value:unknown):Promise<unknown>{
  const input=workspaceEnvelope.parse(value);if(Buffer.byteLength(JSON.stringify(input.payload??null))>2*1024**2)throw new Error('工作台输入超过2 MiB。');const p=(input.payload??{}) as any;
+ const checkCancelled=()=>{if(shuttingDown||input.requestId&&workspaceRequests.get(input.requestId)?.cancelled)throw new Error('工作台任务已取消，未开始新的处理。');};
+ if(preflightWorkspaceActions.has(input.action))checkCancelled();
  if(input.action==='workspace.interfaceLocale'){const selected=z.object({locale:z.enum(['zh','en','th'])}).strict().parse(p);interfaceLanguage=selected.locale;window?.setTitle(nativeText('合同工作台'));return{locale:interfaceLanguage};}
+ if(input.action==='workspace.cancel'){
+  const cancel=z.object({requestId:uuid}).strict().parse(p);const request=workspaceRequests.get(cancel.requestId);if(request)request.cancelled=true;
+  return rpc('runWorkspaceCommand',input);
+ }
  if(input.action.startsWith('maintenance.'))return executeMaintenance(input);
  if(input.action==='documents.importVersion'){
   const version=z.object({parentDocumentId:uuid,expectedLatestDocumentId:uuid}).strict().parse(p);
   const selection=await dialog.showOpenDialog(window!,{title:nativeText('导入该合同的下一版本（保留原件）'),properties:['openFile'],filters:[{name:nativeText('合同文档'),extensions:['docx','pdf']}]});
   return selection.canceled?null:rpc('importVersionFile',{...version,path:selection.filePaths[0]});
  }
- if(['translations.generate','modelRuntime.probe','alignment.compare','reporting.translation.generate'].includes(input.action)){
-  const state=await rpc<AppState>('getState');if(state.modelConfig?.provider!=='codex-cli')await vault.unlock();return rpc('runWorkspaceCommand',input,state.modelConfig?.provider!=='codex-cli'&&state.modelConfig?vault.get(state.modelConfig.baseUrl):null);
+ if(modelWorkspaceActions.has(input.action)){
+  const state=await rpc<AppState>('getState');checkCancelled();if(state.modelConfig?.provider!=='codex-cli')await vault.unlock();checkCancelled();
+  return rpc('runWorkspaceCommand',input,state.modelConfig?.provider!=='codex-cli'&&state.modelConfig?vault.get(state.modelConfig.baseUrl):null);
  }
  if(input.action==='connections.chooseDirectory'){const selected=await dialog.showOpenDialog(window!,{title:nativeText('选择共享盘或挂载目录'),properties:['openDirectory']});if(selected.canceled)return null;const path=await realpath(selected.filePaths[0]);approvedFolders.add(path);return path;}
  if(input.action==='connections.save'){
@@ -382,8 +415,8 @@ async function executeWorkspaceCommand(value:unknown):Promise<unknown>{
  }
  if(input.action==='library.template.export')throw new Error('请先通过模板的“核验与审核”完成逐项确认，再导出。');
  if(input.action==='conversion.convert'){
-  const choice=await dialog.showSaveDialog(window!,{title:nativeText('导出并加入合同工作台'),defaultPath:input.action==='conversion.convert'?'PDF文字副本.docx':'企业模板合同.docx',filters:[{name:nativeText('Word合同'),extensions:['docx']}]});if(choice.canceled||!choice.filePath)return null;
-  const rendered=await rpc<any>('runWorkspaceCommand',input);
+  const choice=await dialog.showSaveDialog(window!,{title:nativeText('导出并加入合同工作台'),defaultPath:input.action==='conversion.convert'?'PDF文字副本.docx':'企业模板合同.docx',filters:[{name:nativeText('Word合同'),extensions:['docx']}]});checkCancelled();if(choice.canceled||!choice.filePath)return null;
+  const rendered=await rpc<any>('runWorkspaceCommand',input);checkCancelled();
   const bytes=Buffer.from(rendered.docxBase64,'base64');await writeFile(choice.filePath,bytes,{flag:'wx',mode:0o600});
   try{const document=await rpc('importDerivedBytes',{name:rendered.filename,base64:rendered.docxBase64,source:rendered.sourceSnapshot,draft:rendered.draft,partial:rendered.partial,warnings:rendered.warnings});return{path:choice.filePath,document,missingInformation:rendered.missingInformation,warnings:rendered.warnings,partial:Boolean(rendered.partial)};}catch(error){throw new Error(`文件已导出，但加入工作台未完成，请手动导入：${error instanceof Error?error.message:'本地存储异常'}`);}
  }
@@ -424,17 +457,19 @@ async function executeMaintenance(input:WorkspaceCommand):Promise<unknown>{
 function startCore(): void {
   workerError = null;
   workerReady = new Promise<void>((resolve, reject) => {
-    core = new Worker(new URL('./core-worker.js', import.meta.url), { workerData: { dataDir: devData } });
-    const fail = () => {
+    core = new Worker(new URL('./core-worker.js', import.meta.url), { workerData: { dataDir: devData, licensing: {mode:app.isPackaged?'required':'development',deviceCode:licenseDeviceCode} },stdout:true,stderr:true });
+    core.stdout?.resume();core.stderr?.resume();
+    const fail = (error?:unknown) => {
+      if(!shuttingDown&&!maintenanceBusy)recordDiagnostic({event:'core.error',...classifyDiagnosticError(error)});
       workerError = new Error('本地服务已停止，请重启应用。已保存的合同会在重新启动后恢复。');
       reject(workerError); for (const item of pending.values()) { clearTimeout(item.timer); item.reject(workerError); } pending.clear();
     };
     core.on('message', message => {
-      if (message.type === 'ready') resolve();
+      if (message.type === 'ready') {recordDiagnostic({event:'core.ready'});resolve();}
       else if (message.type === 'task') window?.webContents.send('contract-assistant:task', message.task);
       else if (message.type === 'response') { const p = pending.get(message.id); if (!p) return; clearTimeout(p.timer); pending.delete(message.id); message.error ? p.reject(new Error(message.error)) : p.resolve(message.data); }
     });
-    core.on('error', fail); core.on('exit', code => { if (code !== 0) fail(); });
+    core.on('error', fail); core.on('exit', code => {recordDiagnostic({event:'core.exit',exitCode:code}); if (code !== 0) fail(); });
   });
   // A rejected startup is surfaced to every command without an unhandled rejection.
   void workerReady.catch(() => {});
@@ -446,21 +481,40 @@ function startCore(): void {
 async function bootstrap(): Promise<void> {
   await app.whenReady();
   await mkdir(devData, { recursive: true });
+  diagnostics=await DiagnosticLog.open(resolve(devData),{appVersion:APP_VERSION,platform:process.platform,arch:process.arch,nodeVersion:process.versions.node,runtime:'electron',mode:app.isPackaged?'required':'development'});
+  recordDiagnostic({event:'desktop.starting'});
+  licenseDeviceCode=await readElectronDeviceCode();
   vault = new CredentialVault(join(devData, 'credentials'), safeStorage); await vault.init({deferUnlock:true});
   knowledgeVault = new CredentialVault(join(devData, 'credentials/knowledge'), safeStorage, value => value); await knowledgeVault.init({deferUnlock:true});
   webVault = new CredentialVault(join(devData, 'credentials/web'), safeStorage, value => value); await webVault.init({deferUnlock:true});
   startCore();
 
-  ipcMain.handle('contract-assistant:command', async (event, envelope: unknown) => {
+  const handleCommand=async (event:Electron.IpcMainInvokeEvent, envelope: unknown) => {
     if (!window || event.sender !== window.webContents || event.senderFrame !== window.webContents.mainFrame) return { ok: false, error: '无法识别的应用请求。' };
     let operation: Promise<void> | undefined;
     let finishOperation: (() => void) | undefined;
     try {
       if (shuttingDown) throw new Error('应用正在关闭，请等待文件操作收尾。');
+      const { name, payload } = z.object({ name: z.string().min(1).max(100), payload: z.unknown().optional() }).strict().parse(envelope);
+      if(name==='runWorkspaceCommand'&&['maintenance.diagnosticsStatus','maintenance.exportDiagnostics'].includes(String((payload as any)?.action))){
+        operation=new Promise<void>(resolve=>{finishOperation=resolve;});mainOperations.add(operation);
+        return{ok:true,data:await execute(name,payload)};
+      }
       if (maintenanceBusy) throw new Error('正在备份、恢复或维护数据，请稍后操作。');
-      const { name, payload } = z.object({ name: z.string(), payload: z.unknown().optional() }).strict().parse(envelope);
       if (!(name === 'runWorkspaceCommand' && String((payload as any)?.action).startsWith('maintenance.'))) {
         operation = new Promise<void>(resolve => { finishOperation = resolve; }); mainOperations.add(operation);
+      }
+      if (name === 'runWorkspaceCommand' && preflightWorkspaceActions.has(String((payload as any)?.action))) {
+        const input = workspaceEnvelope.parse(payload); const requestId = input.requestId ?? randomUUID();
+        if (workspaceRequests.has(requestId)) throw new Error('此工作台任务正在执行，请勿重复提交。');
+        if (workspaceRequests.size >= 32) throw new Error('准备中的工作台任务过多，请等待或取消后重试。');
+        const request = { cancelled: false }; workspaceRequests.set(requestId, request);
+        const next = sensitiveQueue.then(() => {
+          if (request.cancelled || shuttingDown) throw new Error('工作台任务已取消，未开始新的处理。');
+          return execute(name, { ...input, requestId });
+        }); sensitiveQueue = next.catch(() => {});
+        try { return { ok: true, data: await next }; }
+        finally { if (workspaceRequests.get(requestId) === request) workspaceRequests.delete(requestId); }
       }
       if (name === 'generateContract') {
         const input = normalizeGenerateContractInput(payload);
@@ -496,6 +550,12 @@ async function bootstrap(): Promise<void> {
     } finally {
       if (operation) mainOperations.delete(operation); finishOperation?.();
     }
+  };
+  ipcMain.handle('contract-assistant:command',async(event,envelope:unknown)=>{
+    const started=performance.now();const parsed=z.object({name:z.string().min(1).max(100),payload:z.unknown().optional()}).strict().safeParse(envelope);
+    const command=parsed.success?parsed.data.name:undefined;const action=parsed.success&&command==='runWorkspaceCommand'&&typeof(parsed.data.payload as any)?.action==='string'?(parsed.data.payload as any).action:undefined;
+    recordDiagnostic({event:'command.started',command,action});const result=await handleCommand(event,envelope);
+    recordDiagnostic({event:result.ok?'command.completed':'command.failed',command,action,durationMs:Math.round(performance.now()-started),...(result.ok?{}:classifyDiagnosticError(new Error(result.error)))});return result;
   });
 
   function createWindow(): void {
@@ -519,13 +579,16 @@ async function bootstrap(): Promise<void> {
     if (maintenanceBusy) return;
     if (closing) return;
     closing = true;
+    recordDiagnostic({event:'desktop.closing'});
     shuttingDown = true;
+    for (const request of workspaceRequests.values()) request.cancelled = true;
     const finish = () => {
       if (shutdownComplete) return;
       shutdownComplete = true;
       clearTimeout(deadline);
       void core?.terminate();
-      app.quit();
+      recordDiagnostic({event:'desktop.closed'});void diagnostics?.close().finally(()=>app.quit());
+      if(!diagnostics)app.quit();
     };
     // Cancel pending network work and persist completed retrieval branches before
     // releasing the worker. Forced termination still recovers as interrupted.
@@ -534,7 +597,8 @@ async function bootstrap(): Promise<void> {
   });
 }
 
-void bootstrap().catch(() => {
+void bootstrap().catch(async error => {
+  recordDiagnostic({event:'desktop.startup_failed',...classifyDiagnosticError(error)});await diagnostics?.close();
   dialog.showErrorBox('合同工作台启动失败', '本地服务未能启动。请检查应用数据目录权限，关闭后重新启动；已保存的合同不会因此删除。');
   app.quit();
 });

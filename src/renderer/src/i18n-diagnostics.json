@@ -1,0 +1,78 @@
+{
+  "导出问题日志": {
+    "en": "Export problem log",
+    "th": "ส่งออกบันทึกปัญหา"
+  },
+  "保存排查文件，方便联系支持人员。": {
+    "en": "Save a file to help support investigate a problem.",
+    "th": "บันทึกไฟล์เพื่อให้ฝ่ายช่วยเหลือตรวจสอบปัญหาได้"
+  },
+  "关闭问题日志窗口": {
+    "en": "Close problem log window",
+    "th": "ปิดหน้าต่างบันทึกปัญหา"
+  },
+  "遇到问题时，把日志文件交给支持人员": {
+    "en": "Share the log file with support when something goes wrong",
+    "th": "เมื่อพบปัญหา ส่งไฟล์บันทึกให้ฝ่ายช่วยเหลือ"
+  },
+  "保存一份软件运行记录，帮助排查打不开、卡住或操作失败等问题。": {
+    "en": "Save an activity record to help investigate startup issues, freezes or failed actions.",
+    "th": "บันทึกข้อมูลการทำงานเพื่อช่วยตรวจสอบปัญหาเปิดโปรแกรมไม่ได้ โปรแกรมค้าง หรือทำงานไม่สำเร็จ"
+  },
+  "文件中会记录什么": {
+    "en": "What the file contains",
+    "th": "ข้อมูลที่บันทึกในไฟล์"
+  },
+  "记录软件版本、启动和任务状态等排查信息，不包含合同正文、激活码或服务密钥。": {
+    "en": "It records the app version, startup and task status for troubleshooting. It does not include contract text, activation codes or service keys.",
+    "th": "บันทึกเวอร์ชันโปรแกรม การเริ่มทำงาน และสถานะงานเพื่อช่วยตรวจสอบปัญหา โดยไม่มีเนื้อหาสัญญา รหัสเปิดใช้งาน หรือคีย์บริการ"
+  },
+  "日志只在本机保存，不会自动上传。是否提供给支持人员，由您决定。": {
+    "en": "The log stays on this computer and is not uploaded automatically. You decide whether to share it with support.",
+    "th": "บันทึกอยู่บนเครื่องนี้และไม่อัปโหลดอัตโนมัติ คุณเป็นผู้ตัดสินใจว่าจะส่งให้ฝ่ายช่วยเหลือหรือไม่"
+  },
+  "当前是界面预览，请在已安装的软件中导出问题日志。": {
+    "en": "This is a preview. Export problem logs from the installed app.",
+    "th": "นี่เป็นหน้าตัวอย่าง โปรดส่งออกบันทึกปัญหาจากโปรแกรมที่ติดตั้ง"
+  },
+  "即使授权已到期，或当前无法打开合同，也可以尝试保存日志。": {
+    "en": "You can try saving logs even if access has expired or a contract cannot be opened.",
+    "th": "ลองบันทึกไฟล์ได้แม้สิทธิ์หมดอายุหรือเปิดสัญญาไม่ได้"
+  },
+  "保存日志文件": {
+    "en": "Save log file",
+    "th": "บันทึกไฟล์บันทึกปัญหา"
+  },
+  "正在保存日志…": {
+    "en": "Saving log…",
+    "th": "กำลังบันทึกไฟล์…"
+  },
+  "请在弹出的窗口中选择保存位置，也可以取消。": {
+    "en": "Choose a location in the save window, or cancel.",
+    "th": "เลือกตำแหน่งบันทึกในหน้าต่างที่เปิดขึ้น หรือยกเลิกได้"
+  },
+  "已取消保存，没有生成新的日志文件。": {
+    "en": "Saving was cancelled. No new log file was created.",
+    "th": "ยกเลิกแล้ว ไม่มีการสร้างไฟล์บันทึกใหม่"
+  },
+  "日志未能保存。请换一个保存位置后重试；若仍失败，请重启软件后再试。": {
+    "en": "The log could not be saved. Try another location. If it still fails, restart the app and try again.",
+    "th": "บันทึกไฟล์ไม่ได้ โปรดลองตำแหน่งอื่น หากยังไม่ได้ ให้เริ่มโปรแกรมใหม่แล้วลองอีกครั้ง"
+  },
+  "日志已保存，可将文件提供给支持人员。": {
+    "en": "The log was saved. You can share the file with support.",
+    "th": "บันทึกไฟล์แล้ว สามารถส่งไฟล์ให้ฝ่ายช่วยเหลือได้"
+  },
+  "查看保存位置": {
+    "en": "View saved location",
+    "th": "ดูตำแหน่งที่บันทึก"
+  },
+  "保存软件运行记录，方便排查使用问题": {
+    "en": "Save an app activity record to help investigate a problem",
+    "th": "บันทึกข้อมูลการทำงานเพื่อช่วยตรวจสอบปัญหาการใช้งาน"
+  },
+  "启动异常时，可能只有启动记录；日志不一定包含全部操作过程。": {
+    "en": "After a startup problem, only startup records may be available. The log may not contain every action.",
+    "th": "หากเริ่มโปรแกรมผิดปกติ อาจมีเพียงบันทึกการเริ่มทำงาน บันทึกอาจไม่ได้รวมทุกการกระทำ"
+  }
+}

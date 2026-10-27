@@ -58,20 +58,20 @@ test('index close begins before waiting for an active sync that needs worker cle
  }finally{released.resolve();await service?.close();await store?.close();await rm(directory,{recursive:true,force:true});}
 });
 
-test('a gated extension cleanup cannot delay cancelling another active model review or release storage early',async()=>{
+test('closing cancels a queued review while a held model extension drains without releasing storage early',async()=>{
  const directory=await mkdtemp(join(tmpdir(),'law-close-parallel-'));const priorFetch=globalThis.fetch;let store:AppStore|undefined;let service:ContractService|undefined;
- const probeArrived=deferred<void>();const reviewArrived=deferred<void>();const reviewAborted=deferred<void>();const releaseProbe=deferred<void>();const terminal=deferred<import('../src/shared/contracts').ReviewTask>();let probeSignal:AbortSignal|undefined;
+ const probeArrived=deferred<void>();const reviewArrived=deferred<void>();const reviewAborted=deferred<void>();const releaseProbe=deferred<void>();const terminal=deferred<import('../src/shared/contracts').ReviewTask>();let probeSignal:AbortSignal|undefined;let reviewRequested=false;
  try{
   store=await AppStore.open(directory);service=new ContractService(store,directory,task=>{if(['completed','cancelled','failed'].includes(task.status))terminal.resolve(task);},idleKnowledge());const document=await service.loadSample();await service.saveConfig({name:'Synthetic parallel close',baseUrl:'https://model.example.invalid/v1',model:'synthetic',responseFormat:'json_schema',tokenParameter:'max_tokens',maxOutputTokens:4096,contextWindowTokens:16384,timeoutSeconds:600});
   globalThis.fetch=async(_url,init)=>{const body=JSON.parse(String(init?.body));const probe=body.response_format?.json_schema?.name==='model_capability_probe';const signal=init?.signal!;
    return new Promise<Response>((_resolve,reject)=>{
     if(probe){probeSignal=signal;probeArrived.resolve();signal.addEventListener('abort',()=>{void releaseProbe.promise.then(()=>reject(new DOMException('Synthetic extension cleanup complete.','AbortError')));},{once:true});}
-    else{reviewArrived.resolve();signal.addEventListener('abort',()=>{reviewAborted.resolve();reject(new DOMException('Synthetic review cancelled.','AbortError'));},{once:true});}
+    else{reviewRequested=true;reviewArrived.resolve();signal.addEventListener('abort',()=>{reviewAborted.resolve();reject(new DOMException('Synthetic review cancelled.','AbortError'));},{once:true});}
    });};
   const probing=service.runWorkspaceCommand({action:'modelRuntime.probe',payload:{confirmed:true,capability:'jsonSchema'}});const probeCancelled=assert.rejects(probing,error=>(error as any)?.code==='CANCELLED'||(error as any)?.name==='AbortError');await within(probeArrived.promise);
-  await service.startReview({documentId:document.id,mode:'model',context:{contractType:'service',ourPartyRole:'service_recipient',businessContext:'Synthetic shutdown concurrency fixture',strictness:'balanced'}},null);await within(reviewArrived.promise);
-  let closed=false;const closing=service.close().then(()=>{closed=true;});await within(reviewAborted.promise);await new Promise<void>(resolve=>setImmediate(resolve));assert.equal(probeSignal?.aborted,true);assert.equal(closed,false,'Storage must remain open until the extension cleanup and its cancelled ledger have finished.');
+  await service.startReview({documentId:document.id,mode:'model',context:{contractType:'service',ourPartyRole:'service_recipient',businessContext:'Synthetic shutdown concurrency fixture',strictness:'balanced'}},null);assert.equal(service.getResourceState().queued.some(task=>task.operation==='contract_review'),true);assert.equal(reviewRequested,false);
+  let closed=false;const closing=service.close().then(()=>{closed=true;});assert.equal((await within(terminal.promise)).status,'cancelled');await new Promise<void>(resolve=>setImmediate(resolve));assert.equal(reviewRequested,false);assert.equal(probeSignal?.aborted,true);assert.equal(closed,false,'Storage must remain open until the extension cleanup and its cancelled ledger have finished.');
   releaseProbe.resolve();await within(Promise.all([closing,probeCancelled]));assert.equal((await within(terminal.promise)).status,'cancelled');service=undefined;store=undefined;
-  store=await AppStore.open(directory);const runs=new WorkspaceAssets(store).list('model_runtime_run');assert.equal(runs.length,2);assert.ok(runs.every(run=>run.body.status==='cancelled'));
+  store=await AppStore.open(directory);const runs=new WorkspaceAssets(store).list('model_runtime_run');assert.equal(runs.length,1);assert.ok(runs.every(run=>run.body.status==='cancelled'));assert.equal(reviewRequested,false,'A cancelled queued review must never start a paid request.');
  }finally{releaseProbe.resolve();globalThis.fetch=priorFetch;await service?.close();await store?.close();await rm(directory,{recursive:true,force:true});}
 });

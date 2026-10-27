@@ -8,7 +8,16 @@ export async function desktopSmokeFlow(config, report) {
   const equivalent = (left, right) => JSON.stringify(canonical(left)) === JSON.stringify(canonical(right));
   async function wait(read, good, label, timeout = 60000) {
     const until = Date.now() + timeout;
-    while (Date.now() < until) { const value = await read(); if (good(value)) return value; await sleep(50); }
+    while (Date.now() < until) {
+      let timer;
+      try {
+        // A read can itself wait on an IPC response. Bound that await too;
+        // otherwise an RPC timeout hides the actual failing stage for minutes.
+        const value = await Promise.race([Promise.resolve().then(read), new Promise((_resolve, reject) => { timer = setTimeout(() => reject(new Error(`Timed out reading: ${label}`)), Math.max(1, until - Date.now())); })]);
+        if (good(value)) return value;
+      } finally { if (timer) clearTimeout(timer); }
+      await sleep(50);
+    }
     throw new Error(`Timed out: ${label}`);
   }
   const errors = []; const tasks = []; const stages = [];
@@ -42,6 +51,20 @@ export async function desktopSmokeFlow(config, report) {
     check(initial.isPreview === false && initial.storageBackend === 'rust', 'A real native-storage desktop workspace is required.');
     unsubscribe = bridge.onTaskUpdate(task => tasks.push({ id: task.id, status: task.status, stage: task.stage }));
     await stage('idle-existing-history', async () => ({ documents: initial.documents.length, title: document.title, rendered: Boolean(document.querySelector('.workspace')) }));
+    await stage('resource-policy-and-native-sample', async () => {
+      const resource = await bridge.runWorkspaceCommand({ action: 'workspace.resources' });
+      check(resource?.policy === 'serial-model-priority' && resource.maxQueue === 32, 'Production resource scheduler unavailable.');
+      check(Array.isArray(resource.queued) && typeof resource.pressure?.stale === 'boolean', 'Resource-state response is invalid.');
+      check(['normal', 'warning', 'critical', 'unknown'].includes(resource.pressure.effectiveLevel), 'Invalid effective memory pressure.');
+      return { policy: resource.policy, source: resource.pressure.source, level: resource.pressure.effectiveLevel, stale: resource.pressure.stale };
+    });
+    await stage('diagnostic-license-and-device-context', async () => {
+      const state = await bridge.runWorkspaceCommand({ action: 'workspace.licenseState' });
+      check(state?.mode === 'development' && state.canCreate === true && state.canViewExport === true, 'Expected an explicitly isolated development-license build.');
+      check(typeof state.deviceCode === 'string' && /^LAWDEV1-[a-f0-9]{64}$/u.test(state.deviceCode), 'Native device-code transport is unavailable.');
+      check(!('token' in state) && !('privateKey' in state), 'License state must not expose activation/signing material.');
+      return { mode: state.mode, status: state.status, canCreate: state.canCreate, canViewExport: state.canViewExport, deviceCodeAvailable: true };
+    });
     if (config.restart) {
       const retained = await stage('restart-data-preservation', async () => {
         const expected = config.previous;
@@ -57,6 +80,11 @@ export async function desktopSmokeFlow(config, report) {
         await bridge.testModelConnection();
         const state = await bridge.getState(); check(state.modelConfig.hasApiKey === true, 'OS-encrypted model key was not retained.');
         return { reviews: true, decisions: true, exports: true, modelCredential: true, documentIds: state.documents.map(item => item.id) };
+      });
+      await stage('restart-diagnostic-log-export', async () => {
+        const result = await bridge.runWorkspaceCommand({ action: 'maintenance.exportDiagnostics', payload: {} });
+        check(result?.path && result.bytes > 0, 'Retained troubleshooting log did not export after restart.');
+        return { exported: true, bytes: result.bytes };
       });
       check(errors.length === 0, JSON.stringify(errors));
       await report({ final: true, passed: true, phase: 'done', restart: true, cleanupCredential: true, stages, retained, errors, tasks });
@@ -93,12 +121,12 @@ export async function desktopSmokeFlow(config, report) {
     });
     await stage('local-review', async () => {
       const before = (await bridge.getState()).tasks.map(item => item.id);
-      await click('本地规则检查'); const task = await completedReview(before);
+      await click('基础条款检查'); const task = await completedReview(before);
       return { reviewId: task.resultId, status: task.status };
     });
     const review = await stage('mock-model-review-with-local-citation', async () => {
       const before = (await bridge.getState()).tasks.map(item => item.id);
-      await click('开始模型审核'); const task = await completedReview(before);
+      await click('开始智能审核'); const task = await completedReview(before);
       const result = await bridge.getReview(task.resultId);
       check(result.findings[0]?.citations[0]?.matchStatus === 'matched' && result.findings[0].basisStatus === 'source_matched', 'The model citation did not match saved source text.');
       check(result.retrieval.evidence.some(item => item.localIndex?.fileSha256 && item.sourceUri.startsWith('file:')), 'Local source provenance missing.');
@@ -152,15 +180,34 @@ export async function desktopSmokeFlow(config, report) {
     await stage('import-trilingual-pdf', async () => {
       const item = document.querySelector('.import-button'); check(item && !item.disabled, 'Import button unavailable.'); item.click();
       const state = await wait(() => bridge.getState(), value => value.documents.some(item => item.name === config.pdfName), 'trilingual PDF import');
-      const pdf = state.documents.find(item => item.name === config.pdfName); const detail = await bridge.getDocument(pdf.id);
+      const pdf = state.documents.find(item => item.name === config.pdfName);
+      await report({ final: false, passed: false, phase: stageName, state: 'pdf-listed', stages });
+      const detail = await wait(() => bridge.getDocument(pdf.id), Boolean, 'trilingual PDF source detail');
       check(detail.blocks.some(item => item.text.includes('合同付款')) && detail.blocks.some(item => item.text.includes('ข้อความภาษาไทย')), 'Trilingual PDF source text was not preserved.');
       return { id: pdf.id, blocks: pdf.blockCount };
     });
-    await stage('idle-after-full-review');
+    await stage('idle-after-full-review', async () => {
+      const resource = await wait(() => bridge.runWorkspaceCommand({ action: 'workspace.resources' }), value => !value.active && value.queued.length === 0, 'actual resource cleanup after review and PDF export');
+      return { active: resource.active, queued: resource.queued.length, source: resource.pressure.source, level: resource.pressure.effectiveLevel };
+    });
+    await stage('private-troubleshooting-log-export', async () => {
+      let rejected = false;
+      try { await bridge.getReview('synthetic-private-input-never-log'); } catch { rejected = true; }
+      check(rejected, 'Malformed synthetic input should be rejected.');
+      const status = await bridge.runWorkspaceCommand({ action: 'maintenance.diagnosticsStatus', payload: {} });
+      check(status.available === true, 'Local troubleshooting logger is unavailable.');
+      const result = await bridge.runWorkspaceCommand({ action: 'maintenance.exportDiagnostics', payload: {} });
+      check(result?.path && result.bytes > 0, 'Troubleshooting log did not export.');
+      return { exported: true, bytes: result.bytes, bounded: status.maxFiles === 4 };
+    });
     check(tasks.some(item => item.status === 'completed') && tasks.some(item => item.status === 'running'), 'Task events did not reach the renderer.');
     check(errors.length === 0, JSON.stringify(errors));
     await report({ final: true, passed: true, phase: 'done', stages, review, acceptedId: decisions.acceptedId, rejectedId: decisions.rejectedId, exported, errors, tasks, body: document.body.innerText.slice(-8000) });
   } catch (error) {
-    await report({ final: true, passed: false, phase: stageName, stages, errors, tasks, error: `${error?.message ?? String(error)}\n${error?.stack ?? ''}`, body: document.body?.innerText.slice(-12000) ?? '' });
+    let resources; let timer;
+    try { resources = await Promise.race([bridge?.runWorkspaceCommand({ action: 'workspace.resources' }), new Promise((_resolve, reject) => { timer = setTimeout(() => reject(new Error('Resource diagnostics unavailable')), 2000); })]); }
+    catch { resources = { unavailable: true }; }
+    finally { if (timer) clearTimeout(timer); }
+    await report({ final: true, passed: false, phase: stageName, stages, errors, tasks, resources, error: `${error?.message ?? String(error)}\n${error?.stack ?? ''}`, body: document.body?.innerText.slice(-12000) ?? '' });
   } finally { unsubscribe(); window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onError); }
 }

@@ -4,20 +4,30 @@ import { ContractService } from '../core/service';
 import type { ModelConfigInput, RetrievalConfigInput, StartReviewInput } from '../shared/contracts';
 import type { KnowledgeSearchInput, KnowledgeSyncMode } from '../shared/knowledge';
 import { KnowledgeWorkerClient } from '../core/knowledge-client';
+import { z } from 'zod';
 import type { ConfigureKnowledgeInput } from '../shared/setup';
 import type { SaveChangeInput, GenerateChangeInput, DecideChangeInput, ExportChangesInput, EnableEditableCopyInput } from '../shared/changes';
 import type { GenerateContractInput, ExportContractDraftInput } from '../shared/generation';
 import type { SaveEnterpriseStandardInput, PublishEnterpriseStandardInput, SaveRiskDispositionInput } from '../shared/assurance';
+import { LicenseManager } from '../core/license-manager';
+import { OFFICIAL_LICENSE_PUBLIC_KEYS } from '../core/license-trusted-keys';
 
 if (!parentPort) throw new Error('Core worker requires a parent port.');
 const port = parentPort;
 const store = await AppStore.open(workerData.dataDir as string);
-const service = new ContractService(store, workerData.dataDir, task => port.postMessage({ type: 'task', task }), new KnowledgeWorkerClient(workerData.dataDir, new URL('./knowledge-worker.js', import.meta.url)));
+const licensing = workerData.licensing as {mode?:unknown;deviceCode?:unknown}|undefined;
+const licenseManager = new LicenseManager(workerData.dataDir, { mode: licensing?.mode === 'development' ? 'development' : 'required', deviceCode: typeof licensing?.deviceCode === 'string' ? licensing.deviceCode : null, publicKeys: { ...OFFICIAL_LICENSE_PUBLIC_KEYS } });
+const service = new ContractService(store, workerData.dataDir, task => port.postMessage({ type: 'task', task }), new KnowledgeWorkerClient(workerData.dataDir, new URL('./knowledge-worker.js', import.meta.url)), undefined, { licenseManager });
 
 port.on('message', async (message: {id:string; command:string; payload:unknown; apiKey?:string|null; retrievalKeys?:{knowledgeApiKey:string|null;webApiKey:string|null};connectionSecrets?:Record<string,string>}) => {
   try {
     let data: unknown;
     switch (message.command) {
+      // Private parent/Core controls; these are not renderer bridge commands.
+      case 'assertLicenseWritable': await service.assertLicenseWritable(); data=null; break;
+      case 'updateResourcePressure': service.updateResourcePressure(message.payload as import('../shared/resources').ResourcePressure); data = null; break;
+      case 'acquireResource': { const input=z.object({id:z.string().uuid()}).strict().parse(message.payload); await service.acquireExternalResource(input.id); data=null; break; }
+      case 'releaseResource': { const input=z.object({id:z.string().uuid()}).strict().parse(message.payload); service.releaseExternalResource(input.id); data=null; break; }
       case 'runWorkspaceCommand': data = await service.runWorkspaceCommand(message.payload as import('../shared/workspace-tools').WorkspaceCommand, message.connectionSecrets, message.apiKey ?? null); break;
       case 'importDerivedBytes': data = await service.importDerivedBytes(message.payload as Parameters<typeof service.importDerivedBytes>[0]); break;
       case 'getState': data = service.getState(); break;

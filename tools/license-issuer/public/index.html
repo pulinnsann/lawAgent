@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer"><title>LawAgent 本地许可签发</title><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.js"></script></head>
+<body>
+  <main>
+    <header><p class="eyebrow">LAWAGENT · 本机管理工具</p><h1>离线体验许可签发</h1><p>最多 100 份许可，每份绑定 1 台设备，自载明开始时间起有效 90 天。</p><p class="quiet">此工具仅用于本机签发；客户在 LawAgent 的“授权与体验许可”窗口激活。</p></header>
+    <p id="message" role="status" aria-live="polite">正在读取本机签发记录…</p>
+    <section class="counts" aria-label="实际签发数量"><div><span>许可总额</span><strong id="limit">—</strong></div><div><span>已签发</span><strong id="issued">—</strong></div><div><span>剩余可签发</span><strong id="remaining">—</strong></div></section>
+    <section class="card"><h2>签发一份新许可</h2><form id="issue-form"><label for="device-code">客户设备码</label><input id="device-code" name="deviceCode" required spellcheck="false" autocomplete="off" placeholder="从客户的授权窗口复制 LAWDEV1- 开头的完整设备码" maxlength="72"><label for="starts-at">许可开始时间（本机时区，可留空）</label><input id="starts-at" name="startsAt" type="datetime-local" step="1"><p class="quiet">留空时由签发服务使用当前时间；到期时间由服务按 90 天确定。每次成功签发永久占用一个名额，不提供重置、删除或重新签发入口。</p><button id="issue-button" type="submit" disabled>签发并生成激活码</button></form></section>
+    <section class="card" aria-labelledby="token-heading"><h2 id="token-heading">本次取得的激活码</h2><p id="token-summary" class="quiet">签发成功后或选择历史许可后，在这里复制激活码。</p><label for="license-token">激活码</label><textarea id="license-token" readonly rows="5" spellcheck="false"></textarea><button id="copy-token" type="button" disabled>复制激活码</button><p class="quiet">将激活码发送给对应设备的使用者。激活码不会放进浏览器地址或访问日志。</p></section>
+    <section class="card"><div class="section-heading"><h2>已签发记录</h2><button id="refresh-button" type="button">刷新记录</button></div><p class="quiet">历史入口只取回原激活码，不新增名额，不改变绑定设备或有效期。</p><div class="table-scroll"><table><caption class="sr-only">本机许可签发记录</caption><thead><tr><th scope="col">序号</th><th scope="col">设备码</th><th scope="col">开始时间</th><th scope="col">到期时间</th><th scope="col">激活码</th></tr></thead><tbody id="license-rows"><tr><td colspan="5">正在读取…</td></tr></tbody></table></div></section>
+    <footer><p id="key-info"></p><p>界面不接收或展示私钥。请保管好本机签发资料与备份；本工具不是对外服务。</p></footer>
+  </main>
+</body>
+</html>

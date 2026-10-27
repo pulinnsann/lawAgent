@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "issuer-window",
+  "description": "No general filesystem, shell or network access is exposed to the issuer UI.",
+  "windows": ["main"],
+  "permissions": []
+}

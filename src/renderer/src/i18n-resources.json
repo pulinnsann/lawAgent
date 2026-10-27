@@ -1,0 +1,210 @@
+{
+  "资源与任务状态": {
+    "en": "Resources and task status",
+    "th": "ทรัพยากรและสถานะงาน"
+  },
+  "已接入的重任务串行运行，模型任务优先。": {
+    "en": "Integrated heavy tasks run one at a time, with model tasks taking priority.",
+    "th": "งานที่ใช้ทรัพยากรสูงซึ่งเชื่อมต่อแล้วจะทำงานทีละงาน โดยให้งานโมเดลมีลำดับความสำคัญก่อน"
+  },
+  "刷新资源状态": {
+    "en": "Refresh resource status",
+    "th": "รีเฟรชสถานะทรัพยากร"
+  },
+  "正在刷新": {
+    "en": "Refreshing",
+    "th": "กำลังรีเฟรช"
+  },
+  "刷新状态": {
+    "en": "Refresh status",
+    "th": "รีเฟรชสถานะ"
+  },
+  "资源状态更新失败": {
+    "en": "Resource status could not be updated",
+    "th": "ไม่สามารถอัปเดตสถานะทรัพยากรได้"
+  },
+  "以下保留上次取得的任务信息，当前内存压力暂记未知。": {
+    "en": "The last task information is retained below. Current memory pressure is unknown.",
+    "th": "แสดงข้อมูลงานล่าสุดที่ได้รับด้านล่าง โดยถือว่ายังไม่ทราบแรงกดดันหน่วยความจำปัจจุบัน"
+  },
+  "正在读取资源状态…": {
+    "en": "Reading resource status…",
+    "th": "กำลังอ่านสถานะทรัพยากร…"
+  },
+  "暂未取得资源状态。": {
+    "en": "Resource status is not available yet.",
+    "th": "ยังไม่มีข้อมูลสถานะทรัพยากร"
+  },
+  "本地服务正在关闭": {
+    "en": "The local service is shutting down",
+    "th": "กำลังปิดบริการภายในเครื่อง"
+  },
+  "采样时间：{time}": {
+    "en": "Sampled at {time}",
+    "th": "เก็บตัวอย่างเมื่อ {time}"
+  },
+  "采样已过期，按未知压力处理。": {
+    "en": "The sample has expired; pressure is treated as unknown.",
+    "th": "ตัวอย่างหมดอายุแล้ว จึงถือว่ายังไม่ทราบแรงกดดันหน่วยความจำ"
+  },
+  "系统可用内存：{available}；总内存：{total}": {
+    "en": "System memory available: {available}; total: {total}",
+    "th": "หน่วยความจำระบบที่พร้อมใช้: {available}; ทั้งหมด: {total}"
+  },
+  "正在运行": {
+    "en": "Running",
+    "th": "กำลังทำงาน"
+  },
+  "开始于 {time}": {
+    "en": "Started at {time}",
+    "th": "เริ่มเมื่อ {time}"
+  },
+  "已请求取消，正在等待实际清理完成。": {
+    "en": "Cancellation was requested; waiting for cleanup to finish.",
+    "th": "ส่งคำขอยกเลิกแล้ว กำลังรอให้การล้างทรัพยากรเสร็จสิ้น"
+  },
+  "当前没有占用资源的任务。": {
+    "en": "No task currently holds the resource slot.",
+    "th": "ขณะนี้ไม่มีงานครอบครองช่องทรัพยากร"
+  },
+  "排队任务：{count} / {max}": {
+    "en": "Queued tasks: {count} / {max}",
+    "th": "งานในคิว: {count} / {max}"
+  },
+  "没有排队任务。": {
+    "en": "No tasks are queued.",
+    "th": "ไม่มีงานในคิว"
+  },
+  "另有 {count} 项任务等待。": {
+    "en": "{count} more tasks are waiting.",
+    "th": "มีอีก {count} งานที่กำลังรอ"
+  },
+  "系统采样用于安排后续任务，不会调节客户模型的权重、上下文或显存配置。": {
+    "en": "System samples guide subsequent task admission. They do not change the customer's model weights, context or GPU memory settings.",
+    "th": "ใช้ตัวอย่างระบบเพื่อจัดลำดับงานถัดไป โดยไม่ปรับน้ำหนักโมเดล บริบท หรือการตั้งค่าหน่วยความจำ GPU ของลูกค้า"
+  },
+  "仅串行管理已接入的应用任务，不是应用 RSS、系统内存或客户模型显存的硬性上限。": {
+    "en": "Only integrated application tasks are serialized. This is not a hard limit on application RSS, system memory or the customer's model GPU memory.",
+    "th": "จัดให้ทำงานทีละงานเฉพาะงานของแอปที่เชื่อมต่อแล้ว ไม่ใช่เพดานแบบบังคับของ RSS ของแอป หน่วยความจำระบบ หรือหน่วยความจำ GPU ของโมเดลลูกค้า"
+  },
+  "运行中的任务只有在实际清理并释放租约后才让出资源；未知或过期的压力信息按保守串行策略继续。": {
+    "en": "A running task releases its slot only after actual cleanup and lease release. Unknown or expired pressure samples retain the conservative serial policy.",
+    "th": "งานที่กำลังทำงานจะคืนช่องทรัพยากรหลังจากล้างทรัพยากรและคืนสิทธิ์ใช้งานจริงแล้วเท่านั้น หากไม่ทราบแรงกดดันหรือตัวอย่างหมดอายุ จะใช้การทำงานทีละงานอย่างระมัดระวังต่อไป"
+  },
+  "资源状态响应无效，请刷新后重试。": {
+    "en": "The resource status response is invalid. Refresh and try again.",
+    "th": "การตอบกลับสถานะทรัพยากรไม่ถูกต้อง โปรดรีเฟรชแล้วลองอีกครั้ง"
+  },
+  "模型任务": {
+    "en": "Model task",
+    "th": "งานโมเดล"
+  },
+  "文档任务": {
+    "en": "Document task",
+    "th": "งานเอกสาร"
+  },
+  "索引任务": {
+    "en": "Index task",
+    "th": "งานดัชนี"
+  },
+  "正常": {
+    "en": "Normal",
+    "th": "ปกติ"
+  },
+  "内存压力偏高": {
+    "en": "Elevated memory pressure",
+    "th": "แรงกดดันหน่วยความจำสูงขึ้น"
+  },
+  "内存压力紧张": {
+    "en": "Critical memory pressure",
+    "th": "แรงกดดันหน่วยความจำวิกฤต"
+  },
+  "内存压力未知": {
+    "en": "Memory pressure unknown",
+    "th": "ไม่ทราบแรงกดดันหน่วยความจำ"
+  },
+  "macOS 系统采样": {
+    "en": "macOS system sample",
+    "th": "ตัวอย่างจากระบบ macOS"
+  },
+  "Windows 系统采样": {
+    "en": "Windows system sample",
+    "th": "ตัวอย่างจากระบบ Windows"
+  },
+  "未取得系统采样": {
+    "en": "System sample unavailable",
+    "th": "ไม่มีตัวอย่างจากระบบ"
+  },
+  "合成测试采样": {
+    "en": "Synthetic test sample",
+    "th": "ตัวอย่างสังเคราะห์สำหรับทดสอบ"
+  },
+  "等待当前任务释放资源": {
+    "en": "Waiting for the current task to release resources",
+    "th": "รอให้งานปัจจุบันคืนทรัพยากร"
+  },
+  "等待索引取消并清理": {
+    "en": "Waiting for index cancellation and cleanup",
+    "th": "รอการยกเลิกดัชนีและล้างทรัพยากร"
+  },
+  "等待系统内存压力下降": {
+    "en": "Waiting for system memory pressure to decrease",
+    "th": "รอให้แรงกดดันหน่วยความจำระบบลดลง"
+  },
+  "内存压力偏高，暂缓索引": {
+    "en": "Indexing is deferred because memory pressure is elevated",
+    "th": "เลื่อนการสร้างดัชนีเนื่องจากแรงกดดันหน่วยความจำสูงขึ้น"
+  },
+  "等待优先任务完成": {
+    "en": "Waiting for higher-priority tasks",
+    "th": "รองานที่มีลำดับความสำคัญสูงกว่า"
+  },
+  "本地规则审核": {
+    "en": "Local rule review",
+    "th": "ตรวจสอบด้วยกฎภายในเครื่อง"
+  },
+  "知识库建库": {
+    "en": "Knowledge indexing",
+    "th": "สร้างดัชนีฐานความรู้"
+  },
+  "知识库检索": {
+    "en": "Knowledge search",
+    "th": "ค้นหาฐานความรู้"
+  },
+  "导入文档": {
+    "en": "Document import",
+    "th": "นำเข้าเอกสาร"
+  },
+  "PDF 文字与 OCR 转换": {
+    "en": "PDF text and OCR conversion",
+    "th": "แปลงข้อความ PDF และ OCR"
+  },
+  "报告生成": {
+    "en": "Report preparation",
+    "th": "จัดทำรายงาน"
+  },
+  "文档导出": {
+    "en": "Document export",
+    "th": "ส่งออกเอกสาร"
+  },
+  "原生 PDF 导出": {
+    "en": "Native PDF export",
+    "th": "ส่งออก PDF ผ่านระบบ"
+  },
+  "本地数据维护": {
+    "en": "Local data maintenance",
+    "th": "ดูแลข้อมูลภายในเครื่อง"
+  },
+  "其他任务": {
+    "en": "Other task",
+    "th": "งานอื่น"
+  },
+  "内存压力偏高，暂缓文档及索引任务": {
+    "en": "Document processing and indexing are deferred because memory pressure is elevated",
+    "th": "เลื่อนการประมวลผลเอกสารและการสร้างดัชนีเนื่องจากแรงกดดันหน่วยความจำสูงขึ้น"
+  },
+  "等待资源调度": {
+    "en": "Waiting for shared resources",
+    "th": "กำลังรอทรัพยากรที่ใช้ร่วมกัน"
+  }
+}

@@ -1,0 +1,52 @@
+name: Manual license issuer installers
+
+# Build-only artifacts. No signing key, issuance ledger or public release.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  issuer:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            platform: mac
+          - os: windows-2025
+            platform: win
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install build tools
+        run: npm ci --include=optional
+      - name: Install stable Rust
+        run: rustup toolchain install stable --profile minimal --no-self-update
+      - name: Select stable Rust
+        run: rustup default stable
+      - name: Build public icon assets
+        run: node node_modules/@tauri-apps/cli/tauri.js icon assets/license-issuer-icon.svg --output native/license-issuer/icons
+      - name: Native signer and permissions tests with ephemeral keys
+        run: npm run license:native:test
+      - name: Native frontend tests with a mock boundary
+        run: node --import tsx --test tests/license-issuer-desktop-ui.test.ts
+      - name: Package unsigned installer without signing material
+        run: npm run license:pack:${{ matrix.platform }} -- --ci
+      - name: Upload administrator installer for manual acceptance
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: lawagent-license-issuer-${{ matrix.platform }}-${{ github.run_number }}
+          path: |
+            .local/rust-target/release/bundle/dmg/LawAgent License Issuer*.dmg
+            .local/rust-target/release/bundle/nsis/LawAgent License Issuer*.exe
+          if-no-files-found: error
+          retention-days: 14

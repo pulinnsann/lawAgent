@@ -12,6 +12,7 @@ import type { KnowledgePort, KnowledgeState, KnowledgeSyncJob } from '../src/sha
 
 function deferred<T>() { let resolve!: (value: T) => void; const promise = new Promise<T>(done => { resolve = done; }); return { promise, resolve }; }
 async function within<T>(promise: Promise<T>): Promise<T> { let timer: ReturnType<typeof setTimeout> | undefined; try { return await Promise.race([promise, new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('Synthetic priority test timed out')), 3000); })]); } finally { clearTimeout(timer); } }
+const until = (read:()=>boolean) => within((async()=>{while(!read())await new Promise<void>(resolve=>setImmediate(resolve));})());
 class ControlledKnowledge implements KnowledgePort {
   signals: AbortSignal[] = []; stopped = true; private finish: (() => void) | null = null;
   async getState(folderPath: string | null): Promise<KnowledgeState> { return { folderPath, engine: 'sqlite-fts5', tokenizerVersion: 'synthetic', indexedFiles: 0, chunks: 0, staleFiles: 0, lastSyncedAt: null, job: null, limitations: [] }; }
@@ -45,7 +46,8 @@ const response = (init: RequestInit | undefined) => {
 
 test('model review cancels indexing and awaits actual worker cleanup before any model request', async () => fixture(async ({ service, knowledge, documentId, terminal }) => {
   let calls = 0; globalThis.fetch = async (_url, init) => { calls++; assert.equal(knowledge.stopped, true); return response(init); };
-  await service.startKnowledgeSync(); const starting = service.startReview({ documentId, context, mode: 'model' }, null);
+  await service.startKnowledgeSync(); await until(()=>knowledge.signals.length===1); const starting = service.startReview({ documentId, context, mode: 'model' }, null);
+  await until(()=>knowledge.signals[0].aborted);
   assert.equal(knowledge.signals[0].aborted, true); await new Promise<void>(resolve => setImmediate(resolve)); assert.equal(calls, 0); assert.equal(knowledge.stopped, false);
   await assert.rejects(service.startKnowledgeSync(), /模型审核.*暂缓/);
   knowledge.release(); await within(starting); const completed = await within(terminal.promise); assert.equal(completed.status, 'completed', completed.error ?? ''); assert.equal(calls, 1);
@@ -56,12 +58,16 @@ test('manual indexing is deferred throughout an active model request and availab
   const { taskId } = await service.startReview({ documentId, context, mode: 'model' }, null); await within(requested.promise);
   await assert.rejects(service.startKnowledgeSync(), /模型审核.*暂缓/); assert.equal(knowledge.signals.length, 0);
   await service.cancelReview(taskId); assert.equal((await within(terminal.promise)).status, 'cancelled');
-  await service.startKnowledgeSync(); assert.equal(knowledge.signals.length, 1); knowledge.release();
+  await service.startKnowledgeSync();
+  // Admission is asynchronous: terminal publication may precede the actual
+  // worker-drain barrier. The index queues, then starts after that barrier.
+  for(let n=0;n<200&&knowledge.signals.length===0;n++)await new Promise(resolve=>setTimeout(resolve,5));
+  assert.equal(knowledge.signals.length, 1); knowledge.release();
 }));
 
 test('knowledge scope changes while a model waits for cleanup cancel the pending run before a model call', async () => fixture(async ({ service, knowledge, documentId, terminal }) => {
   let calls = 0; globalThis.fetch = async (_url, init) => { calls++; return response(init); };
-  await service.startKnowledgeSync(); const starting = service.startReview({ documentId, context, mode: 'model' }, null);
+  await service.startKnowledgeSync(); await until(()=>knowledge.signals.length===1); const starting = service.startReview({ documentId, context, mode: 'model' }, null);
   const config = service.getState().retrievalConfig!; await service.saveRetrievalConfig({ ...config, knowledge: { ...config.knowledge, enabled: false } });
   knowledge.release(); await within(starting); assert.equal((await within(terminal.promise)).status, 'cancelled'); assert.equal(calls, 0);
 }));
@@ -74,7 +80,7 @@ test('closing a model start waits for index cleanup and cancels the persisted ru
   // double's close() release the sync automatically.
   knowledge.close = async () => { await indexClose.promise; };
   try {
-    await service.startKnowledgeSync(); const starting = service.startReview({ documentId, context, mode: 'model' }, null);
+    await service.startKnowledgeSync(); await until(()=>knowledge.signals.length===1); const starting = service.startReview({ documentId, context, mode: 'model' }, null);
     const closing = service.close(); let closed = false; void closing.then(() => { closed = true; });
     await new Promise<void>(resolve => setImmediate(resolve)); assert.equal(closed, false); assert.equal(knowledge.signals[0].aborted, true);
     knowledge.release(); await within(starting); assert.equal((await within(terminal.promise)).status, 'cancelled');

@@ -101,13 +101,13 @@ async function runShell(shell) {
   if (shell === 'tauri') smokeVaultIds.push(smokeVaultId);
   const dataDir = join(parent, shell); await cp(closedFixture, dataDir, { recursive: true });
   assert.equal(sha(await readFile(join(dataDir, 'workspace.sqlite'))), fixtureSha256);
-  const exports = { tracked: join(parent, `${shell}-tracked.docx`), markdown: join(parent, `${shell}-cited-report.md`), pdfs: ['zh', 'en', 'th'].map(language => join(parent, `${shell}-${language}-report.pdf`)) };
+  const exports = { tracked: join(parent, `${shell}-tracked.docx`), markdown: join(parent, `${shell}-cited-report.md`), diagnostics:join(parent,`${shell}-problem.log`),restartDiagnostics:join(parent,`${shell}-restart-problem.log`), pdfs: ['zh', 'en', 'th'].map(language => join(parent, `${shell}-${language}-report.pdf`)) };
   const samples = []; const launches = [];
   async function launch(restart = false, previous) {
     const baseline = new Set((await processSnapshot()).map(item => item.pid)); const attributedWebKit = new Set();
     const reportPath = join(parent, `${shell}-${restart ? 'restart' : 'first'}-report.json`);
     const dialogPath = join(parent, `${shell}-${restart ? 'restart' : 'first'}-dialogs.json`);
-    await writeFile(dialogPath, JSON.stringify({ openFiles: restart ? [] : [inputPath, pdfPath], folders: restart ? [] : [knowledgeFolder], saveFiles: restart ? [] : [exports.tracked, exports.markdown, ...exports.pdfs] }));
+    await writeFile(dialogPath, JSON.stringify({ openFiles: restart ? [] : [inputPath, pdfPath], folders: restart ? [] : [knowledgeFolder], saveFiles: restart ? [exports.restartDiagnostics] : [exports.tracked, exports.markdown, ...exports.pdfs,exports.diagnostics] }));
     const config = { fixture, restart, previous, endpoint, apiKey, knowledgeFolder, retrieval, inputName: basename(inputPath), pdfName: basename(pdfPath), windowMs: options.windowMs };
     const injection = `void (${desktopSmokeFlow.toString()})(${JSON.stringify(config)}, value => window.__TAURI__.core.invoke('desktop_smoke_report', { report: value }));`;
     const scriptPath = join(parent, `${shell}-${restart ? 'restart' : 'first'}-flow.js`); await writeFile(scriptPath, injection);
@@ -161,6 +161,11 @@ async function runShell(shell) {
     }
   }
   const first = await launch();
+  const diagnosticText=await readFile(exports.diagnostics,'utf8');
+  assert.match(diagnosticText,/LawAgent troubleshooting log/u);
+  assert.match(diagnosticText,/command.failed/u);
+  if(shell==='tauri')assert.match(diagnosticText,/native_backend_ready/u);
+  for(const secret of [apiKey,endpoint,basename(inputPath),knowledgeFolder,'synthetic-private-input-never-log',first.review.id,'LAWDEV1-'])assert.ok(!diagnosticText.includes(secret),'Troubleshooting log must omit payloads, credentials, paths and identifiers.');
   const zip = await JSZip.loadAsync(await readFile(exports.tracked)); const xml = await zip.file('word/document.xml').async('string');
   assert.match(xml, /<[\w-]+:ins\b/u); assert.match(xml, /<[\w-]+:del\b/u); assert.match(xml, /双方书面确认/u); assert.match(xml, /Original Author/u); assert.match(xml, /<w:b\s*\/>/u); assert.ok(!xml.includes('This rejected text must not appear.'));
   assert.equal(sha(await readFile(inputPath)), sha(inputBytes));
@@ -181,6 +186,10 @@ async function runShell(shell) {
     pdfValidation.push({ path, bytes: bytes.length, pageCount: parsed.pageCount, trilingualText: true, originalQuote: true, syntheticApprovedTranslation: path !== exports.pdfs[0] });
   }
   await launch(true, first);
+  const restartedLog=await readFile(exports.restartDiagnostics,'utf8');
+  assert.match(restartedLog,/desktop.closed/u);
+  assert.match(restartedLog,/command.failed/u);
+  assert.ok(!restartedLog.includes(apiKey)&&!restartedLog.includes('synthetic-private-input-never-log'));
   assert.equal(sha(await readFile(join(dataDir, fixture.originalRelativePath))), fixture.originalSha256);
   assert.equal(sha(await readFile(join(dataDir, 'workspace.sqlite.pre-rust-backup'))), fixtureSha256);
   const db = openNativeDatabase(join(dataDir, 'workspace.sqlite'), true);

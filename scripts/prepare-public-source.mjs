@@ -4,9 +4,9 @@ import { resolve, relative, join, sep } from 'node:path';
 
 // Explicit source allowlist. Running this command never uploads or commits files.
 const root=resolve(import.meta.dirname,'..');
-const rootFiles=['.gitignore','.npmrc','LICENSE','README.md','CHANGELOG.md','CONTRIBUTING.md','THIRD_PARTY_NOTICES.md','package.json','package-lock.json','tsconfig.json','electron.vite.config.ts','vite.preview.config.ts','Cargo.toml','Cargo.lock','vite.desktop.config.ts','vite.tauri.config.ts','assets/desktop-icon.svg','native/law-desktop/Cargo.toml','native/law-desktop/build.rs','native/law-desktop/tauri.conf.json','native/law-core/Cargo.toml','native/law-node/Cargo.toml','native/law-node/build.rs'];
-const roots=['src','tests','scripts','.github','docs/en','native/law-core/src','native/law-node/src','native/law-node/tests','native/law-desktop/src','native/law-desktop/platform','native/law-desktop/capabilities'];
-const extensions=new Set(['ts','tsx','mjs','json','css','html','sql','md','yml','yaml','svg','rs','toml','cjs','m']);
+const rootFiles=['.gitignore','.npmrc','LICENSE','README.md','CHANGELOG.md','CONTRIBUTING.md','THIRD_PARTY_NOTICES.md','package.json','package-lock.json','tsconfig.json','electron.vite.config.ts','vite.preview.config.ts','Cargo.toml','Cargo.lock','vite.desktop.config.ts','vite.tauri.config.ts','assets/desktop-icon.svg','assets/license-issuer-icon.svg','native/law-desktop/Cargo.toml','native/law-desktop/build.rs','native/law-desktop/tauri.conf.json','native/law-core/Cargo.toml','native/law-node/Cargo.toml','native/law-node/build.rs','native/license-issuer/Cargo.toml','native/license-issuer/build.rs','native/license-issuer/tauri.conf.json'];
+const roots=['src','tests','scripts','.github','docs/en','tools/license-issuer','native/law-core/src','native/law-node/src','native/law-node/tests','native/law-desktop/src','native/law-desktop/platform','native/law-desktop/capabilities','native/license-issuer/src','native/license-issuer/capabilities'];
+const extensions=new Set(['ts','tsx','js','mjs','json','css','html','sql','md','yml','yaml','svg','rs','toml','cjs','m']);
 const licensedFontHashes = new Map([
  ['native/law-desktop/platform/fonts/NotoSansThai-Regular.ttf','404ddfb5ed0aaa6b6ec8a85700d682978992062d67da93903967b56cbd9a4acc'],
  ['native/law-desktop/platform/fonts/NotoSansThai-Bold.ttf','2b67cfb22337a868c6c85709e648ea30c79e0a7c530a5fc169a73d3f461d7c52'],

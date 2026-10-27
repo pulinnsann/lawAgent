@@ -1,0 +1,492 @@
+{
+  "模型设置": {
+    "zh": "智能审核服务",
+    "en": "AI review service",
+    "th": "บริการ AI สำหรับตรวจสัญญา"
+  },
+  "环境与知识库配置": {
+    "zh": "首次使用与资料准备",
+    "en": "Getting started and reference materials",
+    "th": "เริ่มใช้งานและเตรียมเอกสารอ้างอิง"
+  },
+  "检查本机环境": {
+    "zh": "检查软件是否可用",
+    "en": "Check that the app is ready",
+    "th": "ตรวจสอบความพร้อมของโปรแกรม"
+  },
+  "检查并初始化环境": {
+    "zh": "检查并准备软件",
+    "en": "Check and prepare the app",
+    "th": "ตรวจสอบและเตรียมโปรแกรม"
+  },
+  "正在检查与初始化…": {
+    "zh": "正在检查并准备…",
+    "en": "Checking and preparing…",
+    "th": "กำลังตรวจสอบและเตรียม…"
+  },
+  "环境已就绪": {
+    "zh": "软件已准备好",
+    "en": "The app is ready",
+    "th": "โปรแกรมพร้อมใช้งานแล้ว"
+  },
+  "环境尚未就绪": {
+    "zh": "还有问题需要处理",
+    "en": "Some issues need attention",
+    "th": "ยังมีปัญหาที่ต้องแก้ไข"
+  },
+  "配置自己的知识库": {
+    "zh": "添加公司参考资料",
+    "en": "Add your company's reference materials",
+    "th": "เพิ่มเอกสารอ้างอิงของบริษัท"
+  },
+  "知识库名称": {
+    "zh": "资料库名称",
+    "en": "Reference library name",
+    "th": "ชื่อคลังเอกสารอ้างอิง"
+  },
+  "本地资料索引": {
+    "zh": "本机参考资料",
+    "en": "Reference materials on this computer",
+    "th": "เอกสารอ้างอิงในคอมพิวเตอร์นี้"
+  },
+  "选择资料目录": {
+    "zh": "选择资料文件夹",
+    "en": "Choose a reference folder",
+    "th": "เลือกโฟลเดอร์เอกสารอ้างอิง"
+  },
+  "资料目录": {
+    "zh": "资料文件夹",
+    "en": "Reference folder",
+    "th": "โฟลเดอร์เอกสารอ้างอิง"
+  },
+  "本地建库和检索无需模型 API": {
+    "zh": "整理和查找本机资料，不需要连接智能服务",
+    "en": "Organizing and searching local materials needs no AI service",
+    "th": "การจัดเตรียมและค้นหาเอกสารในเครื่องไม่ต้องเชื่อมต่อบริการ AI"
+  },
+  "桌面版自带所需运行环境。打开软件后，点击检查即可初始化本机存储和检索组件，再选择你自己的资料目录。": {
+    "zh": "软件已包含所需组件。先点击检查，再选择公司制度、合同模板等参考资料所在的文件夹。",
+    "en": "The app includes what it needs. Run the check, then choose a folder containing company policies, contract templates or other references.",
+    "th": "โปรแกรมมีส่วนประกอบที่จำเป็นแล้ว ให้ตรวจสอบก่อน แล้วเลือกโฟลเดอร์ที่เก็บระเบียบบริษัท แบบสัญญา หรือเอกสารอ้างอิงอื่น"
+  },
+  "结果来自桌面服务的实际检测；失败项可以修复后重试。": {
+    "zh": "这里会显示本机的实际检查结果。如有未通过项目，按提示处理后再检查。",
+    "en": "These are actual checks on this computer. Follow any instructions for failed items, then check again.",
+    "th": "ผลนี้มาจากการตรวจสอบคอมพิวเตอร์จริง หากมีรายการไม่ผ่าน ให้แก้ไขตามคำแนะนำแล้วตรวจสอบอีกครั้ง"
+  },
+  "请先点击“检查并初始化环境”，通过后再建立知识库。": {
+    "zh": "请先点击“检查并准备软件”，通过后再添加参考资料。",
+    "en": "First click “Check and prepare the app”. Once it passes, add your reference materials.",
+    "th": "โปรดคลิก “ตรวจสอบและเตรียมโปรแกรม” ก่อน เมื่อผ่านแล้วจึงเพิ่มเอกสารอ้างอิง"
+  },
+  "首次手动建库后，应用空闲时按设定间隔增量更新。": {
+    "zh": "首次整理完成后，软件会在空闲时按设定时间检查新增和修改的资料。",
+    "en": "After the first preparation, the app checks for new and changed materials at the chosen interval while idle.",
+    "th": "หลังเตรียมเอกสารครั้งแรก โปรแกรมจะตรวจเอกสารใหม่และเอกสารที่แก้ไขตามช่วงเวลาที่ตั้งไว้เมื่อว่าง"
+  },
+  "首次手动建库完成后，应用空闲时每 {v0} 分钟增量同步；重启时自动增量核对，并恢复中断任务。": {
+    "zh": "首次整理完成后，软件空闲时每 {v0} 分钟检查新增和修改的资料；重新打开软件时，也会继续未完成的整理。",
+    "en": "After initial preparation, new and changed materials are checked every {v0} minutes while the app is idle. Reopening the app also resumes unfinished preparation.",
+    "th": "หลังเตรียมเอกสารครั้งแรก โปรแกรมจะตรวจเอกสารใหม่และเอกสารที่แก้ไขทุก {v0} นาทีเมื่อว่าง และทำงานที่ค้างไว้ต่อเมื่อเปิดโปรแกรมอีกครั้ง"
+  },
+  "自动同步已关闭。可按需手动增量更新或完整核验。": {
+    "zh": "已关闭自动更新。需要时，可手动更新新增和修改的资料，或重新检查全部资料。",
+    "en": "Automatic updates are off. You can update new and changed materials or recheck all materials when needed.",
+    "th": "ปิดการอัปเดตอัตโนมัติแล้ว คุณสามารถอัปเดตเอกสารใหม่และเอกสารที่แก้ไข หรือตรวจสอบเอกสารทั้งหมดได้ตามต้องการ"
+  },
+  "选择资料文件夹并保存配置后，即可建立本地索引。": {
+    "zh": "选择资料文件夹并保存后，即可整理资料，供审核时查找引用。",
+    "en": "Choose and save a reference folder, then prepare its materials for use in reviews.",
+    "th": "เลือกและบันทึกโฟลเดอร์เอกสารอ้างอิง แล้วเตรียมเอกสารเพื่อใช้ค้นหาและอ้างอิงระหว่างตรวจสัญญา"
+  },
+  "当前目录或个性化设置尚未保存。请先保存配置，再建立或更新索引。": {
+    "zh": "文件夹或读取范围尚未保存。请先保存设置，再整理或更新资料。",
+    "en": "The folder or reading scope has not been saved. Save the settings before preparing or updating materials.",
+    "th": "ยังไม่ได้บันทึกโฟลเดอร์หรือขอบเขตการอ่าน โปรดบันทึกการตั้งค่าก่อนเตรียมหรืออัปเดตเอกสาร"
+  },
+  "增量更新": {
+    "zh": "更新新增和修改的资料",
+    "en": "Update new and changed materials",
+    "th": "อัปเดตเอกสารใหม่และเอกสารที่แก้ไข"
+  },
+  "建立 / 增量更新": {
+    "zh": "整理或更新参考资料",
+    "en": "Prepare or update reference materials",
+    "th": "เตรียมหรืออัปเดตเอกสารอ้างอิง"
+  },
+  "读取索引状态失败：": {
+    "zh": "暂时无法读取资料整理情况：",
+    "en": "Unable to read the preparation status: ",
+    "th": "ไม่สามารถอ่านสถานะการเตรียมเอกสารได้ในขณะนี้: "
+  },
+  "已存储片段": {
+    "zh": "已整理的原文片段",
+    "en": "Prepared source passages",
+    "th": "ข้อความต้นฉบับที่เตรียมแล้ว"
+  },
+  "资料范围或个性化设置已变更，需要同步后才能补齐当前范围的索引。": {
+    "zh": "资料范围已更改。更新完成后，新增范围内的资料才能被完整查找。",
+    "en": "The reading scope has changed. Update it so the newly included materials can be searched.",
+    "th": "ขอบเขตเอกสารเปลี่ยนแล้ว โปรดอัปเดตเพื่อให้ค้นหาเอกสารที่เพิ่มเข้ามาได้ครบตามขอบเขต"
+  },
+  "正在读取已保存文件夹的索引状态…": {
+    "zh": "正在查看资料整理进度…",
+    "en": "Checking reference preparation progress…",
+    "th": "กำลังตรวจสอบความคืบหน้าในการเตรียมเอกสาร…"
+  },
+  "增量同步": {
+    "zh": "更新有变化的资料",
+    "en": "Update changed materials",
+    "th": "อัปเดตเอกสารที่เปลี่ยนแปลง"
+  },
+  "索引覆盖与限制": {
+    "zh": "哪些资料可查，还有哪些限制",
+    "en": "Searchable materials and limits",
+    "th": "เอกสารที่ค้นหาได้และข้อจำกัด"
+  },
+  "索引引擎": {
+    "zh": "检索组件（供技术支持核对）",
+    "en": "Search component (for technical support)",
+    "th": "ส่วนประกอบการค้นหา (สำหรับฝ่ายเทคนิคตรวจสอบ)"
+  },
+  "· 分词版本": {
+    "zh": "· 文字处理版本",
+    "en": "· Text-processing version",
+    "th": "· รุ่นการประมวลผลข้อความ"
+  },
+  "自由输入关键词，只查本地索引，不联网、不调用模型。": {
+    "zh": "输入关键词即可查找已整理的本机资料，不会联网或调用智能服务。",
+    "en": "Enter keywords to search prepared materials on this computer. No internet or AI service is used.",
+    "th": "ป้อนคำค้นเพื่อค้นหาเอกสารที่เตรียมไว้ในเครื่อง โดยไม่ใช้อินเทอร์เน็ตหรือบริการ AI"
+  },
+  "项片段": {
+    "zh": "段资料",
+    "en": " passages",
+    "th": "ข้อความ"
+  },
+  "本次没有匹配片段。可调整关键词，并查看索引覆盖范围和同步状态。": {
+    "zh": "没有找到匹配资料。可以换一组关键词，并检查资料是否已整理完成。",
+    "en": "No matching materials were found. Try different keywords and check that preparation has finished.",
+    "th": "ไม่พบเอกสารที่ตรงกัน ลองเปลี่ยนคำค้นและตรวจสอบว่าเตรียมเอกสารเสร็จแล้วหรือไม่"
+  },
+  "重新读取已索引片段": {
+    "zh": "重新查看原文",
+    "en": "Read the source passage again",
+    "th": "อ่านข้อความต้นฉบับอีกครั้ง"
+  },
+  "片段 SHA-256": {
+    "zh": "原文校验码（供核对）",
+    "en": "Source verification code",
+    "th": "รหัสตรวจสอบข้อความต้นฉบับ"
+  },
+  "索引时间": {
+    "zh": "资料整理时间",
+    "en": "Materials prepared at",
+    "th": "เวลาที่เตรียมเอกสาร"
+  },
+  "客户维护知识内容，工作台只读检索。文件夹与知识库 API 可以同时启用。": {
+    "zh": "由你选择和维护参考资料。软件只读取和查找，不改动原文件；本机文件夹和已有资料服务可以一起使用。",
+    "en": "You choose and maintain the references. The app only reads and searches them, leaving originals unchanged. Local folders and existing reference services can be used together.",
+    "th": "คุณเป็นผู้เลือกและดูแลเอกสารอ้างอิง โปรแกรมจะอ่านและค้นหาโดยไม่แก้ไขไฟล์ต้นฉบับ และใช้โฟลเดอร์ในเครื่องร่วมกับบริการเอกสารที่มีอยู่ได้"
+  },
+  "启用外部知识库 API": {
+    "zh": "连接已有的企业资料库",
+    "en": "Connect an existing company reference library",
+    "th": "เชื่อมต่อคลังเอกสารอ้างอิงของบริษัทที่มีอยู่"
+  },
+  "标准检索 API": {
+    "zh": "通用资料查询服务",
+    "en": "General reference search service",
+    "th": "บริการค้นหาเอกสารทั่วไป"
+  },
+  "知识库 API 地址": {
+    "zh": "企业资料服务地址",
+    "en": "Company reference service address",
+    "th": "ที่อยู่บริการเอกสารของบริษัท"
+  },
+  "知识库 / 集合 ID": {
+    "zh": "资料库编号（由管理员提供）",
+    "en": "Reference library ID (from your administrator)",
+    "th": "รหัสคลังเอกสาร (ขอจากผู้ดูแลระบบ)"
+  },
+  "知识库 API 密钥": {
+    "zh": "企业资料服务密钥",
+    "en": "Company reference service key",
+    "th": "คีย์บริการเอกสารของบริษัท"
+  },
+  "搜索 API 地址": {
+    "zh": "搜索服务地址",
+    "en": "Search service address",
+    "th": "ที่อยู่บริการค้นหา"
+  },
+  "搜索 API 密钥": {
+    "zh": "搜索服务密钥",
+    "en": "Search service key",
+    "th": "คีย์บริการค้นหา"
+  },
+  "来源域名白名单": {
+    "zh": "只搜索这些网站",
+    "en": "Limit searches to these websites",
+    "th": "จำกัดการค้นหาเฉพาะเว็บไซต์เหล่านี้"
+  },
+  "请求超时（秒）": {
+    "zh": "最多等待多久（秒）",
+    "en": "Maximum wait (seconds)",
+    "th": "รอได้สูงสุด (วินาที)"
+  },
+  "每路结果上限": {
+    "zh": "每个来源最多返回多少项",
+    "en": "Maximum results per source",
+    "th": "จำนวนผลลัพธ์สูงสุดต่อแหล่งข้อมูล"
+  },
+  "配置已保存，检索存在失败或未完成的分支。请查看各路状态、错误和限制。": {
+    "zh": "设置已保存，但部分来源未能查完。请查看各来源的结果和说明，不要将其视为已完整查询。",
+    "en": "Settings are saved, but some sources were not fully searched. Check each source's results and notes before treating the search as complete.",
+    "th": "บันทึกการตั้งค่าแล้ว แต่บางแหล่งยังค้นหาไม่ครบ โปรดตรวจผลลัพธ์และคำอธิบายของแต่ละแหล่งก่อนถือว่าค้นหาครบแล้ว"
+  },
+  "需要模型审核时，再接入你自己的模型 API；外部知识库和互联网检索可在高级设置中管理。": {
+    "zh": "如需智能审核，请连接你选用的智能服务。已有企业资料库和网上资料查询可在高级设置中管理。",
+    "en": "Connect your chosen AI service when you need AI review. Existing company libraries and internet searches are managed in advanced settings.",
+    "th": "หากต้องการให้ AI ช่วยตรวจสัญญา ให้เชื่อมต่อบริการที่คุณเลือก ส่วนคลังเอกสารของบริษัทและการค้นหาบนอินเทอร์เน็ตจัดการได้ในการตั้งค่าขั้นสูง"
+  },
+  "模型审核需要先配置 API。": {
+    "zh": "使用智能审核前，请先连接智能服务。",
+    "en": "Connect an AI service before starting AI review.",
+    "th": "โปรดเชื่อมต่อบริการ AI ก่อนเริ่มตรวจสัญญาด้วย AI"
+  },
+  "API 地址": {
+    "zh": "智能服务地址",
+    "en": "AI service address",
+    "th": "ที่อยู่บริการ AI"
+  },
+  "API 密钥": {
+    "zh": "服务密钥（由服务商提供）",
+    "en": "Service key (from your provider)",
+    "th": "คีย์บริการ (ขอจากผู้ให้บริการ)"
+  },
+  "填写 API 中的模型 ID": {
+    "zh": "填写服务商提供的模型代码",
+    "en": "Enter the model code supplied by your provider",
+    "th": "กรอกรหัสโมเดลที่ผู้ให้บริการระบุ"
+  },
+  "模型 API（云端 / 本机）": {
+    "zh": "连接智能服务（网上或本机）",
+    "en": "Connect an AI service (online or local)",
+    "th": "เชื่อมต่อบริการ AI (ออนไลน์หรือในเครื่อง)"
+  },
+  "连接云端 API、本机模型端点，或切换到本机 Codex。模型审核会发送合同和取回的资料片段。": {
+    "zh": "选择网上或本机的智能服务。智能审核会将合同及查到的参考资料发送给你选定的服务；也可由技术人员接入本机 Codex。",
+    "en": "Choose an online or local AI service. AI review sends the contract and retrieved references to the service you select. Technical staff can also connect a local Codex installation.",
+    "th": "เลือกบริการ AI ออนไลน์หรือในเครื่อง การตรวจด้วย AI จะส่งสัญญาและเอกสารอ้างอิงที่ค้นพบไปยังบริการที่คุณเลือก หรือให้ฝ่ายเทคนิคเชื่อมต่อ Codex ในเครื่องได้"
+  },
+  "需与服务商支持能力一致": {
+    "zh": "请按服务商说明填写；不确定时可向服务商或技术人员确认。",
+    "en": "Follow your provider's instructions. Ask the provider or technical staff if unsure.",
+    "th": "กรอกตามคำแนะนำของผู้ให้บริการ หากไม่แน่ใจให้สอบถามผู้ให้บริการหรือฝ่ายเทคนิค"
+  },
+  "最大输出 Tokens": {
+    "zh": "单次回复长度上限（计量单位：Token）",
+    "en": "Maximum reply length (tokens)",
+    "th": "ความยาวคำตอบสูงสุดต่อครั้ง (โทเคน)"
+  },
+  "上下文窗口 Tokens": {
+    "zh": "单次可处理内容上限（计量单位：Token）",
+    "en": "Text the service can handle at once (tokens)",
+    "th": "ปริมาณข้อความที่บริการรับได้ต่อครั้ง (โทเคน)"
+  },
+  "输出预留 Tokens": {
+    "zh": "预留回复长度（计量单位：Token）",
+    "en": "Reserved reply length (tokens)",
+    "th": "ความยาวที่สำรองไว้สำหรับคำตอบ (โทเคน)"
+  },
+  "输出 Token 参数": {
+    "zh": "服务商要求的输出设置",
+    "en": "Output setting required by the provider",
+    "th": "การตั้งค่าคำตอบที่ผู้ให้บริการกำหนด"
+  },
+  "服务能力": {
+    "zh": "服务支持的功能",
+    "en": "Features supported by the service",
+    "th": "คุณสมบัติที่บริการรองรับ"
+  },
+  "能力探测": {
+    "zh": "检查服务可用功能",
+    "en": "Check supported service features",
+    "th": "ตรวจสอบคุณสมบัติที่บริการรองรับ"
+  },
+  "按服务与模型保存能力、预算及重试策略。所有探测都可能产生一次真实调用费用。": {
+    "zh": "分别保存每个智能服务的功能、用量限制和失败重试设置。点击检测可能产生一次真实调用费用。",
+    "en": "Save features, usage limits and retry settings for each AI service. Each feature check may incur a real service charge.",
+    "th": "บันทึกคุณสมบัติ ขีดจำกัดการใช้งาน และการลองใหม่ของแต่ละบริการ AI การตรวจสอบแต่ละครั้งอาจมีค่าบริการจริง"
+  },
+  "请先取消或等待能力探测完成。": {
+    "zh": "请先停止功能检测，或等待检测完成。",
+    "en": "Stop the feature check or wait for it to finish first.",
+    "th": "โปรดหยุดการตรวจสอบคุณสมบัติหรือรอให้เสร็จก่อน"
+  },
+  "单任务累计预算": {
+    "zh": "一次任务的总用量限制",
+    "en": "Total usage limit for one task",
+    "th": "ขีดจำกัดการใช้งานรวมต่อหนึ่งงาน"
+  },
+  "Token上限（留空不限）": {
+    "zh": "服务用量上限（Token；留空不限制）",
+    "en": "Service usage limit (tokens; blank means no limit)",
+    "th": "ขีดจำกัดการใช้บริการ (โทเคน; เว้นว่างคือไม่จำกัด)"
+  },
+  "每百万输入Token价格": {
+    "zh": "输入内容单价（每百万 Token）",
+    "en": "Input text price (per million tokens)",
+    "th": "ราคาข้อความที่ส่งเข้า (ต่อหนึ่งล้านโทเคน)"
+  },
+  "每百万输出Token价格": {
+    "zh": "回复内容单价（每百万 Token）",
+    "en": "Reply text price (per million tokens)",
+    "th": "ราคาข้อความคำตอบ (ต่อหนึ่งล้านโทเคน)"
+  },
+  "取消能力探测": {
+    "zh": "停止功能检测",
+    "en": "Stop the feature check",
+    "th": "หยุดการตรวจสอบคุณสมบัติ"
+  },
+  "预算占用": {
+    "zh": "已占用额度",
+    "en": "Usage allowance committed",
+    "th": "โควตาที่ถูกกันไว้แล้ว"
+  },
+  "专业法律 MCP": {
+    "zh": "专业法律资料服务（MCP）",
+    "en": "Legal reference service (MCP)",
+    "th": "บริการเอกสารกฎหมาย (MCP)"
+  },
+  "SSH / SFTP 文件目录": {
+    "zh": "公司远端文件夹（SSH / SFTP）",
+    "en": "Company remote folder (SSH / SFTP)",
+    "th": "โฟลเดอร์ระยะไกลของบริษัท (SSH / SFTP)"
+  },
+  "远端知识索引 API": {
+    "zh": "已有的资料查询服务（API）",
+    "en": "Existing reference search service (API)",
+    "th": "บริการค้นหาเอกสารที่มีอยู่ (API)"
+  },
+  "固定参数（JSON 对象，仅作为资料）": {
+    "zh": "服务商提供的附加设置（JSON；仅用于资料查询）",
+    "en": "Extra provider settings (JSON; reference queries only)",
+    "th": "การตั้งค่าเพิ่มเติมจากผู้ให้บริการ (JSON; สำหรับค้นหาเอกสารเท่านั้น)"
+  },
+  "连接端点": {
+    "zh": "资料服务地址",
+    "en": "Reference service address",
+    "th": "ที่อยู่บริการเอกสาร"
+  },
+  "MCP Streamable HTTP 端点": {
+    "zh": "专业资料服务地址（MCP HTTP）",
+    "en": "Professional reference service address (MCP HTTP)",
+    "th": "ที่อยู่บริการเอกสารเฉพาะทาง (MCP HTTP)"
+  },
+  "知识索引 API 根地址（包含版本路径）": {
+    "zh": "资料查询服务地址（含版本路径）",
+    "en": "Reference search address (including version path)",
+    "th": "ที่อยู่บริการค้นหาเอกสาร (รวมพาธรุ่น)"
+  },
+  "API 令牌（留空保留现有值）": {
+    "zh": "连接密钥（不更换时留空）",
+    "en": "Connection key (leave blank to keep it)",
+    "th": "คีย์เชื่อมต่อ (เว้นว่างหากไม่เปลี่ยน)"
+  },
+  "连接凭据": {
+    "zh": "连接密钥或密码",
+    "en": "Connection key or password",
+    "th": "คีย์หรือรหัสผ่านสำหรับเชื่อมต่อ"
+  },
+  "凭据由本机安全存储单独管理": {
+    "zh": "密钥或密码由本机单独安全保存",
+    "en": "Keys and passwords are stored separately and protected on this computer",
+    "th": "คีย์และรหัสผ่านถูกเก็บแยกและปกป้องไว้ในเครื่องนี้"
+  },
+  "本机镜像上限（GB）": {
+    "zh": "下载到本机的资料空间上限（GB）",
+    "en": "Maximum space for downloaded materials (GB)",
+    "th": "พื้นที่สูงสุดสำหรับเอกสารที่ดาวน์โหลดลงเครื่อง (GB)"
+  },
+  "记录人标签": {
+    "zh": "记录人姓名或称呼",
+    "en": "Name or label for the record",
+    "th": "ชื่อหรือชื่อเรียกสำหรับบันทึก"
+  },
+  "保存连接版本": {
+    "zh": "保存资料连接设置",
+    "en": "Save reference connection settings",
+    "th": "บันทึกการเชื่อมต่อเอกสาร"
+  },
+  "发现 MCP 工具": {
+    "zh": "读取服务支持的查询功能",
+    "en": "Read supported search features",
+    "th": "อ่านคุณสมบัติการค้นหาที่บริการรองรับ"
+  },
+  "索引目录：": {
+    "zh": "参考资料文件夹：",
+    "en": "Reference folder: ",
+    "th": "โฟลเดอร์เอกสารอ้างอิง: "
+  },
+  "点击后将此目录设为当前本地知识库并建立或更新索引。": {
+    "zh": "点击后，会将这个文件夹加入当前参考资料库，并整理其中的资料，供审核时查找。",
+    "en": "Add this folder as the current reference library and prepare its materials for review searches.",
+    "th": "เพิ่มโฟลเดอร์นี้เป็นคลังเอกสารอ้างอิงปัจจุบัน และเตรียมเอกสารสำหรับค้นหาระหว่างตรวจสัญญา"
+  },
+  "设为知识库并建库": {
+    "zh": "加入参考资料库并整理",
+    "en": "Add and prepare reference materials",
+    "th": "เพิ่มและเตรียมเอกสารอ้างอิง"
+  },
+  "配置修订 r{v0}": {
+    "zh": "设置版本 {v0}",
+    "en": "Settings version {v0}",
+    "th": "การตั้งค่ารุ่น {v0}"
+  },
+  "管理当前工作空间的数据副本，查看并清理可重建的知识索引。": {
+    "zh": "备份或恢复当前工作资料，也可以清理供查找使用的整理副本。",
+    "en": "Back up or restore your current work, or clear prepared search copies that can be rebuilt.",
+    "th": "สำรองหรือกู้คืนข้อมูลงานปัจจุบัน หรือล้างสำเนาที่เตรียมไว้สำหรับค้นหาซึ่งสร้างใหม่ได้"
+  },
+  "知识索引状态": {
+    "zh": "参考资料整理情况",
+    "en": "Reference preparation status",
+    "th": "สถานะการเตรียมเอกสารอ้างอิง"
+  },
+  "同时包含知识索引与相关缓存（可能占用较多空间）": {
+    "zh": "同时备份参考资料的整理副本（可能占用较多空间）",
+    "en": "Include prepared reference copies in the backup (may use substantial space)",
+    "th": "สำรองสำเนาเอกสารอ้างอิงที่เตรียมไว้ด้วย (อาจใช้พื้นที่มาก)"
+  },
+  "清理本地知识索引": {
+    "zh": "清理参考资料的整理副本",
+    "en": "Clear prepared reference copies",
+    "th": "ล้างสำเนาเอกสารอ้างอิงที่เตรียมไว้"
+  },
+  "将当前可重建的索引移到可恢复目录，保留原始资料文件和合同审核记录。需要检索时可重新建库。": {
+    "zh": "暂时移走用于快速查找的整理副本，并保留恢复副本。原始资料、合同和审核记录不会删除，需要时也可重新整理。",
+    "en": "Move prepared search copies aside while keeping a recovery copy. Original materials, contracts and review records remain intact; preparation can be repeated when needed.",
+    "th": "ย้ายสำเนาที่เตรียมไว้สำหรับค้นหาออกชั่วคราวและเก็บสำเนากู้คืนไว้ โดยไม่ลบเอกสารต้นฉบับ สัญญา หรือบันทึกการตรวจ และเตรียมใหม่ได้เมื่อต้องการ"
+  },
+  "我确认暂时清理当前知识索引，并保留恢复副本": {
+    "zh": "我确认清理参考资料的整理副本，并保留可恢复副本",
+    "en": "I confirm clearing prepared reference copies while keeping a recovery copy",
+    "th": "ฉันยืนยันการล้างสำเนาเอกสารอ้างอิงที่เตรียมไว้ โดยเก็บสำเนากู้คืนไว้"
+  },
+  "保留副本并清理索引": {
+    "zh": "保留恢复副本并清理",
+    "en": "Keep a recovery copy and clear",
+    "th": "เก็บสำเนากู้คืนแล้วล้าง"
+  },
+  "选择一个新的备份目录，保存数据库、合同和相关工作资产，并写入可核验的清单。": {
+    "zh": "选择一个新的备份文件夹，保存合同、报告和相关工作记录，并附上核对清单。",
+    "en": "Choose a new backup folder for contracts, reports and related work records, with a checklist for verification.",
+    "th": "เลือกโฟลเดอร์สำรองใหม่เพื่อเก็บสัญญา รายงาน และบันทึกงานที่เกี่ยวข้อง พร้อมรายการสำหรับตรวจสอบ"
+  },
+  "已读取备份清单。请核对版本、日期和文件摘要后再确认恢复。": {
+    "zh": "已读取备份内容。请先核对备份版本、日期和文件核对信息，再确认恢复。",
+    "en": "The backup information has been read. Check its version, date and file verification details before restoring.",
+    "th": "อ่านข้อมูลสำรองแล้ว โปรดตรวจสอบรุ่น วันที่ และข้อมูลตรวจสอบไฟล์ก่อนยืนยันการกู้คืน"
+  }
+}

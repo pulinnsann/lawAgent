@@ -21,6 +21,8 @@ const labels: Record<string, { en: string; th: string }> = {
   '导出并加入合同工作台': { en: 'Export and add to workbench', th: 'ส่งออกและเพิ่มในพื้นที่ทำงานสัญญา' },
   '选择备份目录': { en: 'Choose backup folder', th: 'เลือกโฟลเดอร์สำรองข้อมูล' },
   '选择备份保存位置': { en: 'Choose where to save backup', th: 'เลือกตำแหน่งบันทึกข้อมูลสำรอง' },
+  '导出问题日志': { en: 'Export problem log', th: 'ส่งออกบันทึกปัญหา' },
+  '问题日志文件': { en: 'Problem log file', th: 'ไฟล์บันทึกปัญหา' },
 };
 export function nativeInterfaceText(locale: InterfaceLanguage, source: string): string {
   return locale === 'zh' ? source : labels[source]?.[locale] ?? source;

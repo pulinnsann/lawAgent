@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>LawAgent 许可签发器</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">LAWAGENT · 管理员工具</p>
+      <h1>离线体验许可签发器</h1>
+      <p>最多 100 份许可，每份绑定 1 台电脑，有效期 90 天。</p>
+      <p class="quiet">这是签发管理员使用的软件。客户只需安装 LawAgent，并向你提供“授权与体验许可”中的设备码。</p>
+    </header>
+
+    <p id="message" role="status" aria-live="polite">正在读取签发资料…</p>
+
+    <section class="card setup" aria-labelledby="setup-heading">
+      <div class="section-heading"><h2 id="setup-heading">签发资料</h2><span id="setup-status" class="badge">未连接</span></div>
+      <p id="directory-path" class="directory">尚未选择签发资料目录。</p>
+      <p id="setup-help" class="quiet">首次使用，请选择原有的签发资料目录。它应包含签发私钥、签发记录和资料标识；空目录不会创建新名额。</p>
+      <button id="select-directory" type="button" disabled>选择已有签发资料目录</button>
+      <p class="quiet">资料保存在应用程序之外，升级或重新安装不会重置名额。请完整备份并妥善保管此目录，勿随客户安装包分发。</p>
+    </section>
+
+    <section class="counts" aria-label="实际签发数量">
+      <div><span>许可总额</span><strong id="limit">—</strong></div>
+      <div><span>已签发</span><strong id="issued">—</strong></div>
+      <div><span>剩余可签发</span><strong id="remaining">—</strong></div>
+    </section>
+
+    <section class="card" aria-labelledby="issue-heading">
+      <h2 id="issue-heading">签发一份新许可</h2>
+      <form id="issue-form">
+        <label for="device-code">客户设备码或签发信息</label>
+        <input id="device-code" name="deviceCode" required spellcheck="false" autocomplete="off" placeholder="可粘贴设备码或客户复制的签发信息" maxlength="2048" aria-describedby="device-code-help" disabled>
+        <p id="device-code-help" class="quiet">可粘贴 LAWDEV1- 开头的完整设备码，或客户在 LawAgent 中复制的整份签发信息。签发时只使用其中的设备码，不绑定软件版本。</p>
+        <label for="starts-at">许可开始时间（本机时区，可留空）</label>
+        <input id="starts-at" name="startsAt" type="datetime-local" step="1" disabled>
+        <p class="quiet">留空则从签发时刻开始。每次成功签发占用一个名额；同一设备只能获得一份体验许可。取回原码不会延长期限或消耗新名额。</p>
+        <button id="issue-button" type="submit" class="primary" disabled>签发并生成激活码</button>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="token-heading">
+      <h2 id="token-heading">激活码</h2>
+      <p id="token-summary" class="quiet">签发成功或取回历史许可后，在这里复制或保存激活码。</p>
+      <label for="license-token" class="sr-only">激活码内容</label>
+      <textarea id="license-token" readonly rows="5" spellcheck="false"></textarea>
+      <div class="actions"><button id="copy-token" type="button" disabled>复制激活码</button><button id="export-token" type="button" disabled>保存激活码文件</button></div>
+      <p class="quiet">将激活码交给对应设备的使用者。客户可在 LawAgent 的“授权与体验许可”窗口中粘贴激活。</p>
+    </section>
+
+    <section class="card" aria-labelledby="history-heading">
+      <div class="section-heading"><h2 id="history-heading">已签发记录</h2><button id="refresh-button" type="button" disabled>刷新记录</button></div>
+      <div class="table-scroll"><table><caption class="sr-only">许可签发记录</caption><thead><tr><th scope="col">序号</th><th scope="col">设备码</th><th scope="col">开始时间</th><th scope="col">到期时间</th><th scope="col">激活码</th></tr></thead><tbody id="license-rows"><tr><td colspan="5">尚未连接签发资料。</td></tr></tbody></table></div>
+    </section>
+
+    <footer><p id="key-info"></p><p>私钥由本机签发程序读取，不会出现在界面或安装包中。保留同一份签发记录才能持续管理 100 个体验名额。</p></footer>
+  </main>
+</body>
+</html>

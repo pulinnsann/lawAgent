@@ -51,7 +51,9 @@ export interface ProtocolSession {
 }
 
 /** Every privileged request travels only on the inherited anonymous pipe. */
-export function startDesktopProtocol(input: Readable, output: Writable, create: (host: DesktopHost)=>Promise<DesktopRuntime>, options: {hostTimeoutMs?:number;maxInFlight?:number;onFatal?:(error:Error)=>void} = {}): ProtocolSession {
+export function startDesktopProtocol(input: Readable, output: Writable, create: (host: DesktopHost)=>Promise<DesktopRuntime>, options: {hostTimeoutMs?:number;maxInFlight?:number;onFatal?:(error:Error)=>void;onDiagnostic?:(event:'protocol.starting'|'protocol.ready'|'protocol.closed'|'protocol.failed')=>void} = {}): ProtocolSession {
+  const diagnostic=(event:'protocol.starting'|'protocol.ready'|'protocol.closed'|'protocol.failed')=>{try{options.onDiagnostic?.(event);}catch{/* Logging never changes pipe lifecycle. */}};
+  diagnostic('protocol.starting');
   let runtime: DesktopRuntime | undefined;
   let stopping = false;
   let closed = false;
@@ -85,7 +87,7 @@ export function startDesktopProtocol(input: Readable, output: Writable, create: 
     emitTask(task){void write({type:'task',task}).catch(fail);},
     emitShutdownProgress(phase){void write({type:'shutdownProgress',phase}).catch(fail);},
   };
-  const ready=Promise.resolve().then(()=>create(host)).then(value=>{runtime=value;return write({type:'ready',protocol:1});});
+  const ready=Promise.resolve().then(()=>create(host)).then(value=>{runtime=value;diagnostic('protocol.ready');return write({type:'ready',protocol:1});});
   const rejectHostRequests=()=>{for(const request of hostPending.values()){clearTimeout(request.timer);request.reject(new Error('Desktop connection closed.'));}hostPending.clear();};
   let runtimeClosing:Promise<void>|null=null;
   const closeRuntime=()=>runtimeClosing??=ready.then(()=>runtime?.close());
@@ -96,12 +98,14 @@ export function startDesktopProtocol(input: Readable, output: Writable, create: 
     try{await closeRuntime();await Promise.allSettled([...inFlight]);await writeQueue;}
     finally{
       closed=true;
+      diagnostic('protocol.closed');
       rejectHostRequests();
       input.removeListener('data',onData);input.removeListener('end',onEnd);input.removeListener('error',fail);output.removeListener('error',fail);settleDone();
     }
   })();
   function fail(error:Error):void {
     if(closed)return;
+    diagnostic('protocol.failed');
     options.onFatal?.(error);
     stopping=true;
     // Never echo a malformed frame: it may contain credentials or contract text.

@@ -53,25 +53,22 @@ jobs:
         run: npm run native:test:desktop
       - name: Package unsigned Tauri NSIS installer
         run: npm run pack:win -- --ci
-      - name: Collect installer and portable ZIP
+      - name: Collect verified installer and portable ZIP
         run: |
-          New-Item -ItemType Directory -Force release | Out-Null
-          Copy-Item .local/rust-target/release/bundle/nsis/*.exe release/
           $portable = "output/tauri-windows-portable"
           New-Item -ItemType Directory -Force $portable | Out-Null
           Copy-Item .local/rust-target/release/law-agent-desktop.exe "$portable/合同工作台.exe"
           Copy-Item -Recurse .local/tauri-runtime "$portable/runtime"
-          Compress-Archive -Path "$portable/*" -DestinationPath release/law-agent-windows-x64-portable.zip
-          Copy-Item output/tauri-resource-inventory.json release/
-          Get-ChildItem release -File | Where-Object { $_.Extension -in '.exe', '.zip' } | ForEach-Object { "$(($_ | Get-FileHash -Algorithm SHA256).Hash.ToLower())  $($_.Name)" } | Set-Content -Encoding utf8 release/SHA256SUMS.txt
+          Compress-Archive -Path "$portable/*" -DestinationPath output/law-agent-windows-x64-portable.zip
+          $collected = node scripts/collect-desktop-installers.mjs --portable-zip output/law-agent-windows-x64-portable.zip
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $result = $collected | ConvertFrom-Json
+          "LAW_AGENT_RELEASE_DIR=$($result.releaseDirectory)" | Add-Content -Encoding utf8 $env:GITHUB_ENV
+          Copy-Item output/tauri-resource-inventory.json "$($result.releaseDirectory)/tauri-resource-inventory.json"
       - name: Upload artifacts for manual review
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: law-agent-tauri-windows-x64-${{ github.run_number }}
-          path: |
-            release/*.exe
-            release/*.zip
-            release/SHA256SUMS.txt
-            release/tauri-resource-inventory.json
+          path: ${{ env.LAW_AGENT_RELEASE_DIR }}/*
           if-no-files-found: error
           retention-days: 14

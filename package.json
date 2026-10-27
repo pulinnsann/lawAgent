@@ -9,6 +9,11 @@
   "type": "module",
   "main": "out/main/index.js",
   "scripts": {
+    "license:issuer": "node --import tsx tools/license-issuer/server.mjs",
+    "license:desktop": "node scripts/license-issuer-desktop.mjs dev",
+    "license:pack:mac": "node scripts/license-issuer-desktop.mjs build --bundles app,dmg",
+    "license:pack:win": "node scripts/license-issuer-desktop.mjs build --bundles nsis",
+    "license:native:test": "node scripts/license-issuer-desktop.mjs prepare && node scripts/native-core.mjs test -p law-license-issuer --locked",
     "predev": "node scripts/ensure-native-binding.mjs",
     "pretest": "node scripts/ensure-native-binding.mjs",
     "prebuild": "node scripts/ensure-native-binding.mjs",

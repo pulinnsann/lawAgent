@@ -2,6 +2,29 @@
 #import <WebKit/WebKit.h>
 #import <Security/Security.h>
 #import <LocalAuthentication/LocalAuthentication.h>
+#import <IOKit/IOKitLib.h>
+#import <IOKit/IOKitKeys.h>
+
+// Read a single stable system property into the caller's bounded buffer. The
+// raw value stays inside this native boundary and is never logged or returned
+// through desktop IPC; Rust validates and domain-hashes it before publication.
+int32_t law_device_identity(char *output, size_t capacity) {
+    if (!output || capacity < 1 || capacity > 128) return 0;
+    output[0] = '\0';
+    CFMutableDictionaryRef matching = IOServiceMatching("IOPlatformExpertDevice");
+    if (!matching) return 0;
+    io_service_t service = IOServiceGetMatchingService(kIOMainPortDefault, matching);
+    if (!service) return 0;
+    CFTypeRef property = IORegistryEntryCreateCFProperty(service, CFSTR(kIOPlatformUUIDKey), kCFAllocatorDefault, 0);
+    IOObjectRelease(service);
+    if (!property) return 0;
+    bool valid = CFGetTypeID(property) == CFStringGetTypeID() &&
+        CFStringGetCString((CFStringRef)property, output, (CFIndex)capacity, kCFStringEncodingUTF8) &&
+        (CFIndex)strlen(output) == CFStringGetLength((CFStringRef)property);
+    CFRelease(property);
+    if (!valid) output[0] = '\0';
+    return valid ? 1 : 0;
+}
 
 // This key belongs to the native vault. Electron's Safe Storage item and all
 // existing encrypted files remain untouched.

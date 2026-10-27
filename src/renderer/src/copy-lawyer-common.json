@@ -1,0 +1,172 @@
+{
+  "高级设置（通常无需修改）": {
+    "zh": "高级设置（通常无需修改）",
+    "en": "Advanced settings (usually no changes needed)",
+    "th": "การตั้งค่าขั้นสูง (โดยทั่วไปไม่จำเป็นต้องเปลี่ยน)"
+  },
+  "技术兼容设置（通常无需修改）": {
+    "zh": "技术兼容设置（通常无需修改）",
+    "en": "Service compatibility (usually no changes needed)",
+    "th": "ความเข้ากันได้ของบริการ (โดยทั่วไปไม่จำเป็นต้องเปลี่ยน)"
+  },
+  "由服务提供方或信息技术同事协助填写；日常审核通常无需调整。": {
+    "zh": "由服务提供方或信息技术同事协助填写；日常审核通常无需调整。",
+    "en": "Ask your service provider or IT colleague if changes are needed. Routine reviews can use the current settings.",
+    "th": "หากต้องเปลี่ยนค่า โปรดให้ผู้ให้บริการหรือเจ้าหน้าที่ไอทีช่วยตรวจสอบ การตรวจสัญญาทั่วไปใช้ค่าปัจจุบันได้"
+  },
+  "查看技术记录（可选）": {
+    "zh": "查看技术记录（可选）",
+    "en": "Technical record (optional)",
+    "th": "ดูบันทึกทางเทคนิค (ไม่บังคับ)"
+  },
+  "服务提供方的接入说明": {
+    "zh": "服务提供方的接入说明",
+    "en": "Connection instructions for the service provider",
+    "th": "คำแนะนำการเชื่อมต่อสำหรับผู้ให้บริการ"
+  },
+  "连接地址由服务提供方提供；访问密钥请填在下方，不要写入地址。": {
+    "zh": "连接地址由服务提供方提供；访问密钥请填在下方，不要写入地址。",
+    "en": "Use the address supplied by your provider. Enter the access key below, not in the address.",
+    "th": "ใช้ที่อยู่ที่ผู้ให้บริการแจ้ง และกรอกรหัสเข้าถึงด้านล่าง อย่าใส่รหัสไว้ในที่อยู่"
+  },
+  "基础条款检查仅按预设规则提示待确认事项，请结合原文自行判断。": {
+    "zh": "基础条款检查仅按预设规则提示待确认事项，请结合原文自行判断。",
+    "en": "Basic clause checks flag items using preset rules. Read the original text and use your own judgment.",
+    "th": "การตรวจข้อสัญญาเบื้องต้นแจ้งประเด็นตามกฎที่กำหนด โปรดอ่านข้อความต้นฉบับและใช้ดุลยพินิจของคุณ"
+  },
+  "查看本次检查记录": {
+    "zh": "查看本次检查记录",
+    "en": "View this check record",
+    "th": "ดูบันทึกการตรวจครั้งนี้"
+  },
+  "企业知识库": {
+    "zh": "企业参考资料",
+    "en": "Company reference documents",
+    "th": "เอกสารอ้างอิงขององค์กร"
+  },
+  "知识库": {
+    "zh": "参考资料",
+    "en": "Reference documents",
+    "th": "เอกสารอ้างอิง"
+  },
+  "互联网检索": {
+    "zh": "网上查找依据",
+    "en": "Find sources online",
+    "th": "ค้นหาแหล่งอ้างอิงออนไลน์"
+  },
+  "资料连接": {
+    "zh": "审核参考资料",
+    "en": "Review sources",
+    "th": "แหล่งอ้างอิงสำหรับการตรวจ"
+  },
+  "资料连接设置": {
+    "zh": "参考资料设置",
+    "en": "Reference document settings",
+    "th": "ตั้งค่าเอกสารอ้างอิง"
+  },
+  "专业检索与远端知识库": {
+    "zh": "法律资料服务与公司共享资料",
+    "en": "Legal services and shared company documents",
+    "th": "บริการข้อมูลกฎหมายและเอกสารที่องค์กรใช้ร่วมกัน"
+  },
+  "模型运行与用量": {
+    "zh": "服务用量与运行设置",
+    "en": "Service usage and settings",
+    "th": "การใช้งานบริการและการตั้งค่า"
+  },
+  "能力、流式输出、预算、重试和调用台账": {
+    "zh": "查看使用记录和费用，设置用量上限",
+    "en": "View usage and costs, and set usage limits",
+    "th": "ดูประวัติการใช้งานและค่าใช้จ่าย พร้อมกำหนดขีดจำกัดการใช้งาน"
+  },
+  "模型分析": {
+    "zh": "智能审核",
+    "en": "AI review",
+    "th": "การตรวจด้วย AI"
+  },
+  "原文覆盖": {
+    "zh": "已检查原文",
+    "en": "Original passages checked",
+    "th": "ข้อความต้นฉบับที่ตรวจแล้ว"
+  },
+  "待判断": {
+    "zh": "待人工确认",
+    "en": "Needs human confirmation",
+    "th": "รอผู้ใช้ยืนยัน"
+  },
+  "本地规则检查独立运行，不调用模型。": {
+    "zh": "基础条款检查在本机完成，不使用智能服务。",
+    "en": "Basic clause checks run on this computer without using an AI service.",
+    "th": "การตรวจข้อสัญญาเบื้องต้นทำในคอมพิวเตอร์เครื่องนี้ โดยไม่ใช้บริการ AI"
+  },
+  "KNOWLEDGE & WEB": {
+    "zh": "审核参考资料",
+    "en": "Review sources",
+    "th": "แหล่งอ้างอิงสำหรับการตรวจ"
+  },
+  "本工作区暂未发现依赖更新": {
+    "zh": "暂未发现本工作台中与本次审核有关的资料变更",
+    "en": "No changes found in related records in this workbench",
+    "th": "ยังไม่พบการเปลี่ยนแปลงในบันทึกที่เกี่ยวข้องกับการตรวจครั้งนี้ภายในพื้นที่ทำงาน"
+  },
+  "依赖记录已有更新，建议核对并重审": {
+    "zh": "相关资料或设置有更新，建议核对后重新审核",
+    "en": "Related information or settings have changed. Check them and consider a new review.",
+    "th": "ข้อมูลหรือการตั้งค่าที่เกี่ยวข้องมีการเปลี่ยนแปลง โปรดตรวจสอบและพิจารณาตรวจสัญญาใหม่"
+  },
+  "部分依赖版本未知，不能确认报告仍适用": {
+    "zh": "部分资料的当时版本不明，请确认这份结果是否仍适用",
+    "en": "Some source versions are unknown. Confirm whether this result still applies.",
+    "th": "ไม่ทราบรุ่นของข้อมูลบางส่วน โปรดยืนยันว่าผลการตรวจนี้ยังใช้ได้หรือไม่"
+  },
+  "比较范围 ·": {
+    "zh": "本次核对范围 ·",
+    "en": "Scope of this check ·",
+    "th": "ขอบเขตการตรวจสอบครั้งนี้ ·"
+  },
+  "本次未保存企业标准版本（基础审核或旧记录）。当前标准选择不会补写此历史报告。": {
+    "zh": "这份结果未留存当时的企业审核标准。以后变更设置不会改写这份历史结果。",
+    "en": "The company review standards used at the time were not retained. Changing settings will not rewrite this saved result.",
+    "th": "ไม่ได้เก็บเกณฑ์การตรวจขององค์กรที่ใช้ในขณะนั้น การเปลี่ยนการตั้งค่าจะไม่แก้ไขผลที่บันทึกไว้"
+  },
+  "模型连接设置": {
+    "zh": "连接智能审核服务",
+    "en": "Connect an AI review service",
+    "th": "เชื่อมต่อบริการตรวจสัญญาด้วย AI"
+  },
+  "模型连接": {
+    "zh": "智能审核服务",
+    "en": "AI review service",
+    "th": "บริการตรวจสัญญาด้วย AI"
+  },
+  "关闭模型设置": {
+    "zh": "关闭智能服务设置",
+    "en": "Close AI service settings",
+    "th": "ปิดการตั้งค่าบริการ AI"
+  },
+  "模型连接方式": {
+    "zh": "智能服务接入方式",
+    "en": "How to connect the AI service",
+    "th": "วิธีเชื่อมต่อบริการ AI"
+  },
+  "使用你自己的模型连接": {
+    "zh": "选择用于合同审核的智能服务",
+    "en": "Choose the AI service to review your contracts",
+    "th": "เลือกบริการ AI สำหรับตรวจสัญญาของคุณ"
+  },
+  "例如：公司模型服务": {
+    "zh": "例如：公司合同审核服务",
+    "en": "For example: company contract review service",
+    "th": "เช่น บริการตรวจสัญญาขององค์กร"
+  },
+  "远端及内网服务须使用 HTTPS；本机 localhost 服务允许使用 HTTP。": {
+    "zh": "网上和公司内网的地址须以 https:// 开头；本机服务可使用 http://。地址请向服务商或技术同事索取。",
+    "en": "Online and company-network addresses must start with https://. A service on this computer may use http://. Ask your provider or IT colleague for the address.",
+    "th": "ที่อยู่ออนไลน์และเครือข่ายองค์กรต้องขึ้นต้นด้วย https:// บริการในเครื่องนี้ใช้ http:// ได้ โปรดขอที่อยู่จากผู้ให้บริการหรือเจ้าหน้าที่ไอที"
+  },
+  "密钥保存后不回显；留空表示保持原有密钥。": {
+    "zh": "保存后不再显示密钥；留空可保留原来的密钥。",
+    "en": "The saved key is not displayed again. Leave this blank to keep the existing key.",
+    "th": "ระบบจะไม่แสดงรหัสที่บันทึกไว้อีก เว้นว่างเพื่อใช้รหัสเดิม"
+  }
+}

@@ -1,0 +1,317 @@
+{
+  "授权与体验许可": {
+    "zh": "使用授权",
+    "en": "Access and activation",
+    "th": "สิทธิ์ใช้งานและการเปิดใช้งาน"
+  },
+  "当前许可状态": {
+    "zh": "当前授权状态",
+    "en": "Current access",
+    "th": "สถานะสิทธิ์ปัจจุบัน"
+  },
+  "尚未激活": {
+    "zh": "尚未激活",
+    "en": "Not activated",
+    "th": "ยังไม่เปิดใช้งาน"
+  },
+  "许可有效": {
+    "zh": "已激活",
+    "en": "Activated",
+    "th": "เปิดใช้งานแล้ว"
+  },
+  "许可尚未开始": {
+    "zh": "尚未到授权开始日期",
+    "en": "Access has not started yet",
+    "th": "ยังไม่ถึงวันเริ่มสิทธิ์"
+  },
+  "许可已到期": {
+    "zh": "体验已到期",
+    "en": "Trial expired",
+    "th": "สิทธิ์ทดลองหมดอายุแล้ว"
+  },
+  "许可无效": {
+    "zh": "授权未通过验证",
+    "en": "Activation could not be confirmed",
+    "th": "ยังยืนยันการเปิดใช้งานไม่ได้"
+  },
+  "无法取得设备码": {
+    "zh": "暂时无法取得本机识别码",
+    "en": "Computer code unavailable",
+    "th": "ยังอ่านรหัสประจำเครื่องไม่ได้"
+  },
+  "许可保存异常": {
+    "zh": "授权信息暂时无法保存",
+    "en": "Activation could not be saved",
+    "th": "ยังบันทึกการเปิดใช้งานไม่ได้"
+  },
+  "许可状态暂不可用": {
+    "zh": "暂时无法查看授权状态",
+    "en": "Access status is temporarily unavailable",
+    "th": "ยังตรวจสอบสถานะสิทธิ์ไม่ได้"
+  },
+  "正在检查许可…": {
+    "zh": "正在查看授权状态…",
+    "en": "Checking access…",
+    "th": "กำลังตรวจสอบสิทธิ์…"
+  },
+  "刷新许可状态": {
+    "zh": "刷新状态",
+    "en": "Refresh status",
+    "th": "ตรวจสอบอีกครั้ง"
+  },
+  "许可状态响应无效，请刷新后重试。": {
+    "zh": "暂时无法读取授权状态，请刷新后重试。",
+    "en": "Access status could not be read. Refresh and try again.",
+    "th": "ยังอ่านสถานะสิทธิ์ไม่ได้ โปรดตรวจสอบอีกครั้ง"
+  },
+  "许可编号": {
+    "zh": "授权编号",
+    "en": "Activation reference",
+    "th": "หมายเลขอ้างอิงสิทธิ์"
+  },
+  "许可序号": {
+    "zh": "体验名额编号",
+    "en": "Trial number",
+    "th": "ลำดับสิทธิ์ทดลอง"
+  },
+  "签发时间": {
+    "zh": "授权开通时间",
+    "en": "Issued on",
+    "th": "วันที่ออกสิทธิ์"
+  },
+  "许可开始时间": {
+    "zh": "开始时间",
+    "en": "Access starts",
+    "th": "เริ่มใช้สิทธิ์"
+  },
+  "许可到期时间": {
+    "zh": "到期时间",
+    "en": "Access ends",
+    "th": "สิ้นสุดสิทธิ์"
+  },
+  "本机设备码": {
+    "zh": "本机识别码",
+    "en": "This computer’s code",
+    "th": "รหัสประจำเครื่องนี้"
+  },
+  "暂未取得设备码": {
+    "zh": "暂未取得本机识别码，请刷新重试",
+    "en": "Computer code unavailable; refresh to try again",
+    "th": "ยังอ่านรหัสประจำเครื่องไม่ได้ โปรดตรวจสอบอีกครั้ง"
+  },
+  "复制设备码": {
+    "zh": "复制本机识别码",
+    "en": "Copy computer code",
+    "th": "คัดลอกรหัสประจำเครื่อง"
+  },
+  "签发所需本机信息": {
+    "zh": "本机授权信息",
+    "en": "Activation for this computer",
+    "th": "การเปิดใช้งานเครื่องนี้"
+  },
+  "将本机设备码交给许可提供方，或复制整份签发信息以便核对产品与版本。": {
+    "zh": "需要授权时，将本机识别码或下方申请信息发给授权管理员。取得激活码后，填写到下方即可。",
+    "en": "To request access, send your administrator the computer code or request information below. Then enter the activation code they provide.",
+    "th": "เมื่อต้องการขอสิทธิ์ ส่งรหัสประจำเครื่องหรือข้อมูลคำขอด้านล่างให้ผู้ดูแล จากนั้นกรอกรหัสเปิดใช้งานที่ได้รับ"
+  },
+  "将设备码交给许可提供方，取得适用于本机的激活码。": {
+    "zh": "将本机识别码交给授权管理员，取得这台电脑的激活码。",
+    "en": "Send this computer code to your administrator to request an activation code.",
+    "th": "ส่งรหัสประจำเครื่องให้ผู้ดูแลเพื่อขอรหัสเปิดใช้งานสำหรับเครื่องนี้"
+  },
+  "产品名称": {
+    "zh": "软件名称",
+    "en": "Application",
+    "th": "ชื่อโปรแกรม"
+  },
+  "应用版本": {
+    "zh": "软件版本",
+    "en": "Version",
+    "th": "เวอร์ชัน"
+  },
+  "本机签发信息": {
+    "zh": "授权申请内容",
+    "en": "Activation request",
+    "th": "ข้อมูลคำขอเปิดใช้งาน"
+  },
+  "取得有效设备码后显示签发信息": {
+    "zh": "取得本机识别码后，会显示申请内容",
+    "en": "The request appears when the computer code is available",
+    "th": "ข้อมูลคำขอจะแสดงเมื่ออ่านรหัสประจำเครื่องได้"
+  },
+  "复制签发信息": {
+    "zh": "复制授权申请信息",
+    "en": "Copy activation request",
+    "th": "คัดลอกคำขอเปิดใช้งาน"
+  },
+  "签发信息仅包含产品、应用版本和设备码。": {
+    "zh": "申请信息只包含软件名称、版本和本机识别码。",
+    "en": "The request contains only the application, version and computer code.",
+    "th": "คำขอมีเฉพาะชื่อโปรแกรม เวอร์ชัน และรหัสประจำเครื่อง"
+  },
+  "查看申请信息内容（可选）": {
+    "zh": "查看申请信息内容（可选）",
+    "en": "View request contents (optional)",
+    "th": "ดูข้อมูลคำขอ (ไม่บังคับ)"
+  },
+  "粘贴激活码": {
+    "zh": "填写收到的激活码",
+    "en": "Enter the activation code you received",
+    "th": "กรอกรหัสเปิดใช้งานที่ได้รับ"
+  },
+  "激活码仅在本机提交，不需要在此输入模型 API 密钥。": {
+    "zh": "这里填写授权管理员提供的激活码，请勿填写其他服务的密码或密钥。",
+    "en": "Enter the activation code from your administrator, not a service password or key.",
+    "th": "กรอกรหัสเปิดใช้งานจากผู้ดูแล ไม่ใช่รหัสผ่านหรือคีย์ของบริการอื่น"
+  },
+  "正在激活…": {
+    "zh": "正在开通授权…",
+    "en": "Activating access…",
+    "th": "กำลังเปิดใช้งานสิทธิ์…"
+  },
+  "激活本机许可": {
+    "zh": "激活这台电脑",
+    "en": "Activate this computer",
+    "th": "เปิดใช้งานเครื่องนี้"
+  },
+  "离线体验许可": {
+    "zh": "体验授权说明",
+    "en": "About your trial",
+    "th": "ข้อมูลสิทธิ์ทดลอง"
+  },
+  "本次体验计划最多签发 100 份许可，每份绑定 1 台设备。": {
+    "zh": "本次共有 100 个体验名额，每份授权仅供 1 台电脑使用。",
+    "en": "This program has 100 trial places. Each activation is for one computer.",
+    "th": "โครงการนี้มีสิทธิ์ทดลอง 100 สิทธิ์ แต่ละสิทธิ์ใช้ได้กับคอมพิวเตอร์หนึ่งเครื่อง"
+  },
+  "每份许可自载明的开始时间起有效 90 天，以显示的到期时间为准。": {
+    "zh": "体验期为 90 天，从上方显示的开始时间计算，到期时间以上方显示为准。",
+    "en": "The trial lasts 90 days from the start time shown above. The displayed end time applies.",
+    "th": "ทดลองใช้ได้ 90 วันนับจากเวลาเริ่มที่แสดงด้านบน โดยยึดเวลาสิ้นสุดที่แสดง"
+  },
+  "此页面只显示本机许可状态，不显示全部许可的剩余名额。": {
+    "zh": "这里显示这台电脑的授权情况；剩余体验名额由授权管理员查看。",
+    "en": "This page shows access for this computer. Your administrator manages remaining trial places.",
+    "th": "หน้านี้แสดงสิทธิ์ของเครื่องนี้ ผู้ดูแลเป็นผู้ตรวจสอบสิทธิ์ทดลองที่เหลือ"
+  },
+  "体验许可不改变项目源代码的 Apache-2.0 开源授权。": {
+    "zh": "软件源代码仍按 Apache-2.0 开源协议提供。",
+    "en": "The source code remains available under Apache-2.0.",
+    "th": "ซอร์สโค้ดยังคงใช้สัญญาอนุญาต Apache-2.0"
+  },
+  "许可检查时间：{time}": {
+    "zh": "最近检查：{time}",
+    "en": "Last checked: {time}",
+    "th": "ตรวจสอบล่าสุด: {time}"
+  },
+  "许可已激活，可继续新建任务。": {
+    "zh": "授权已生效，可以开始处理合同。",
+    "en": "Access is active. You can start working on contracts.",
+    "th": "สิทธิ์มีผลแล้ว สามารถเริ่มทำงานกับสัญญาได้"
+  },
+  "许可状态已更新，请核对有效期和本机状态。": {
+    "zh": "授权状态已更新，请查看开始和到期时间。",
+    "en": "Access status updated. Check the start and end dates.",
+    "th": "อัปเดตสถานะสิทธิ์แล้ว โปรดตรวจสอบวันเริ่มและวันสิ้นสุด"
+  },
+  "设备码已复制。": {
+    "zh": "本机识别码已复制，可发给授权管理员。",
+    "en": "Computer code copied. Send it to your administrator.",
+    "th": "คัดลอกรหัสประจำเครื่องแล้ว ส่งให้ผู้ดูแลได้"
+  },
+  "无法自动复制，请选择设备码后手动复制。": {
+    "zh": "已选中本机识别码，请按复制快捷键。",
+    "en": "The computer code is selected. Use your copy shortcut.",
+    "th": "เลือกรหัสประจำเครื่องแล้ว โปรดใช้แป้นลัดคัดลอก"
+  },
+  "签发信息已复制。": {
+    "zh": "授权申请信息已复制，可发给授权管理员。",
+    "en": "Activation request copied. Send it to your administrator.",
+    "th": "คัดลอกคำขอเปิดใช้งานแล้ว ส่งให้ผู้ดูแลได้"
+  },
+  "无法自动复制，已选中签发信息，请使用系统复制快捷键。": {
+    "zh": "已展开并选中申请内容，请按复制快捷键。",
+    "en": "The request is open and selected. Use your copy shortcut.",
+    "th": "เปิดและเลือกข้อมูลคำขอแล้ว โปรดใช้แป้นลัดคัดลอก"
+  },
+  "查看本机许可、设备码与有效期，或激活离线许可。": {
+    "zh": "查看这台电脑的使用授权，申请或填写激活码。",
+    "en": "View access for this computer, request activation or enter your code.",
+    "th": "ดูสิทธิ์ของเครื่องนี้ ขอเปิดใช้งาน หรือกรอกรหัสที่ได้รับ"
+  },
+  "关闭许可窗口": {
+    "zh": "关闭授权窗口",
+    "en": "Close activation window",
+    "th": "ปิดหน้าต่างสิทธิ์"
+  },
+  "新建任务需要有效许可": {
+    "zh": "请先激活，再处理新合同",
+    "en": "Activate access to work on new contracts",
+    "th": "โปรดเปิดใช้งานก่อนทำงานกับสัญญาใหม่"
+  },
+  "查看已有合同和导出历史结果不受影响。请打开许可窗口查看状态或激活。": {
+    "zh": "已有合同和审核结果仍可查看、导出。点击下方按钮查看授权或填写激活码。",
+    "en": "You can still view existing contracts and export saved results. Open activation to check access or enter your code.",
+    "th": "ยังดูสัญญาเดิมและส่งออกผลตรวจสอบได้ เปิดหน้าต่างสิทธิ์เพื่อตรวจสอบหรือกรอกรหัสเปิดใช้งาน"
+  },
+  "查看许可": {
+    "zh": "查看授权",
+    "en": "View access",
+    "th": "ดูสิทธิ์ใช้งาน"
+  },
+  "激活有效许可后可新建任务": {
+    "zh": "激活后可导入和审核新合同",
+    "en": "Activate access to import and review new contracts",
+    "th": "เปิดใช้งานเพื่อนำเข้าและตรวจสอบสัญญาใหม่"
+  },
+  "本机试用授权有效。": {
+    "zh": "这台电脑的体验授权已生效。",
+    "en": "This computer’s trial is active.",
+    "th": "สิทธิ์ทดลองของเครื่องนี้มีผลแล้ว"
+  },
+  "尚未激活本机授权；可以查看和导出已有数据。": {
+    "zh": "这台电脑尚未激活；已有资料仍可查看和导出。",
+    "en": "This computer is not activated. Existing material can still be viewed and exported.",
+    "th": "ยังไม่ได้เปิดใช้งานเครื่องนี้ แต่ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "试用授权尚未开始；可以查看和导出已有数据。": {
+    "zh": "尚未到体验开始时间；已有资料仍可查看和导出。",
+    "en": "The trial has not started yet. Existing material can still be viewed and exported.",
+    "th": "ยังไม่ถึงเวลาเริ่มทดลอง แต่ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "90 天试用授权已到期；可以查看和导出已有数据，不能创建新的审核或生成任务。": {
+    "zh": "90 天体验期已结束。已有资料仍可查看和导出；继续审核或起草新合同需要有效授权。",
+    "en": "The 90-day trial has ended. Existing material can still be viewed and exported; new review or drafting work needs active access.",
+    "th": "การทดลอง 90 วันสิ้นสุดแล้ว ยังดูและส่งออกข้อมูลเดิมได้ แต่การตรวจสอบหรือร่างสัญญาใหม่ต้องมีสิทธิ์ที่ใช้ได้"
+  },
+  "该授权不属于本机设备，未替换已有授权。": {
+    "zh": "这个激活码适用于另一台电脑，原有授权未受影响。",
+    "en": "This activation code is for another computer. Your existing activation was kept.",
+    "th": "รหัสเปิดใช้งานนี้เป็นของคอมพิวเตอร์เครื่องอื่น สิทธิ์เดิมยังคงอยู่"
+  },
+  "请输入有效的许可证字符串。": {
+    "zh": "请填写完整、有效的激活码。",
+    "en": "Enter a complete, valid activation code.",
+    "th": "โปรดกรอกรหัสเปิดใช้งานที่ครบถ้วนและถูกต้อง"
+  },
+  "授权无法核验；可以查看和导出已有数据，请重新提供有效授权。": {
+    "zh": "暂时无法确认授权，请重新填写有效激活码。已有资料仍可查看和导出。",
+    "en": "Access could not be confirmed. Enter a valid activation code. Existing material can still be viewed and exported.",
+    "th": "ยังยืนยันสิทธิ์ไม่ได้ โปรดกรอกรหัสเปิดใช้งานที่ถูกต้อง ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "无法取得有效的本机设备码；可以查看和导出已有数据。": {
+    "zh": "暂时无法取得本机识别码，请联系授权管理员。已有资料仍可查看和导出。",
+    "en": "The computer code is unavailable. Contact your administrator. Existing material can still be viewed and exported.",
+    "th": "ยังอ่านรหัสประจำเครื่องไม่ได้ โปรดติดต่อผู้ดูแล ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "无法安全读取授权记录；可以查看和导出已有数据。": {
+    "zh": "暂时无法读取已保存的授权，请联系管理员。已有资料仍可查看和导出。",
+    "en": "Saved activation could not be read. Contact your administrator. Existing material can still be viewed and exported.",
+    "th": "ยังอ่านสิทธิ์ที่บันทึกไว้ไม่ได้ โปรดติดต่อผู้ดูแล ยังดูและส่งออกข้อมูลเดิมได้"
+  },
+  "检测到本机时间明显早于已记录时间；请核对时间后重试。已有数据仍可查看和导出。": {
+    "zh": "这台电脑的日期或时间可能有误，请校准后重试。已有资料仍可查看和导出。",
+    "en": "This computer’s date or time may be incorrect. Correct it and try again. Existing material can still be viewed and exported.",
+    "th": "วันที่หรือเวลาของเครื่องนี้อาจไม่ถูกต้อง โปรดแก้ไขแล้วลองอีกครั้ง ยังดูและส่งออกข้อมูลเดิมได้"
+  }
+}

@@ -1,3 +1,8 @@
+import { normalizeNativePressure } from './resource-pressure';
+import { DiagnosticLog, classifyDiagnosticError } from '../main/diagnostic-log';
+import { APP_VERSION } from '../shared/app-version';
+import { desktopRequiresLicense } from '../shared/license-access';
+import { LICENSE_DEVICE_PATTERN, type LicenseMode } from '../shared/licensing';
 import { Worker } from 'node:worker_threads';
 import { randomUUID, createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -26,9 +31,25 @@ import { normalizeSaveEnterpriseStandardInput, normalizePublishEnterpriseStandar
 
 /** Desktop behavior is shared with the established Core worker. OS authority
  * stays in the Tauri parent; no listener or filesystem API is exposed to WebView. */
-export async function createDesktopRuntime(host: DesktopHost, options: {dataDir: string; coreEntry?: URL; shutdownTimeoutMs?: number}): Promise<DesktopRuntime> {
+export async function createDesktopRuntime(host: DesktopHost, options: {dataDir: string; coreEntry?: URL; shutdownTimeoutMs?: number; pressurePollMs?: number; licensing?: {mode:LicenseMode;deviceCode:string|null}; enforceLicensing?:boolean; diagnosticLog?:DiagnosticLog}): Promise<DesktopRuntime> {
 const devData = resolve(options.dataDir);
+const pressurePollMs=options.pressurePollMs??(options.coreEntry?0:5000);
+if(pressurePollMs!==0&&(!Number.isSafeInteger(pressurePollMs)||pressurePollMs<1000||pressurePollMs>60000))throw new Error('系统压力采样间隔无效。');
 if (!isAbsolute(options.dataDir) || options.dataDir.includes('\0')) throw new Error('Desktop data directory must be absolute.');
+await mkdir(devData, {recursive:true,mode:0o700});
+const diagnostics=options.diagnosticLog??await DiagnosticLog.open(devData,{appVersion:APP_VERSION,platform:process.platform,arch:process.arch,nodeVersion:process.versions.node,runtime:'tauri',mode:options.licensing?.mode});
+const recordDiagnostic=(event:Parameters<DiagnosticLog['record']>[0])=>{try{diagnostics.record(event);}catch{/* Diagnostics cannot interrupt contract work. */}};
+const finishDiagnostics=()=>options.diagnosticLog?diagnostics.flush().catch(()=>{}):diagnostics.close().catch(()=>{});
+recordDiagnostic({event:'desktop.starting'});
+const taskLogStages=new Map<string,string>();
+const recordTaskProgress=(task:any)=>{
+ if(!task||typeof task!=='object'||typeof task.id!=='string'||!/^[-a-fA-F0-9]{36}$/u.test(task.id))return;
+ const status=['queued','running','completed','cancelled','failed'].includes(task.status)?task.status:undefined;
+ const stage=['queued','preparing','analyzing','validating','saving','completed','local_rules','model_request','parsing','cancelled','failed','batch_prepare','batch_review','synthesizing'].includes(task.stage)?task.stage:undefined;
+ if(!status&&!stage)return;const marker=String(status)+'/'+String(stage);if(taskLogStages.get(task.id)===marker)return;
+ if(taskLogStages.size>=64)taskLogStages.delete(taskLogStages.keys().next().value!);taskLogStages.set(task.id,marker);
+ recordDiagnostic({event:'task.progress',stage,status,reviewMode:['model','local'].includes(task.mode)?task.mode:undefined});
+};
 const builtCore = new URL('./core-worker.js', import.meta.url);
 const coreEntry = options.coreEntry ?? (existsSync(fileURLToPath(builtCore)) ? builtCore : new URL('../main/core-worker.ts', import.meta.url));
 const uuid = z.string().uuid();
@@ -101,6 +122,9 @@ let sensitiveQueue: Promise<unknown> = Promise.resolve();
 // requests that have not reached the Core worker yet.
 const changeDraftRequests = new Map<string, { cancelled: boolean }>();
 const contractGenerationRequests = new Map<string, { cancelled: boolean }>();
+const workspaceRequests = new Map<string, { cancelled: boolean }>();
+const modelWorkspaceActions = new Set(['translations.generate','modelRuntime.probe','alignment.compare','reporting.translation.generate']);
+const preflightWorkspaceActions = new Set([...modelWorkspaceActions,'conversion.convert']);
 let maintenanceBusy = false;
 let criticalMaintenanceBusy = false;
 let criticalMaintenanceDone: Promise<void> = Promise.resolve();
@@ -110,6 +134,11 @@ let connectionSaveQueue: Promise<unknown> = Promise.resolve();
 const mainOperations = new Set<Promise<void>>();
 const maintenanceOperations = new Set<Promise<void>>();
 let shuttingDown = false;
+let pressureTimer:ReturnType<typeof setInterval>|undefined;let pressureReading:Promise<void>|null=null;
+const samplePressure=()=>{if(shuttingDown||maintenanceBusy||pressureReading)return;const read=(async()=>{
+ try{const sample=normalizeNativePressure(await host.call('resourcePressure',{}));if(!shuttingDown&&!maintenanceBusy&&coreRunning)await rpc('updateResourcePressure',sample);}
+ catch{if(!shuttingDown&&!maintenanceBusy&&coreRunning)await rpc('updateResourcePressure',normalizeNativePressure(null)).catch(()=>{});}
+})();pressureReading=read;void read.finally(()=>{if(pressureReading===read)pressureReading=null;}).catch(()=>{});};
 const pending = new Map<string, {resolve:(v:any)=>void; reject:(e:Error)=>void; timer:NodeJS.Timeout}>();
 
 async function rpc<T>(command: string, payload: unknown = null, apiKey?: string | null, retrievalKeys?: {knowledgeApiKey:string|null;webApiKey:string|null}, connectionSecrets?:Record<string,string>): Promise<T> {
@@ -152,6 +181,7 @@ function retrievalKeys(config: PublicRetrievalConfig | null | undefined) {
 
 async function execute(name: string, payload: unknown): Promise<unknown> {
   if (shuttingDown) throw new Error('应用正在关闭，未开始新的操作。');
+  if((!options.coreEntry||options.enforceLicensing)&&desktopRequiresLicense(name,payload))await rpc('assertLicenseWritable');
   // Local document and knowledge operations do not need the OS keychain.
   // Unlock only for a user action that actually uses or changes credentials,
   // after the application window has been created.
@@ -350,23 +380,33 @@ async function extensionSecrets(includeId?:string):Promise<Record<string,string>
  const assets=await rpc<WorkspaceAsset[]>('runWorkspaceCommand',{action:'connections.list'});const result:Record<string,string>={};for(const asset of assets.filter(a=>a.body.enabled||a.id===includeId).slice(0,16)){const value=(await extensionVault(asset.id)).get(connectionBinding(asset));if(value)result[asset.id]=value;}return result;
 }
 async function renderPdf(html: string): Promise<Buffer> {
+ const leaseId=randomUUID();
+ try{await rpc('acquireResource',{id:leaseId});if(shuttingDown)throw new Error('应用正在关闭，未开始 PDF 导出。');
  if(Buffer.byteLength(html)>10*1024**2)throw new Error('报告内容超过PDF导出上限。');
  const rendered = await host.call<{base64: string}>('renderPdf', {html});
  const bytes = Buffer.from(rendered.base64, 'base64');
  if (bytes.length > 40 * 1024**2 || !bytes.subarray(0, 5).equals(Buffer.from('%PDF-'))) throw new Error('原生 PDF 导出未返回有效文件。');
  return bytes;
+ }finally{await rpc('releaseResource',{id:leaseId}).catch(()=>{});}
 }
 async function executeWorkspaceCommand(value:unknown):Promise<unknown>{
  const input=workspaceEnvelope.parse(value);if(Buffer.byteLength(JSON.stringify(input.payload??null))>2*1024**2)throw new Error('工作台输入超过2 MiB。');const p=(input.payload??{}) as any;
+ const checkCancelled=()=>{if(shuttingDown||input.requestId&&workspaceRequests.get(input.requestId)?.cancelled)throw new Error('工作台任务已取消，未开始新的处理。');};
+ if(preflightWorkspaceActions.has(input.action))checkCancelled();
  if(input.action==='workspace.interfaceLocale'){const selected=z.object({locale:z.enum(['zh','en','th'])}).strict().parse(p);interfaceLanguage=selected.locale;await window.setTitle(nativeText('合同工作台'));return{locale:interfaceLanguage};}
+ if(input.action==='workspace.cancel'){
+  const cancel=z.object({requestId:uuid}).strict().parse(p);const request=workspaceRequests.get(cancel.requestId);if(request)request.cancelled=true;
+  return rpc('runWorkspaceCommand',input);
+ }
  if(input.action.startsWith('maintenance.'))return executeMaintenance(input);
  if(input.action==='documents.importVersion'){
   const version=z.object({parentDocumentId:uuid,expectedLatestDocumentId:uuid}).strict().parse(p);
   const selection=await dialog.showOpenDialog(window!,{title:nativeText('导入该合同的下一版本（保留原件）'),properties:['openFile'],filters:[{name:nativeText('合同文档'),extensions:['docx','pdf']}]});
   return selection.canceled?null:rpc('importVersionFile',{...version,path:selection.filePaths[0]});
  }
- if(['translations.generate','modelRuntime.probe','alignment.compare','reporting.translation.generate'].includes(input.action)){
-  const state=await rpc<AppState>('getState');if(state.modelConfig?.provider!=='codex-cli')await vault.unlock();return rpc('runWorkspaceCommand',input,state.modelConfig?.provider!=='codex-cli'&&state.modelConfig?vault.get(state.modelConfig.baseUrl):null);
+ if(modelWorkspaceActions.has(input.action)){
+  const state=await rpc<AppState>('getState');checkCancelled();if(state.modelConfig?.provider!=='codex-cli')await vault.unlock();checkCancelled();
+  return rpc('runWorkspaceCommand',input,state.modelConfig?.provider!=='codex-cli'&&state.modelConfig?vault.get(state.modelConfig.baseUrl):null);
  }
  if(input.action==='connections.chooseDirectory'){const selected=await dialog.showOpenDialog(window!,{title:nativeText('选择共享盘或挂载目录'),properties:['openDirectory']});if(selected.canceled)return null;const path=await realpath(selected.filePaths[0]);approvedFolders.add(path);return path;}
  if(input.action==='connections.save'){
@@ -403,8 +443,8 @@ async function executeWorkspaceCommand(value:unknown):Promise<unknown>{
  }
  if(input.action==='library.template.export')throw new Error('请先通过模板的“核验与审核”完成逐项确认，再导出。');
  if(input.action==='conversion.convert'){
-  const choice=await dialog.showSaveDialog(window!,{title:nativeText('导出并加入合同工作台'),defaultPath:input.action==='conversion.convert'?'PDF文字副本.docx':'企业模板合同.docx',filters:[{name:nativeText('Word合同'),extensions:['docx']}]});if(choice.canceled||!choice.filePath)return null;
-  const rendered=await rpc<any>('runWorkspaceCommand',input);
+  const choice=await dialog.showSaveDialog(window!,{title:nativeText('导出并加入合同工作台'),defaultPath:input.action==='conversion.convert'?'PDF文字副本.docx':'企业模板合同.docx',filters:[{name:nativeText('Word合同'),extensions:['docx']}]});checkCancelled();if(choice.canceled||!choice.filePath)return null;
+  const rendered=await rpc<any>('runWorkspaceCommand',input);checkCancelled();
   const bytes=Buffer.from(rendered.docxBase64,'base64');await writeFile(choice.filePath,bytes,{flag:'wx',mode:0o600});
   try{const document=await rpc('importDerivedBytes',{name:rendered.filename,base64:rendered.docxBase64,source:rendered.sourceSnapshot,draft:rendered.draft,partial:rendered.partial,warnings:rendered.warnings});return{path:choice.filePath,document,missingInformation:rendered.missingInformation,warnings:rendered.warnings,partial:Boolean(rendered.partial)};}catch(error){throw new Error(`文件已导出，但加入工作台未完成，请手动导入：${error instanceof Error?error.message:'本地存储异常'}`);}
  }
@@ -448,20 +488,25 @@ async function executeMaintenance(input:WorkspaceCommand):Promise<unknown>{
 function startCore(): void {
   workerError = null;
   workerReady = new Promise<void>((resolve, reject) => {
-    core = new Worker(coreEntry, { workerData: { dataDir: devData } });
+    core = new Worker(coreEntry, { workerData: { dataDir: devData, licensing }, stdout: true, stderr: true });
+    // The inherited stdout pipe carries JSONL protocol frames only. A Worker's
+    // console and nested-worker output bypass the parent's console overrides;
+    // drain its captured streams without retaining or logging diagnostic text.
+    core.stdout?.resume(); core.stderr?.resume();
     coreRunning = true;
     const runningWorker = core;
-    const fail = () => {
+    const fail = (error?:unknown) => {
       if (core !== runningWorker) return;
+      if(!shuttingDown&&!maintenanceBusy)recordDiagnostic({event:'core.error',...classifyDiagnosticError(error)});
       workerError = new Error('本地服务已停止，请重启应用。已保存的合同会在重新启动后恢复。');
       reject(workerError); for (const item of pending.values()) { clearTimeout(item.timer); item.reject(workerError); } pending.clear();
     };
     core.on('message', message => {
-      if (message.type === 'ready') resolve();
-      else if (message.type === 'task') host.emitTask(message.task);
+      if (message.type === 'ready') {recordDiagnostic({event:'core.ready'});resolve();}
+      else if (message.type === 'task') {recordTaskProgress(message.task);host.emitTask(message.task);}
       else if (message.type === 'response') { const p = pending.get(message.id); if (!p) return; clearTimeout(p.timer); pending.delete(message.id); message.error ? p.reject(new Error(message.error)) : p.resolve(message.data); }
     });
-    core.on('error', fail); core.on('exit', code => { if (core === runningWorker) coreRunning = false; if (code !== 0 || !shuttingDown || pending.size) fail(); });
+    core.on('error', fail); core.on('exit', code => {recordDiagnostic({event:'core.exit',exitCode:code}); if (core === runningWorker) coreRunning = false; if (code !== 0 || !shuttingDown || pending.size) fail(); });
   });
   // A rejected startup is surfaced to every command without an unhandled rejection.
   void workerReady.catch(() => {});
@@ -479,23 +524,54 @@ async function credentialMigrationStatus(): Promise<{legacyCredentialFiles:numbe
   return {legacyCredentialFiles};
 }
 
+let licensing: {mode:LicenseMode;deviceCode:string|null} = options.licensing ?? { mode:'required',deviceCode:null };
+try {
 await mkdir(devData, {recursive:true,mode:0o700});
 vault = new CredentialVault(join(devData,'credentials'), safeStorage, credentialEndpoint, 2000, 'model-key.tauri.bin');
 knowledgeVault = new CredentialVault(join(devData,'credentials/knowledge'), safeStorage, value=>value, 2000, 'model-key.tauri.bin');
 webVault = new CredentialVault(join(devData,'credentials/web'), safeStorage, value=>value, 2000, 'model-key.tauri.bin');
 await Promise.all([vault.init({deferUnlock:true}),knowledgeVault.init({deferUnlock:true}),webVault.init({deferUnlock:true})]);
+if(!options.licensing&&!options.coreEntry){
+ const [identity,mode]=await Promise.all([host.call<{deviceCode?:unknown}>('deviceIdentity',{}).catch(()=>null),host.call<unknown>('licenseBuildMode',{}).catch(()=>null)]);
+ licensing={mode:mode==='development'?'development':'required',deviceCode:typeof identity?.deviceCode==='string'&&LICENSE_DEVICE_PATTERN.test(identity.deviceCode)?identity.deviceCode:null};
+}
 startCore();
-try { await workerReady; } catch (error) { await core!.terminate(); throw error; }
+await workerReady;
+if(pressurePollMs!==0){samplePressure();pressureTimer=setInterval(samplePressure,pressurePollMs);pressureTimer.unref();}
+}catch(error){recordDiagnostic({event:'desktop.startup_failed',...classifyDiagnosticError(error)});if(coreRunning)await core!.terminate().catch(()=>{});await finishDiagnostics();throw error;}
 
-const invoke = async (envelope: unknown) => {
+const invokeBusiness = async (envelope: unknown,onFailure:(error:unknown)=>void) => {
   let operation: Promise<void> | undefined;
   let finishOperation: (()=>void) | undefined;
   try {
     if(shuttingDown)throw new Error('应用正在关闭，请等待文件操作收尾。');
-    if(maintenanceBusy)throw new Error('正在备份、恢复或维护数据，请稍后操作。');
     const {name,payload}=z.object({name:z.string().min(1).max(100),payload:z.unknown().optional()}).strict().parse(envelope);
+    if(name==='runWorkspaceCommand'&&['maintenance.diagnosticsStatus','maintenance.exportDiagnostics'].includes(String((payload as any)?.action))){
+      const input=workspaceEnvelope.parse(payload);z.object({}).strict().parse(input.payload??{});
+      if(input.action==='maintenance.diagnosticsStatus')return{ok:true as const,data:{...diagnostics.status(),coreReady:coreRunning&&!workerError}};
+      operation=new Promise<void>(resolve=>{finishOperation=resolve;});maintenanceOperations.add(operation);
+      const choice=await dialog.showSaveDialog(window!,{title:nativeText('导出问题日志'),defaultPath:`lawagent-problem-log-${new Date().toISOString().replace(/[:.]/gu,'-')}.log`,filters:[{name:nativeText('问题日志文件'),extensions:['log']}]});
+      if(choice.canceled||!choice.filePath)return{ok:true as const,data:null};
+      if(shuttingDown)throw new Error('应用正在关闭，未保存新的排查记录。');
+      let text=await diagnostics.exportText();
+      try{const native=await host.call<{text?:unknown}>('readNativeDiagnostics',{});if(typeof native?.text==='string'&&Buffer.byteLength(native.text)<=320*1024)text+='\n# Native desktop events\n'+native.text;}catch{/* Older hosts and test hosts may not provide a native journal. */}
+      if(shuttingDown)throw new Error('应用正在关闭，未保存新的排查记录。');
+      const bytes=Buffer.from(text,'utf8');
+      try{await writeFile(choice.filePath,bytes,{flag:'wx',mode:0o600});}catch{throw new Error('排查记录未保存，请选择尚不存在的新文件名，并检查保存位置权限。');}
+      recordDiagnostic({event:'diagnostics.exported'});
+      return{ok:true as const,data:{path:choice.filePath,fileName:choice.filePath.split(/[\\/]/u).at(-1),bytes:bytes.length}};
+    }
+    if(maintenanceBusy)throw new Error('正在备份、恢复或维护数据，请稍后操作。');
     operation=new Promise<void>(resolve=>{finishOperation=resolve;});
     if(name==='runWorkspaceCommand'&&String((payload as any)?.action).startsWith('maintenance.'))maintenanceOperations.add(operation);else mainOperations.add(operation);
+    if(name==='runWorkspaceCommand'&&preflightWorkspaceActions.has(String((payload as any)?.action))){
+      const input=workspaceEnvelope.parse(payload);const requestId=input.requestId??randomUUID();
+      if(workspaceRequests.has(requestId))throw new Error('此工作台任务正在执行，请勿重复提交。');
+      if(workspaceRequests.size>=32)throw new Error('准备中的工作台任务过多，请等待或取消后重试。');
+      const request={cancelled:false};workspaceRequests.set(requestId,request);
+      const next=sensitiveQueue.then(()=>{if(request.cancelled||shuttingDown)throw new Error('工作台任务已取消，未开始新的处理。');return execute(name,{...input,requestId});});sensitiveQueue=next.catch(()=>{});
+      try{return{ok:true as const,data:await next};}finally{if(workspaceRequests.get(requestId)===request)workspaceRequests.delete(requestId);}
+    }
     if(name==='generateContract'){
       const input=normalizeGenerateContractInput(payload);
       if(contractGenerationRequests.size)throw new Error('已有合同正在生成或排队，请等待或取消。');
@@ -514,14 +590,25 @@ const invoke = async (envelope: unknown) => {
       const next=sensitiveQueue.then(()=>execute(name,payload));sensitiveQueue=next.catch(()=>{});return{ok:true as const,data:await next};
     }
     return{ok:true as const,data:await execute(name,payload)};
-  }catch(error){return{ok:false as const,error:error instanceof z.ZodError?'输入格式或数值范围不正确，请检查设置。':error instanceof Error?error.message:'操作失败，请重试。'};}
+  }catch(error){onFailure(error);return{ok:false as const,error:error instanceof z.ZodError?'输入格式或数值范围不正确，请检查设置。':error instanceof Error?error.message:'操作失败，请重试。'};}
   finally{if(operation){mainOperations.delete(operation);maintenanceOperations.delete(operation);}finishOperation?.();}
+};
+const invoke:DesktopRuntime['invoke']=async(envelope:unknown)=>{
+ const started=performance.now();const parsed=z.object({name:z.string().min(1).max(100),payload:z.unknown().optional()}).strict().safeParse(envelope);
+ const command=parsed.success?parsed.data.name:undefined;const action=parsed.success&&command==='runWorkspaceCommand'&&typeof(parsed.data.payload as any)?.action==='string'?(parsed.data.payload as any).action:undefined;
+ recordDiagnostic({event:'command.started',command,action});
+ let failure:ReturnType<typeof classifyDiagnosticError>|undefined;
+ const result=await invokeBusiness(envelope,error=>{failure=classifyDiagnosticError(error);});
+ recordDiagnostic({event:result.ok?'command.completed':'command.failed',command,action,durationMs:Math.round(performance.now()-started),...(result.ok?{}:failure??{errorCode:'UNEXPECTED_ERROR'})});
+ return result;
 };
 let closing: Promise<void> | null = null;
 const close = () => closing ??= (async()=>{
-  shuttingDown=true;
+  recordDiagnostic({event:'desktop.closing'});
+  shuttingDown=true;if(pressureTimer)clearInterval(pressureTimer);
   for(const request of changeDraftRequests.values())request.cancelled=true;
   for(const request of contractGenerationRequests.values())request.cancelled=true;
+  for(const request of workspaceRequests.values())request.cancelled=true;
   // Only the actual maintenance publication/rollback phase disables the normal
   // shutdown deadline. Read-only inspection and a waiting picker are ordinary.
   await criticalMaintenanceDone;
@@ -539,6 +626,7 @@ const close = () => closing ??= (async()=>{
     if(coreRunning)await core.terminate();
     coreRunning=false;
     for(const request of pending.values()){clearTimeout(request.timer);request.reject(new Error('Desktop backend closed.'));}pending.clear();
+    taskLogStages.clear();recordDiagnostic({event:'desktop.closed'});await finishDiagnostics();
   }
 })();
 return {invoke, close, isMaintenanceBusy: () => criticalMaintenanceBusy};

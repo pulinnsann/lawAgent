@@ -1,5 +1,5 @@
 [workspace]
-members = ["native/law-core", "native/law-node", "native/law-desktop"]
+members = ["native/law-core", "native/law-node", "native/law-desktop", "native/license-issuer"]
 default-members = ["native/law-core", "native/law-node"]
 resolver = "2"
 
@@ -15,3 +15,9 @@ lto = "thin"
 codegen-units = 1
 strip = "debuginfo"
 panic = "abort"
+
+# Build-time proc-macro dylibs must keep their metadata intact. Stripping them
+# can leave a misaligned Mach-O LINKEDIT string pool on newer macOS linkers.
+# This does not change stripping of the distributed application binary.
+[profile.release.build-override]
+strip = "none"

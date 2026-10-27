@@ -14,8 +14,9 @@ const roles = { buyer: '采购方 / 买方', seller: '供应方 / 卖方', servi
 const messageOf = (error: unknown) => error instanceof Error ? error.message : String(error);
 const dateLabel = (value: string, locale: string) => new Date(value).toLocaleString(locale, { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
 
-export default function ContractGenerationPanel({ bridge, open, isPreview, modelConfig, onClose, onModelSettings, onImported }: {
+export default function ContractGenerationPanel({ bridge, open, isPreview, canCreate = true, modelConfig, onClose, onModelSettings, onImported }: {
   bridge: ContractAssistantBridge; open: boolean; isPreview: boolean; modelConfig?: PublicModelConfig | null;
+  canCreate?: boolean;
   onClose: () => void; onModelSettings: () => void; onImported: (document: ContractDetail) => Promise<void>;
 }) {
   const { t, translateMessage, dateLocale } = useI18n();
@@ -82,7 +83,7 @@ export default function ContractGenerationPanel({ bridge, open, isPreview, model
   useEffect(() => {
     if (!open) return;
     const previous = window.document.activeElement;
-    const frame = requestAnimationFrame(() => panelRef.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus());
+    const frame = requestAnimationFrame(() => (panelRef.current?.querySelector<HTMLTextAreaElement>('textarea:not(:disabled)') ?? panelRef.current?.querySelector<HTMLButtonElement>('button:not(:disabled)'))?.focus());
     return () => { cancelAnimationFrame(frame); if (previous instanceof HTMLElement && previous.isConnected) previous.focus(); };
   }, [open]);
   useEffect(() => {
@@ -101,7 +102,7 @@ export default function ContractGenerationPanel({ bridge, open, isPreview, model
 
   const generate = async () => {
     const text = description.trim();
-    if (activeRequest.current || busy || isPreview || !modelConfig || text.length < 20 || text.length > 12000) return;
+    if (activeRequest.current || busy || isPreview || !canCreate || !modelConfig || text.length < 20 || text.length > 12000) return;
     const ticket = { id: crypto.randomUUID(), cancelled: false }; activeRequest.current = ticket;
     ++operation.current; setBusy('generate'); setNotice(null);
     try {
@@ -123,7 +124,14 @@ export default function ContractGenerationPanel({ bridge, open, isPreview, model
   const exportDraft = async () => {
     if (!draft || busy || isPreview) return;
     setBusy('export'); setNotice(null);
-    try { const view=await bridge.runWorkspaceCommand({action:'library.authoring.prepareDescription',payload:{draftId:draft.id,actorLabel:'法务'}}) as AuthoringCaseView; if(alive.current&&isOpen.current)setAuthoring(view); }
+    try {
+      if (!canCreate) {
+        const result = await bridge.exportContractDraft({ draftId: draft.id });
+        if (result && alive.current && isOpen.current) await onImported(result.document);
+        return;
+      }
+      const view=await bridge.runWorkspaceCommand({action:'library.authoring.prepareDescription',payload:{draftId:draft.id,actorLabel:'法务'}}) as AuthoringCaseView; if(alive.current&&isOpen.current)setAuthoring(view);
+    }
     catch(error){if(alive.current)setNotice({kind:'error',text:messageOf(error)});}
     finally{if(alive.current)setBusy(null);}
   };
@@ -135,21 +143,22 @@ export default function ContractGenerationPanel({ bridge, open, isPreview, model
       <header className="generation-heading"><div><span>{t("CONTRACT DRAFT")}</span><h2 id="generation-title"><FilePlus2 size={20} />{t("描述生成合同")}</h2><p>{t("把交易安排写清楚，生成一份独立合同草稿。")}</p></div><button className="icon-button" aria-label={t("关闭生成合同")} disabled={busy === 'export'} onClick={close}><X size={19} /></button></header>
       <div className="generation-body">
         {isPreview && <p className="generation-note"><Info size={15} />{t("当前是界面预览：历史中仅有固定演示草稿，不调用模型、不生成或导出真实文件。")}</p>}
+        {!canCreate && <p className="generation-note" role="note"><Info size={15} />{t('许可暂不可新建任务；可查看已保存草稿，或导出此前已确认的合同。')}</p>}
         <div className="generation-layout"><div className="generation-input-column">
           <div className="generation-section-heading"><h3>{t("描述交易需求")}</h3><button className="text-button" disabled={Boolean(busy)} onClick={() => { close(); onModelSettings(); }}><Settings2 size={13} />{t("模型设置")}</button></div>
-          <label className="field"><span>{t("合同需求描述")}</span><textarea aria-label={t("合同需求描述")} value={description} onChange={event => setDescription(event.target.value)} disabled={Boolean(busy)} maxLength={12000} rows={8} placeholder={t("例如：我方委托服务商提供一年的系统维护服务，需约定服务范围、响应时间、按验收付款、保密、违约和退出安排。尚未确定的信息请保留待填写。")} /><span className="field-help">{t("20–12,000 字；说明双方角色、交易内容、交付验收、付款和特别关注事项。")}{description.trim().length.toLocaleString()} / 12,000</span></label>
-          <div className="generation-form-grid"><label className="field"><span>{t("合同语言")}</span><select aria-label={t("合同语言")} value={language} disabled={Boolean(busy)} onChange={event => setLanguage(event.target.value as typeof language)}>{Object.entries(languages).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label><label className="field"><span>{t("生成合同类型")}</span><select aria-label={t("生成合同类型")} value={contractType} disabled={Boolean(busy)} onChange={event => setContractType(event.target.value as typeof contractType)}>{Object.entries(types).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label><label className="field generation-role"><span>{t("生成合同我方立场")}</span><select aria-label={t("生成合同我方立场")} value={ourPartyRole} disabled={Boolean(busy)} onChange={event => setOurPartyRole(event.target.value as typeof ourPartyRole)}>{Object.entries(roles).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label></div>
+          <label className="field"><span>{t("合同需求描述")}</span><textarea aria-label={t("合同需求描述")} value={description} onChange={event => setDescription(event.target.value)} disabled={Boolean(busy) || !canCreate} maxLength={12000} rows={8} placeholder={t("例如：我方委托服务商提供一年的系统维护服务，需约定服务范围、响应时间、按验收付款、保密、违约和退出安排。尚未确定的信息请保留待填写。")} /><span className="field-help">{t("20–12,000 字；说明双方角色、交易内容、交付验收、付款和特别关注事项。")}{description.trim().length.toLocaleString()} / 12,000</span></label>
+          <div className="generation-form-grid"><label className="field"><span>{t("合同语言")}</span><select aria-label={t("合同语言")} value={language} disabled={Boolean(busy) || !canCreate} onChange={event => setLanguage(event.target.value as typeof language)}>{Object.entries(languages).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label><label className="field"><span>{t("生成合同类型")}</span><select aria-label={t("生成合同类型")} value={contractType} disabled={Boolean(busy) || !canCreate} onChange={event => setContractType(event.target.value as typeof contractType)}>{Object.entries(types).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label><label className="field generation-role"><span>{t("生成合同我方立场")}</span><select aria-label={t("生成合同我方立场")} value={ourPartyRole} disabled={Boolean(busy) || !canCreate} onChange={event => setOurPartyRole(event.target.value as typeof ourPartyRole)}>{Object.entries(roles).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label></div>
           <p className="generation-scope">{t("以中国大陆法律为范围，按所选语言起草；缺少的主体、金额和日期需人工补充。生成草稿须经人工审核，法律依据及时效仍需核验。")}</p>
           {!isPreview && !modelConfig && <p className="generation-note"><Info size={15} />{t("请先在模型设置中配置可用连接，再生成合同。")}</p>}
           {modelConfig && <p className="generation-model">{t("当前模型：")}{modelConfig.name} · {modelConfig.model}</p>}
-          <div className="generation-actions"><button className="button primary" disabled={Boolean(busy) || isPreview || !modelConfig || description.trim().length < 20 || description.trim().length > 12000} onClick={() => void generate()}>{busy === 'generate' || busy === 'cancel' ? <LoaderCircle size={15} className="spin" /> : <Sparkles size={15} />}{busy === 'generate' || busy === 'cancel' ? t("正在生成合同…") : t("生成合同草稿")}</button>{(busy === 'generate' || busy === 'cancel') && <button className="button secondary" disabled={busy === 'cancel'} onClick={() => void cancelGeneration()}><Square size={12} />{busy === 'cancel' ? t("正在取消…") : t("取消本次生成")}</button>}</div>
+          <div className="generation-actions"><button className="button primary" disabled={Boolean(busy) || isPreview || !canCreate || !modelConfig || description.trim().length < 20 || description.trim().length > 12000} onClick={() => void generate()}>{busy === 'generate' || busy === 'cancel' ? <LoaderCircle size={15} className="spin" /> : <Sparkles size={15} />}{busy === 'generate' || busy === 'cancel' ? t("正在生成合同…") : t("生成合同草稿")}</button>{(busy === 'generate' || busy === 'cancel') && <button className="button secondary" disabled={busy === 'cancel'} onClick={() => void cancelGeneration()}><Square size={12} />{busy === 'cancel' ? t("正在取消…") : t("取消本次生成")}</button>}</div>
           <div className="generation-section-heading generation-history-heading"><h3>{t("已保存的合同草稿")}<span>{drafts.length}</span></h3><button className="text-button" aria-label={t("刷新合同草稿")} disabled={Boolean(busy)} onClick={() => void refreshHistory()}><RefreshCw size={13} />{t("刷新")}</button></div>
           <div className="generation-history" aria-label={t("合同草稿历史")}>{drafts.length ? drafts.map(item => <button key={item.id} className={`generation-history-item ${draft?.id === item.id ? 'active' : ''}`} disabled={Boolean(busy)} onClick={() => void chooseDraft(item.id)}><FileText size={16} /><span><strong>{item.title}</strong><small>{t(languages[item.language])} · {dateLabel(item.createdAt, dateLocale)}</small></span></button>) : <p>{busy === 'history' ? t("正在读取草稿…") : t("尚未生成合同草稿。")}</p>}</div>
         </div><div className="generation-preview-column">
           {draft ? <article className="generation-draft" data-draft-id={draft.id}><div className="generation-draft-meta"><span>{isPreview ? t("固定演示草稿") : t("待审核草稿")}</span><span>{t(languages[draft.language])} · {dateLabel(draft.createdAt, dateLocale)}</span></div><h3>{draft.title}</h3><div className="generation-checks"><section><h4>{t("待补信息")}</h4>{draft.missingInformation.length ? <ul>{draft.missingInformation.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>{t("模型未列出待补信息，仍需逐项核对交易事实。")}</p>}</section><section><h4>{t("风险提醒与限制")}</h4>{draft.warnings.length ? <ul>{draft.warnings.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>{t("请人工审核条款与业务安排，不能据此认为不存在风险。")}</p>}</section></div><div className="generation-clauses">{draft.clauses.map((clause, index) => <section key={index}><h4>{clause.heading}</h4>{clause.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}</section>)}</div><p className="generation-model">{t("使用模型：")}{draft.modelId}{draft.inputTokens !== null ? t(" · 输入 {v0} tokens", { v0: draft.inputTokens.toLocaleString() }) : ''}{draft.outputTokens !== null ? t(" · 输出 {v0} tokens", { v0: draft.outputTokens.toLocaleString() }) : ''}</p></article> : <div className="generation-empty"><FilePlus2 size={34} strokeWidth={1.4} /><h3>{t("合同草稿将在这里预览")}</h3><p>{t("生成后核验交易信息与占位，审核当前原稿并逐项确认后导出 DOCX。")}</p></div>}
         </div></div>
       </div>
-      <footer className="generation-footer">{notice && <div className={`notice ${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.kind === 'error' ? <CircleAlert size={15} /> : notice.kind === 'success' ? <Check size={15} /> : <Info size={15} />}<span>{translateMessage(notice.text)}</span></div>}<div><p>{t("生成后先建立审核原稿；完成核验、审核及人工确认，才可最终导出。")}</p><button className="button primary" disabled={!draft || Boolean(busy) || isPreview} onClick={() => void exportDraft()}>{busy === 'export' ? <LoaderCircle size={15} className="spin" /> : <ArrowDownToLine size={15} />}{busy === 'export' ? t("正在准备审核原稿…") : t("核验、审核并确认")}</button></div></footer>
+      <footer className="generation-footer">{notice && <div className={`notice ${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>{notice.kind === 'error' ? <CircleAlert size={15} /> : notice.kind === 'success' ? <Check size={15} /> : <Info size={15} />}<span>{translateMessage(notice.text)}</span></div>}<div><p>{canCreate ? t("生成后先建立审核原稿；完成核验、审核及人工确认，才可最终导出。") : t('仅导出此前已完成审核与确认的合同，未确认草稿仍需有效许可继续处理。')}</p><button className="button primary" disabled={!draft || Boolean(busy) || isPreview} onClick={() => void exportDraft()}>{busy === 'export' ? <LoaderCircle size={15} className="spin" /> : <ArrowDownToLine size={15} />}{busy === 'export' ? canCreate ? t("正在准备审核原稿…") : t('正在导出已确认合同…') : canCreate ? t("核验、审核并确认") : t('导出已确认合同')}</button></div></footer>
     </section>
   </div>;
 }

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { interfaceMessages } from './i18n-messages';
+import { interfaceMessages, lawyerInterfaceMessages } from './i18n-messages';
 
 export type InterfaceLocale = 'zh' | 'en' | 'th';
 export type TranslationParams = Record<string, string | number | boolean | null | undefined>;
@@ -8,7 +8,7 @@ export const interfaceLocales: readonly InterfaceLocale[] = ['zh', 'en', 'th'];
 export const dateLocales: Record<InterfaceLocale, string> = { zh: 'zh-CN-u-ca-gregory-nu-latn', en: 'en-GB-u-ca-gregory-nu-latn', th: 'th-TH-u-ca-gregory-nu-latn' };
 export function isInterfaceLocale(value: unknown): value is InterfaceLocale { return value === 'zh' || value === 'en' || value === 'th'; }
 export function translate(locale: InterfaceLocale, key: string, params: TranslationParams = {}): string {
-  const message = locale === 'zh' ? key : interfaceMessages[key]?.[locale] ?? key;
+  const message = lawyerInterfaceMessages[key]?.[locale] ?? (locale === 'zh' ? key : interfaceMessages[key]?.[locale] ?? key);
   return message.replace(/\{([A-Za-z][A-Za-z0-9_]*)\}/g, (placeholder, name: string) => Object.prototype.hasOwnProperty.call(params, name) ? String(params[name] ?? '') : placeholder);
 }
 type KnownMessagePattern = { key: string; names: string[]; pattern: RegExp };
@@ -18,7 +18,8 @@ function initializeKnownMessages(): void {
   if (knownReverse) return;
   knownReverse = new Map(); knownPatterns = [];
   for (const [key, translations] of Object.entries(interfaceMessages)) {
-    for (const text of [key, translations.en, translations.th]) {
+    const friendly = lawyerInterfaceMessages[key];
+    for (const text of [...new Set([key, translations.en, translations.th, ...(friendly ? [friendly.zh, friendly.en, friendly.th] : [])])]) {
       if (!knownReverse.has(text)) knownReverse.set(text, key);
       const names: string[] = []; let expression = ''; let offset = 0;
       for (const match of text.matchAll(/\{([A-Za-z][A-Za-z0-9_]*)\}/g)) {

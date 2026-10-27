@@ -20,6 +20,20 @@ where F: FnOnce() -> Result<Value, String> + Send + 'static {
     }).await.map_err(|_| "System credential operation could not finish.".to_owned())?
 }
 type Reply = oneshot::Sender<Result<Value, String>>;
+
+async fn register_reply(pending: &Mutex<HashMap<String, Reply>>, failed: &AtomicBool, stopping: &AtomicBool, id: String) -> Result<oneshot::Receiver<Result<Value, String>>, String> {
+    let mut pending = pending.lock().await;
+    // Readiness can become stale while this caller waits for the map. Failure
+    // sets its flag before draining under this same lock, so a reply is either
+    // included in that drain or refused here; none can be inserted afterward.
+    if failed.load(Ordering::Acquire) { return Err("Local service stopped. Restart the application; saved contracts are retained.".into()); }
+    if stopping.load(Ordering::Acquire) { return Err("The application is closing. Please wait for file operations to finish.".into()); }
+    if pending.len() >= 32 { return Err("Too many desktop requests are running.".into()); }
+    let (send, receive) = oneshot::channel();
+    pending.insert(id, send);
+    Ok(receive)
+}
+
 struct Backend {
     input: Mutex<ChildStdin>,
     child: Mutex<Child>,
@@ -40,7 +54,7 @@ impl Backend {
         input.write_all(&bytes).await.map_err(|_| "Desktop backend connection closed.".to_owned())
     }
     async fn fail(&self) {
-        self.failed.store(true, Ordering::Release);
+        if !self.failed.swap(true, Ordering::AcqRel) { crate::diagnostics::record(crate::diagnostics::Event::NativeBackendStopped); }
         for (_, reply) in self.pending.lock().await.drain() { let _ = reply.send(Err("Local service stopped. Restart the application; saved contracts are retained.".into())); }
         self.changed.notify_waiters();
     }
@@ -56,8 +70,7 @@ impl Backend {
         if self.stopping.load(Ordering::Acquire) { return Err("The application is closing. Please wait for file operations to finish.".into()); }
         tokio::time::timeout(std::time::Duration::from_secs(60), self.wait_ready()).await.map_err(|_| "Local service startup timed out.")??;
         let id = uuid::Uuid::new_v4().to_string();
-        let (send, receive) = oneshot::channel();
-        { let mut pending = self.pending.lock().await; if pending.len() >= 32 { return Err("Too many desktop requests are running.".into()); } pending.insert(id.clone(), send); }
+        let receive = register_reply(&self.pending, &self.failed, &self.stopping, id.clone()).await?;
         if let Err(error) = self.write(json!({"type":"invoke","id":id,"name":name,"payload":payload})).await { self.pending.lock().await.remove(&id); return Err(error); }
         // Commands retain their existing backend timeouts; long maintenance copies
         // must finish publication/rollback instead of being killed on a timer.
@@ -65,6 +78,7 @@ impl Backend {
     }
     async fn shutdown(&self) {
         if self.stopping.swap(true, Ordering::AcqRel) { return; }
+        crate::diagnostics::record(crate::diagnostics::Event::NativeShutdownStart);
         if self.failed.load(Ordering::Acquire) { let _ = self.child.lock().await.kill().await; self.stopped.store(true, Ordering::Release); return; }
         let sent = self.write(json!({"type":"shutdown","id":"shutdown"})).await.is_ok();
         if sent {
@@ -87,6 +101,7 @@ impl Backend {
         if !sent || (self.failed.load(Ordering::Acquire) && !self.stopped.load(Ordering::Acquire)) { let _ = self.child.lock().await.kill().await; }
         let _ = self.child.lock().await.wait().await;
         self.stopped.store(true, Ordering::Release);
+        crate::diagnostics::record(crate::diagnostics::Event::NativeShutdownComplete);
     }
 }
 
@@ -94,7 +109,43 @@ impl Backend {
 async fn desktop_invoke(window: tauri::WebviewWindow, backend: tauri::State<'_, Arc<Backend>>, name: String, payload: Option<Value>) -> Result<Value, String> {
     if window.label() != "main" || !allowed_url(&window.url().map_err(|_| "Invalid window origin.")?, development_url(window.app_handle()).as_ref()) { return Err("Unrecognized application request.".into()); }
     if name.len() > 100 || serde_json::to_vec(&payload).map_err(|_| "Invalid request.")?.len() > 8 * 1024 * 1024 { return Err("Desktop request exceeds its input limit.".into()); }
+    if let Some(action) = diagnostic_action(&name, payload.as_ref()) {
+        if backend.failed.load(Ordering::Acquire) || !backend.ready.load(Ordering::Acquire) {
+            let app = window.app_handle().clone();
+            if action == "maintenance.diagnosticsStatus" { return Ok(json!({"ok":true,"data":{"available":true,"retentionFiles":2,"maxFileBytes":crate::diagnostics::MAX_BYTES,"nativeOnly":true}})); }
+            return match export_native_diagnostics(app).await { Ok(data) => Ok(json!({"ok":true,"data":data})), Err(error) => Ok(json!({"ok":false,"error":error})) };
+        }
+    }
     backend.invoke(name, payload.unwrap_or(Value::Null)).await
+}
+fn diagnostic_action<'a>(name: &str, payload: Option<&'a Value>) -> Option<&'a str> {
+    if name != "runWorkspaceCommand" { return None; }
+    let object = payload?.as_object()?;
+    if object.keys().any(|key| !matches!(key.as_str(), "action" | "payload" | "requestId")) { return None; }
+    if let Some(request) = object.get("requestId") { if uuid::Uuid::parse_str(request.as_str()?).is_err() { return None; } }
+    if let Some(input) = object.get("payload") { if !input.as_object()?.is_empty() { return None; } }
+    let action = object.get("action")?.as_str()?;
+    ["maintenance.diagnosticsStatus", "maintenance.exportDiagnostics"].contains(&action).then_some(action)
+}
+async fn export_native_diagnostics(app: tauri::AppHandle) -> Result<Value, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let check_open = || -> Result<(), String> {
+            if app.try_state::<Arc<Backend>>().is_some_and(|state| state.stopping.load(Ordering::Acquire)) {
+                return Err("应用正在关闭，未保存新的问题日志。".into());
+            }
+            Ok(())
+        };
+        check_open()?;
+        let data = workspace_path(app.path().config_dir().map_err(|_| "无法定位问题日志。")?)?;
+        let text = crate::diagnostics::export_text(&data);
+        let epoch = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |time| time.as_secs());
+        let selected = app.dialog().file().set_title("保存启动问题日志 / Save startup log").set_file_name(format!("LawAgent-startup-{epoch}.log")).add_filter("Problem log", &["log"]).blocking_save_file();
+        let Some(selected) = selected else { return Ok(Value::Null); };
+        check_open()?;
+        let path = selected.into_path().map_err(|_| "请选择本机保存位置。")?;
+        crate::diagnostics::save_new(&path, &text)?;
+        Ok(json!({"path":path,"fileName":path.file_name().map(|name|name.to_string_lossy()),"bytes":text.len()}))
+    }).await.map_err(|_| "启动日志未能保存，请重新打开软件后重试。".to_string())?
 }
 fn local_url(url: &tauri::Url) -> bool {
     (url.scheme() == "tauri" && url.host_str() == Some("localhost")) || (matches!(url.scheme(), "http" | "https") && url.host_str() == Some("tauri.localhost"))
@@ -152,7 +203,7 @@ fn start_backend(app: tauri::AppHandle, runtime: PathBuf, data: PathBuf) -> Resu
             if !matches!(result, Ok(n) if n > 0) || bytes.len() > MAX_FRAME + 1 || bytes.last() != Some(&b'\n') { break; }
             let frame: Value = match serde_json::from_slice(&bytes) { Ok(frame) => frame, Err(_) => break };
             match frame["type"].as_str() {
-                Some("ready") if frame["protocol"] == 1 => { session.ready.store(true, Ordering::Release); session.changed.notify_waiters(); }
+                Some("ready") if frame["protocol"] == 1 => { session.ready.store(true, Ordering::Release); crate::diagnostics::record(crate::diagnostics::Event::NativeBackendReady); session.changed.notify_waiters(); }
                 Some("response") => { if let Some(id) = frame["id"].as_str() { if let Some(reply) = session.pending.lock().await.remove(id) { let _ = reply.send(if let Some(error) = frame["error"].as_str() { Err(error.to_owned()) } else { Ok(frame["data"].clone()) }); } } }
                 Some("task") => { let _ = app.emit_to("main", "desktop-task", &frame["task"]); }
                 Some("host") => {
@@ -175,8 +226,18 @@ fn start_backend(app: tauri::AppHandle, runtime: PathBuf, data: PathBuf) -> Resu
 }
 
 fn text<'a>(payload: &'a Value, name: &str) -> Result<&'a str, String> { payload[name].as_str().ok_or_else(|| "Invalid native desktop request.".into()) }
+fn license_build_mode() -> &'static str {
+    if cfg!(feature = "desktop-smoke") { "development" } else { "required" }
+}
 async fn host_operation(app: tauri::AppHandle, operation: &str, payload: Value) -> Result<Value, String> {
     match operation {
+        "readNativeDiagnostics" => {
+            let data = workspace_path(app.path().config_dir().map_err(|_| "Diagnostics unavailable.")?)?;
+            Ok(json!({"text":crate::diagnostics::export_text(&data)}))
+        }
+        "resourcePressure" => Ok(json!(crate::platform::resource_pressure::sample())),
+        "deviceIdentity" => Ok(json!(crate::platform::device_identity::sample())),
+        "licenseBuildMode" => Ok(json!(license_build_mode())),
         "showOpenDialog" | "showSaveDialog" => native_dialog(app, operation, payload).await,
         "setTitle" => { if let Some(window) = app.get_webview_window("main") { window.set_title(text(&payload, "title")?).map_err(|_| "Could not update the window title.")?; } Ok(Value::Null) }
         "showItemInFolder" => { app.opener().reveal_item_in_dir(text(&payload, "path")?).map_err(|_| "Could not reveal the source document.")?; Ok(Value::Null) }
@@ -256,6 +317,7 @@ fn initialize(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     if std::env::var_os("LAW_AGENT_SMOKE_FORCE_STARTUP_FAILURE").is_some() { return Err("Synthetic unavailable runtime".into()); }
     let data = workspace_path(app.path().config_dir()?)?;
     std::fs::create_dir_all(&data)?;
+    crate::diagnostics::initialize(&data);
     let runtime = runtime_path(app.handle())?;
     let backend = tauri::async_runtime::block_on(async { start_backend(app.handle().clone(), runtime, data.clone()) })?;
     app.manage(backend);
@@ -268,9 +330,11 @@ fn initialize(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(feature = "desktop-smoke")]
     let window = if let Some(path) = std::env::var_os("LAW_AGENT_SMOKE_SCRIPT") { window.initialization_script(std::fs::read_to_string(path)?) } else { window };
     window.build()?;
+    crate::diagnostics::record(crate::diagnostics::Event::NativeReady);
     Ok(())
 }
 fn startup_failure(app: &tauri::AppHandle) {
+    crate::diagnostics::record(crate::diagnostics::Event::NativeStartupFailed);
     // Returning Err from Tauri's setup callback panics inside its event loop.
     // Report an ordinary launch failure instead of raising a macOS crash dialog.
     eprintln!("Desktop startup failed. Check the installed resources and workspace permissions.");
@@ -280,8 +344,15 @@ fn startup_failure(app: &tauri::AppHandle) {
         return;
     }
     let handle = app.clone();
-    app.dialog().message("本地服务未能启动，请检查安装文件及数据目录权限，然后重新打开。已保存的合同不会因此删除。\nThe application could not start. Check its installation and workspace permissions, then reopen it.")
-        .title("合同工作台 / LawAgent").kind(tauri_plugin_dialog::MessageDialogKind::Error).show(move |_| handle.exit(1));
+    app.dialog().message("软件暂时未能启动，已保存的合同不会因此删除。可以保存启动日志，交给支持人员排查。\nThe application could not start. Saved contracts are retained. You can save a startup log for support.")
+        .title("合同工作台 / LawAgent").kind(tauri_plugin_dialog::MessageDialogKind::Error)
+        .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom("保存问题日志 / Save log".into(), "关闭 / Close".into()))
+        .show(move |save| { if save { tauri::async_runtime::spawn(async move {
+            if export_native_diagnostics(handle.clone()).await.is_err() {
+                let exit = handle.clone();
+                handle.dialog().message("日志未能保存，请换一个保存位置后重新打开软件再试。\nThe log could not be saved. Choose a different location after reopening the app.").title("合同工作台 / LawAgent").show(move |_| exit.exit(1));
+            } else { handle.exit(1); }
+        }); } else { handle.exit(1); } });
 }
 pub fn run() {
     let lifecycle = Arc::new(Lifecycle::default());
@@ -350,6 +421,75 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test] fn native_diagnostics_fallback_accepts_only_empty_export_commands() {
+        for action in ["maintenance.exportDiagnostics", "maintenance.diagnosticsStatus"] {
+            let input = json!({"action":action,"payload":{}});
+            assert_eq!(diagnostic_action("runWorkspaceCommand",Some(&input)),Some(action));
+            assert!(diagnostic_action("other",Some(&input)).is_none());
+            assert!(diagnostic_action("runWorkspaceCommand",Some(&json!({"action":action,"payload":{"path":"untrusted"}}))).is_none());
+            assert!(diagnostic_action("runWorkspaceCommand",Some(&json!({"action":action,"privateKey":"untrusted"}))).is_none());
+        }
+        assert!(diagnostic_action("runWorkspaceCommand",Some(&json!({"action":"maintenance.restore","payload":{}}))).is_none());
+        assert!(diagnostic_action("runWorkspaceCommand",None).is_none());
+    }
+    #[test] fn official_builds_require_licensing_and_only_smoke_builds_are_development() {
+        #[cfg(not(feature = "desktop-smoke"))]
+        assert_eq!(license_build_mode(), "required");
+        #[cfg(feature = "desktop-smoke")]
+        assert_eq!(license_build_mode(), "development");
+    }
+    #[test] fn stale_ready_registration_cannot_survive_a_failure_drain() {
+        tauri::async_runtime::block_on(async {
+            use std::{future::{poll_fn, Future}, task::Poll};
+            let pending = Mutex::new(HashMap::new());
+            let failed = AtomicBool::new(false);
+            let stopping = AtomicBool::new(false);
+            let mut locked = pending.lock().await;
+            let mut registration = Box::pin(register_reply(&pending, &failed, &stopping, "stale-ready".into()));
+            // Deterministically park the caller after its readiness check, at
+            // the same mutex that fail() uses. No scheduling sleeps are needed.
+            poll_fn(|cx| {
+                assert!(registration.as_mut().poll(cx).is_pending());
+                Poll::Ready(())
+            }).await;
+            failed.store(true, Ordering::Release);
+            for (_, reply) in locked.drain() { let _ = reply.send(Err("Local service stopped.".into())); }
+            drop(locked);
+            let result = tokio::time::timeout(std::time::Duration::from_secs(1), registration).await.expect("Registration must settle after the failure drain");
+            assert!(result.unwrap_err().contains("Local service stopped"));
+            assert!(pending.lock().await.is_empty(), "A failed backend must not retain an orphan reply");
+        });
+    }
+    #[test] fn admitted_replies_remain_owned_until_failure_drains_them() {
+        tauri::async_runtime::block_on(async {
+            let pending = Mutex::new(HashMap::new());
+            let failed = AtomicBool::new(false);
+            let stopping = AtomicBool::new(false);
+            let mut receive = register_reply(&pending, &failed, &stopping, "admitted".into()).await.unwrap();
+            assert!(matches!(receive.try_recv(), Err(oneshot::error::TryRecvError::Empty)));
+            failed.store(true, Ordering::Release);
+            for (_, reply) in pending.lock().await.drain() { let _ = reply.send(Err("Local service stopped.".into())); }
+            assert!(receive.await.unwrap().unwrap_err().contains("Local service stopped"));
+            assert!(pending.lock().await.is_empty());
+            assert!(register_reply(&pending, &failed, &stopping, "late".into()).await.unwrap_err().contains("Local service stopped"));
+        });
+    }
+    #[test] fn reply_capacity_and_closing_refuse_new_requests_without_releasing_admitted_work() {
+        tauri::async_runtime::block_on(async {
+            let pending = Mutex::new(HashMap::new());
+            let failed = AtomicBool::new(false);
+            let stopping = AtomicBool::new(false);
+            let mut receivers = Vec::new();
+            for index in 0..32 { receivers.push(register_reply(&pending, &failed, &stopping, index.to_string()).await.unwrap()); }
+            assert!(register_reply(&pending, &failed, &stopping, "overflow".into()).await.unwrap_err().contains("Too many"));
+            assert_eq!(pending.lock().await.len(), 32);
+            stopping.store(true, Ordering::Release);
+            assert!(register_reply(&pending, &failed, &stopping, "closing".into()).await.unwrap_err().contains("closing"));
+            for receive in &mut receivers { assert!(matches!(receive.try_recv(), Err(oneshot::error::TryRecvError::Empty))); }
+            for (id, reply) in pending.lock().await.drain() { reply.send(Ok(json!(id))).unwrap(); }
+            for (index, receive) in receivers.into_iter().enumerate() { assert_eq!(receive.await.unwrap().unwrap(), json!(index.to_string())); }
+        });
+    }
     #[test] fn credential_jobs_are_bounded_and_run_outside_the_ipc_thread() {
         let first = CREDENTIAL_JOBS.try_acquire().unwrap();
         let second = CREDENTIAL_JOBS.try_acquire().unwrap();

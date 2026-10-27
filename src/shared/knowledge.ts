@@ -71,5 +71,8 @@ export interface KnowledgePort {
   syncFolder(input: { folderPath: string; jobId: string; mode: KnowledgeSyncMode; preferences?: KnowledgePreferences }, signal: AbortSignal, onProgress?: (job: KnowledgeSyncJob) => void): Promise<KnowledgeSyncJob>;
   search(input: KnowledgeSearchInput & { folderPath: string }, signal?: AbortSignal): Promise<KnowledgeSearchResult>;
   readChunk(input: { folderPath: string; chunkId: string; preferences?: KnowledgePreferences }): Promise<KnowledgeHit>;
+  /** Drain a snapshot of admitted worker operations, including caller-cancelled
+   * searches whose actual cleanup has not yet been acknowledged. */
+  waitForIdle?(): Promise<void>;
   close(): Promise<void>;
 }
