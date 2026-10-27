@@ -111,6 +111,15 @@ async function assertCleaned(capture: Capture) {
   assert.throws(() => process.kill(capture.pid, 0), (error: unknown) => (error as NodeJS.ErrnoException).code === 'ESRCH');
 }
 
+async function assertStopped(capture: Capture) {
+  // Node terminates Windows processes unconditionally for SIGTERM; the child
+  // cannot run a signal handler and write a final capture. On POSIX, verify
+  // the graceful signal as well. Every platform must prove the process has
+  // exited and its isolated request directory has actually been removed.
+  if (process.platform !== 'win32') assert.equal(capture.terminated, 'SIGTERM');
+  await assertCleaned(capture);
+}
+
 test('Codex使用完整stdin、严格Schema和隔离参数，原文不进入argv/临时文件，环境中的API密钥不继承', async t => {
   const f = await fixture(t);
   const output = await requestCodexCompletion(config(), request, undefined, f.runtime);
@@ -170,7 +179,7 @@ test('Codex出现工具事件时停止进程并失败关闭，不返回半成品
   const f = await fixture(t, 'tool');
   await assert.rejects(requestCodexCompletion(config(), request, undefined, f.runtime), isCode('CODEX_UNEXPECTED_TOOL'));
   const captured = await f.readCapture();
-  assert.equal(captured.terminated, 'SIGTERM'); await assertCleaned(captured);
+  await assertStopped(captured);
 });
 
 test('CLI登录、额度、版本及普通失败归一，stdout/stderr诊断中的凭据不回显', async t => {
@@ -187,15 +196,17 @@ test('取消已启动Codex调用会终止本次进程并清理临时文件', asy
   const captured = await f.waitCapture(); controller.abort();
   const result = await outcome;
   assert.ok(isCode('CANCELLED')(result.error)); assert.equal(result.error.name, 'AbortError');
-  assert.equal((await f.readCapture()).terminated, 'SIGTERM'); await assertCleaned(captured);
+  assert.equal((await f.readCapture()).pid, captured.pid);
+  await assertStopped(await f.readCapture());
 });
 
-test('超时会强制结束忽略SIGTERM的Codex进程，且清理独立临时目录', async t => {
+test('超时会停止Codex进程并清理独立临时目录，POSIX上可强制结束忽略SIGTERM的进程', async t => {
   const f = await fixture(t, 'ignore-term');
   const outcome = requestCodexCompletion(config({ timeoutSeconds: 1 }), request, undefined, f.runtime).then(value => ({ value, error: null }), error => ({ value: null, error }));
   const captured = await f.waitCapture(); const result = await outcome;
   assert.ok(isCode('TIMEOUT')(result.error));
-  assert.equal((await f.readCapture()).terminated, 'SIGTERM'); await assertCleaned(captured);
+  assert.equal((await f.readCapture()).pid, captured.pid);
+  await assertStopped(await f.readCapture());
 });
 
 test('无效JSON、null及非字符串事件类型均返回协议错误而非崩溃', async t => {

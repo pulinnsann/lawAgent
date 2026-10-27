@@ -14,13 +14,13 @@ const context: ReviewContext = { contractType: 'service', ourPartyRole: 'service
 
 test('SQLite persists imports/reviews, restores foreign keys after snapshots, and never stores API keys', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'law-agent-store-'));
-  let store: AppStore | undefined;
+  let store: AppStore | undefined; let service: ContractService | undefined;
   try {
     const samplePath = join(dir, '测试合同.docx'); await writeFile(samplePath, await createSampleContract());
     store = await AppStore.open(join(dir, 'data'));
     let finish!: (task: ReviewTask) => void;
     const completed = new Promise<ReviewTask>(resolve => { finish = resolve; });
-    const service = new ContractService(store, join(dir, 'data'), task => { if (['completed','failed','cancelled'].includes(task.status)) finish(task); });
+    service = new ContractService(store, join(dir, 'data'), task => { if (['completed','failed','cancelled'].includes(task.status)) finish(task); });
     const document = await service.importFile(samplePath);
     assert.ok(document.blocks.length > 5);
     assert.equal((await service.importFile(samplePath)).id, document.id);
@@ -39,14 +39,14 @@ test('SQLite persists imports/reviews, restores foreign keys after snapshots, an
     assert.ok(renderReviewMarkdown(result, document.name).includes('待法务复核'));
     const run = store.rows('SELECT * FROM analysis_runs')[0]; assert.equal(run.status, 'awaiting_review');
     assert.deepEqual(store.rows('PRAGMA foreign_key_check'), []);
-    await store.close(); store = undefined;
+    await service.close(); service = undefined; store = undefined;
     assert.ok(!(await readFile(join(dir, 'data/workspace.sqlite'))).includes(Buffer.from(settings.apiKey!)));
     store = await AppStore.open(join(dir, 'data'));
     assert.equal(store.listDocuments().length, 1);
     assert.equal(store.getDocument(document.id).reviews[0].id, result.id);
     assert.equal(store.getConfig()?.model, 'test-model');
     assert.equal(store.listTasks()[0].status, 'completed');
-  } finally { await store?.close(); await rm(dir, { recursive: true, force: true }); }
+  } finally { await service?.close(); await store?.close(); await rm(dir, { recursive: true, force: true }); }
 });
 
 test('service integrates import → saved configuration → HTTP model review → persisted report', async () => {
@@ -65,14 +65,14 @@ test('service integrates import → saved configuration → HTTP model review �
     response.setHeader('content-type', 'application/json');
     response.end(JSON.stringify({ model: 'integration-test-model', choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(content) } }], usage: { prompt_tokens: 100, completion_tokens: 50 } }));
   });
-  await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
-  let store: AppStore | undefined;
+  await listen(server);
+  let store: AppStore | undefined; let service: ContractService | undefined;
   try {
     const address = server.address(); assert.ok(address && typeof address !== 'string');
     store = await AppStore.open(join(dir, 'data'));
     let finish!: (task:ReviewTask)=>void;
     const completed = new Promise<ReviewTask>(resolve => { finish = resolve; });
-    const service = new ContractService(store, join(dir, 'data'), task => { if (['completed','failed','cancelled'].includes(task.status)) finish(task); });
+    service = new ContractService(store, join(dir, 'data'), task => { if (['completed','failed','cancelled'].includes(task.status)) finish(task); });
     const document = await service.loadSample();
     await service.saveConfig({ name: '集成测试接口', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'integration-test-model', responseFormat: 'json_schema', tokenParameter: 'max_completion_tokens', maxOutputTokens: 4096, contextWindowTokens: 65536, timeoutSeconds: 10 });
     assert.equal((await service.testConnection('local-test-key')).model, 'integration-test-model');
@@ -83,7 +83,7 @@ test('service integrates import → saved configuration → HTTP model review �
     assert.equal(result.inputTokens, 100); assert.equal(result.outputTokens, 50);
     assert.equal(calls.length, 2); assert.ok(calls.every(call => call.url === '/v1/chat/completions' && call.authorization === 'Bearer local-test-key'));
     assert.ok(!JSON.stringify(store.rows('SELECT * FROM reports')).includes('local-test-key'));
-  } finally { await store?.close(); await new Promise<void>(resolve => server.close(() => resolve())); await rm(dir, { recursive: true, force: true }); }
+  } finally { await service?.close(); await store?.close(); await new Promise<void>(resolve => server.close(() => resolve())); await rm(dir, { recursive: true, force: true }); }
 });
 
 async function listen(server: ReturnType<typeof createServer>): Promise<string> {
@@ -225,9 +225,9 @@ test('standard knowledge connection test reads source text but creates no synthe
     } else response.end(JSON.stringify({ externalSourceId: 'source-one', content: '服务合同验收标准与付款前提需要结合具体业务明确。', contentScope: 'fragment', sourceUri: 'https://example.com/policy', locator: { section: '2' } }));
   });
   const baseUrl = await listen(server);
-  let store: AppStore | undefined;
+  let store: AppStore | undefined; let service: ContractService | undefined;
   try {
-    store = await AppStore.open(join(dir, 'data')); const service = new ContractService(store, join(dir, 'data'));
+    store = await AppStore.open(join(dir, 'data')); service = new ContractService(store, join(dir, 'data'));
     const defaults = defaultRetrievalConfig();
     await service.saveRetrievalConfig({ ...defaults, knowledge: { enabled: true, folderPath: null, api: { enabled: true, provider: 'standard', baseUrl, collectionId: 'policies', apiKey: 'standard-private-key' } } });
     const bundle = await service.testRetrieval({ knowledgeApiKey: 'standard-private-key', webApiKey: null });
@@ -237,7 +237,7 @@ test('standard knowledge connection test reads source text but creates no synthe
     assert.equal(store.rows('SELECT * FROM analysis_runs').length, 0); assert.equal(store.rows('SELECT * FROM reports').length, 0);
     assert.equal(store.rows('SELECT * FROM retrieval_attempts').length, 0);
     assert.equal(JSON.stringify(store.rows('SELECT * FROM provider_profiles')).includes('standard-private-key'), false);
-  } finally { await store?.close(); await closeServer(server); await rm(dir, { recursive: true, force: true }); }
+  } finally { await service?.close(); await store?.close(); await closeServer(server); await rm(dir, { recursive: true, force: true }); }
 });
 
 test('model failure retains completed retrieval attempts and sources without manufacturing a report', async () => {

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createRequire } from 'node:module';
+import { finished } from 'node:stream/promises';
 import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { join, dirname, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -24,7 +25,13 @@ async function fakeWindowsArchive(root: string, unpack: boolean, native: Buffer)
   for (const name of ['@napi-rs/canvas', '@napi-rs/canvas-win32-x64-msvc', 'sql.js', 'tesseract.js', 'tesseract.js-core', 'pdfjs-dist', 'regenerator-runtime', 'is-url', 'bmp-js', 'wasm-feature-detect']) files[`node_modules/${name}/package.json`] = JSON.stringify({ name, version: 'synthetic' });
   files['node_modules/@napi-rs/canvas/index.js'] = ''; files['node_modules/@napi-rs/canvas/js-binding.js'] = ''; files['node_modules/@napi-rs/canvas-win32-x64-msvc/skia.win32-x64-msvc.node'] = native;
   for (const [name, bytes] of Object.entries(files)) { const path = join(input, name); await mkdir(dirname(path), { recursive: true }); await writeFile(path, bytes); }
-  await require('@electron/asar').createPackageWithOptions(input, join(resources, 'app.asar'), unpack ? { unpack: '**/*' } : {});
+  // glob v7 treats backslashes as escapes, even on Windows. ASAR's crawler
+  // needs a forward-slash pattern root; its file API still uses native paths.
+  const asar = require('@electron/asar'); const archive = join(resources, 'app.asar');
+  // ASAR v3 resolves to a WriteStream after end(), before pending writes finish.
+  await finished(await asar.createPackageWithOptions(input.replaceAll('\\', '/'), archive, unpack ? { unpack: '**/*' } : {}));
+  assert.equal(asar.statFile(archive, join('node_modules', '@napi-rs', 'canvas', 'package.json')).unpacked === true, unpack);
+  assert.equal(JSON.parse(asar.extractFile(archive, join('node_modules', '@napi-rs', 'canvas', 'package.json')).toString('utf8')).name, '@napi-rs/canvas');
   return resources;
 }
 

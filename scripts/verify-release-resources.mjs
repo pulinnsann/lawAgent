@@ -43,7 +43,7 @@ export async function verifyReleaseResources(options) {
   const entries = [];
   const readResource = async (name, unpacked = false) => {
     let bytes; let location;
-    if (archive) { const stat = asar.statFile(archive, name, false); if (stat.link) throw new Error(`Linked archive resource is not accepted: ${name}`); if (unpacked && !stat.unpacked) throw new Error(`Resource must be unpacked for native/worker access: ${name}`); if (stat.unpacked) { const path = await regularFile(join(options.resources, 'app.asar.unpacked'), name); bytes = await readFile(path); location = 'app.asar.unpacked'; } else { bytes = asar.extractFile(archive, name, false); location = 'app.asar'; } }
+    if (archive) { const archiveName = name.split('/').join(sep); const stat = asar.statFile(archive, archiveName, false); if (stat.link) throw new Error(`Linked archive resource is not accepted: ${name}`); if (unpacked && !stat.unpacked) throw new Error(`Resource must be unpacked for native/worker access: ${name}`); if (stat.unpacked) { const path = await regularFile(join(options.resources, 'app.asar.unpacked'), name); bytes = await readFile(path); location = 'app.asar.unpacked'; } else { bytes = asar.extractFile(archive, archiveName, false); location = 'app.asar'; } }
     else { bytes = await readFile(await regularFile(options.root, name)); location = 'project'; }
     entries.push({ path: name, location, bytes: bytes.length, sha256: sha(bytes) }); return bytes;
   };
